@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>България на длан</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Cormorant+Unicase:wght@600;700&family=Kurale&family=Cormorant+Garamond:ital,wght@1,600&family=Sofia+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Sofia+Sans+Condensed:wght@500;700&family=Neucha&family=Yeseva+One&family=Comfortaa:wght@500;700&family=Press+Start+2P&family=Rubik+Mono+One&display=swap">
+<style>
+/* Layout: a field-guide page — live map demo up top, then research → principles → modes → styles → plan, on one 1120px column */
+:root{
+  --bg:#f2f5f0; --surface:#ffffff; --fg:#14231c; --muted:#56685e; --line:#d3ddd5;
+  --forest:#1d5c45; --rose:#c3305f; --sun:#d99a12; --sea:#cfe4ea; --land:#e0ead6; --ridge:#9bb59f;
+  --display:"Unbounded","Sofia Sans",system-ui,sans-serif;
+  --body:"Sofia Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --cond:"Sofia Sans Condensed","Sofia Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0e1612; --surface:#15211b; --fg:#e4ede7; --muted:#97aa9f; --line:#2a3a31;
+  --forest:#62c398; --rose:#f2709c; --sun:#f0c04c; --sea:#17313a; --land:#203428; --ridge:#3f5c49; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1612; --surface:#15211b; --fg:#e4ede7; --muted:#97aa9f; --line:#2a3a31;
+  --forest:#62c398; --rose:#f2709c; --sun:#f0c04c; --sea:#17313a; --land:#203428; --ridge:#3f5c49; color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1120px;margin:0 auto;padding-block:40px 72px;display:flex;flex-direction:column;gap:72px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(2.1rem,5vw,3.6rem);font-weight:800;letter-spacing:-.02em}
+h2{font-size:clamp(1.45rem,3vw,2rem);font-weight:700}
+h3{font-size:1.02rem;font-weight:700}
+p{margin:0}
+.eyebrow{font-family:var(--cond);font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:.8rem;color:var(--rose)}
+.lede{font-size:1.15rem;color:var(--muted);max-width:60ch}
+.muted{color:var(--muted)}
+section{display:flex;flex-direction:column;gap:24px}
+.sec-head{display:flex;flex-direction:column;gap:8px;max-width:68ch}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr 1fr;gap:16px 40px;align-items:end}
+.hero-text,.hero-side{display:flex;flex-direction:column;gap:14px;min-width:0}
+.hero h1 em{font-style:normal;color:var(--forest)}
+.facts{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--cond);font-weight:500;font-size:.9rem;border:1px solid var(--line);border-radius:999px;padding:3px 11px;background:var(--surface)}
+.btn{font:700 .95rem var(--display);border:0;border-radius:999px;padding:10px 18px;background:var(--forest);color:var(--surface);cursor:pointer}
+.btn:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+
+/* game stage: a fixed dark game screen in both page themes */
+.stage{--sb:#0f3a40;--sb2:#0b2c31;--st:#f0dfae;--sm:#a9c9c0;--sa:#e9b04a;--sbtn:#f0dfae;--sbtnfg:#14302f;--sfont:"Cormorant Unicase","Sofia Sans",serif;
+  margin-top:-40px;border-radius:18px;overflow:hidden;background:var(--sb2);color:var(--st);box-shadow:0 20px 50px -24px rgba(0,0,0,.55);gap:0}
+.stage[data-look="paint"]{--sb:#13305e;--sb2:#0b2149;--st:#fbefcf;--sm:#aec4e6;--sa:#f2c75c;--sbtn:linear-gradient(#f6dc8c,#c9973b);--sbtnfg:#3a2608}
+.stage-bar,.stage-result{display:flex;align-items:center;gap:12px 18px;flex-wrap:wrap;padding:12px 18px;background:var(--sb)}
+.stage-bar{justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08)}
+.stage-result{min-height:76px;justify-content:space-between;border-top:1px solid rgba(255,255,255,.08)}
+.stage .q{font-family:var(--sfont);font-weight:700;font-size:1.35rem;letter-spacing:.02em;line-height:1.2}
+.stage .q span{color:var(--sa)}
+.stage .score{font-family:var(--cond);font-weight:700;font-variant-numeric:tabular-nums;color:var(--sm)}
+.stage .score b{color:var(--st);font-size:1.15rem}
+.looks{display:flex;background:rgba(0,0,0,.25);border-radius:999px;padding:3px}
+.looks button{font:700 .85rem var(--cond);letter-spacing:.06em;text-transform:uppercase;border:0;border-radius:999px;padding:6px 14px;background:transparent;color:var(--sm);cursor:pointer}
+.looks button[aria-pressed="true"]{background:var(--sbtn);color:var(--sbtnfg)}
+.looks button:focus-visible{outline:2px solid var(--sa);outline-offset:2px}
+.stage-map{position:relative;aspect-ratio:1102/780;max-width:100%}
+.stage-map canvas,.stage-map svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.stage-map svg{cursor:crosshair;touch-action:manipulation}
+.loading{position:absolute;inset:0;display:grid;place-items:center;font:600 1.1rem var(--sfont);color:var(--sm);pointer-events:none}
+.stage .result-text{min-width:0;flex:1 1 300px;font-size:1rem;color:var(--sm)}
+.stage .result-text strong{font-family:var(--sfont);font-size:1.2rem;color:var(--st)}
+.stage .result-text em{font-style:normal;color:var(--st)}
+.stage .btn{background:var(--sbtn);color:var(--sbtnfg);font-family:var(--sfont);font-size:1.05rem}
+#mapOverlay text{font-family:"Cormorant Unicase",serif;font-weight:700;paint-order:stroke;stroke-linejoin:round}
+
+/* table */
+.tablebox{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:760px;font-size:.95rem}
+th,td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--line)}
+th{font-family:var(--cond);text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;color:var(--muted);font-weight:700}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700;white-space:nowrap}
+td.take{color:var(--forest);font-weight:600}
+
+/* principles */
+.principles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px 40px;list-style:none;margin:0;padding:0}
+.principles li{display:grid;grid-template-columns:34px 1fr;gap:12px;border-top:2px solid var(--fg);padding-top:12px}
+.principles .glyph{width:28px;height:28px}
+.principles h3{margin-bottom:4px}
+.principles p{color:var(--muted);font-size:.97rem}
+
+/* modes */
+.modes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.mode{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.mode .from{font-family:var(--cond);font-size:.82rem;color:var(--muted);font-weight:500}
+.mode p{font-size:.95rem}
+.mode .age{margin-top:auto;font-family:var(--cond);font-weight:700;font-size:.82rem;color:var(--rose)}
+.mode.star{border:2px solid var(--forest)}
+.mode.star .tag{align-self:flex-start;background:var(--forest);color:var(--surface);font:700 .7rem var(--cond);letter-spacing:.08em;text-transform:uppercase;border-radius:6px;padding:2px 7px}
+
+/* compete */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.split > div{display:flex;flex-direction:column;gap:12px;min-width:0}
+.split ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:10px}
+.split h3{font-size:1.1rem}
+.do h3{color:var(--forest)} .dont h3{color:var(--rose)}
+
+/* content */
+.content{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.content > div{display:flex;flex-direction:column;gap:10px;min-width:0}
+.content h3{display:flex;align-items:baseline;gap:8px}
+.content h3 small{font:600 .8rem var(--cond);color:var(--muted)}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pills span{font-size:.88rem;background:var(--land);border-radius:6px;padding:2px 8px}
+
+/* styles */
+.styles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.style{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;min-width:0}
+.style.pick{border:2px solid var(--forest)}
+.style svg{display:block;width:100%;height:auto}
+.style canvas.cardmap{display:block;width:100%;aspect-ratio:483/320;object-fit:cover;background:#0f3a40}
+.style-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px}
+.style-title{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.style-title h3{font-size:1.1rem}
+.ages{font:700 .82rem var(--cond);color:var(--rose);white-space:nowrap}
+.refs{font-family:var(--cond);font-size:.88rem;color:var(--muted)}
+.pc{display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:.92rem}
+.pc b{display:block;font:700 .75rem var(--cond);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.swatches{display:flex;gap:6px;align-items:center}
+.swatches i{width:22px;height:22px;border-radius:50%;border:1px solid var(--line);display:block}
+.swatches span{font:500 .82rem var(--cond);color:var(--muted);margin-left:6px}
+
+/* plan */
+.rec{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:start}
+.rec-main{display:flex;flex-direction:column;gap:14px;min-width:0}
+.rec-main p{max-width:62ch}
+.phases{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px;counter-reset:ph}
+.phases li{counter-increment:ph;display:grid;grid-template-columns:44px 1fr;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.phases li::before{content:counter(ph);font:800 1.4rem var(--display);color:var(--forest);line-height:1}
+.phases h3{margin-bottom:4px}
+.phases p{font-size:.95rem;color:var(--muted)}
+.sources{font-size:.88rem;color:var(--muted);columns:2;column-gap:32px}
+.sources a{color:var(--muted)}
+.sources li{break-inside:avoid;margin-bottom:4px}
+
+@media (max-width:980px){.modes,.content{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){.hero,.rec,.styles,.split{grid-template-columns:1fr}.principles{grid-template-columns:1fr}.stage{margin-top:-48px}}
+@media (max-width:560px){.stage .q{font-size:1.1rem}.stage-bar,.stage-result{padding:10px 12px}}
+@media (max-width:560px){.modes,.content{grid-template-columns:1fr}.pc{grid-template-columns:1fr}.sources{columns:1}body{font-size:16px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.pinDrop{animation:drop .35s ease-out}
+@keyframes drop{from{transform:translateY(-14px);opacity:0}to{transform:none;opacity:1}}
+</style>
+</head>
+<body>
+<div class="wrap" lang="bg">
+
+<header class="hero">
+  <div class="hero-text">
+    <div class="eyebrow">Идеи за детска игра · проучване</div>
+    <h1>България <em>на длан</em></h1>
+  </div>
+  <div class="hero-side">
+    <p class="lede">Игра, в която децата намират градове, планини, крепости и манастири на приказна карта, събират марки в паспорт и се състезават с приятели и с класа.</p>
+    <div class="facts">
+      <span class="chip">28 области</span><span class="chip">10 обекта на ЮНЕСКО</span><span class="chip">100 национални туристически обекта</span><span class="chip">Мусала 2925 м</span>
+    </div>
+    <div><a class="btn" href="./" style="display:inline-block;text-decoration:none">Играй на цял екран</a></div>
+  </div>
+</header>
+
+<section class="stage" id="stage" data-look="ink" aria-label="Демо: намери обекта на картата">
+  <div class="stage-bar">
+    <div class="q" id="q">Къде е <span>…</span>?</div>
+    <div class="looks" role="group" aria-label="Стил на картата">
+      <button type="button" id="lookInk" data-look="ink" aria-pressed="true">Мастило</button>
+      <button type="button" id="lookPaint" data-look="paint" aria-pressed="false">Приключение</button>
+    </div>
+    <div class="score">Рунд <b id="round">1</b>/5 · <b id="total">0</b> т.</div>
+  </div>
+  <div class="stage-map">
+    <canvas id="mapCanvas" aria-hidden="true"></canvas>
+    <svg id="mapOverlay" viewBox="0 0 1102 780" role="img" aria-label="Карта на България. Щракнете, където мислите, че е обектът."></svg>
+    <div class="loading" id="loading">Рисуваме картата…</div>
+  </div>
+  <div class="stage-result">
+    <div class="result-text" id="resultText">Щракнете на картата там, където мислите, че е обектът. Колкото по-близо, толкова повече точки.</div>
+    <button class="btn" id="next" hidden>Следващ</button>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Какво правят най-добрите</div>
+    <h2>Осем игри, от които си струва да откраднем по нещо</h2>
+    <p class="muted">Всяка от тях е успешна по различна причина. Никоя не прави всичко, затова комбинацията е нашето предимство.</p>
+  </div>
+  <div class="tablebox">
+    <table>
+      <thead><tr><th>Игра</th><th>Ядро на играта</th><th>Защо работи</th><th>Какво взимаме</th></tr></thead>
+      <tbody>
+        <tr><td>Seterra</td><td>Щракаш върху място от списък; над 400 готови куиза</td><td>Мигновена обратна връзка: бяло от първия път, жълто от втория, червено при грешка. Резултат в % и време.</td><td class="take">Цветна оценка по опит и рекорд за време</td></tr>
+        <tr><td>GeoGuessr</td><td>Пуснат си някъде; познаваш по улики</td><td>Мистерия и откривателство. Duels: 6000 точки живот, по-далечният губи разликата.</td><td class="take">Дуел със „сърца“, точки по километри</td></tr>
+        <tr><td>Worldle / Globle</td><td>Една загадка на ден, обща за всички</td><td>Кратко, безплатно, споделимо. Globle оцветява опитите по „топло–студено“.</td><td class="take">Загадка на деня и споделим резултат</td></tr>
+        <tr><td>Travle</td><td>Свържи две страни през съседите им</td><td>Учи връзки и граници, не само точки.</td><td class="take">„Пътят на щъркела“ през областите</td></tr>
+        <tr><td>Stack the Countries</td><td>Верен отговор = парче за кулата</td><td>Колекция: всяка пълна кула печели страна на картата; отключват се нови игри.</td><td class="take">Колекция и отключване. Тяхната слабост: няма звук за имената</td></tr>
+        <tr><td>Kahoot / Blooket</td><td>Учителят прожектира, децата отговарят с код</td><td>Живо съревнование в клас. Blooket сменя тематичните режими и може да дава точки на случаен принцип, за да намали натиска.</td><td class="take">Класна стая с код, без акаунти</td></tr>
+        <tr><td>Duolingo</td><td>Кратки уроци, серии, седмични лиги</td><td>Навик. Лигите от Бронз до Диамант всяка седмица. Внимание: при деца серията лесно става тревожност.</td><td class="take">Лиги в малки групи, „почивен ден“ без наказание</td></tr>
+        <tr><td>Carmen Sandiego (Google Earth)</td><td>Детективска история с улики</td><td>Разказ, който те кара да летиш от място на място; 10–20 мин на случай.</td><td class="take">Детективски режим с исторически улики</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Детското преживяване</div>
+    <h2>Осем правила, които правят играта приятна, а не изпит</h2>
+  </div>
+  <ul class="principles">
+    <li><svg class="glyph" viewBox="0 0 28 28"><circle cx="14" cy="14" r="12" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 14l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><div><h3>Грешката е урок</h3><p>При грешка пинът полита до истинското място и се показва картинка и един интересен факт. Детето научава нещо всеки път.</p></div></li>
+    <li><svg class="glyph" viewBox="0 0 28 28"><circle cx="14" cy="14" r="4" fill="currentColor"/><circle cx="14" cy="14" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="14" cy="14" r="12" fill="none" stroke="currentColor" stroke-width="1"/></svg><div><h3>Точки по километри</h3><p>Не „вярно/грешно“, а колко си близо. 15 км от Мелник още е отличен резултат и мотивира.</p></div></li>
+    <li><svg class="glyph" viewBox="0 0 28 28"><rect x="3" y="6" width="22" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 10v5l3 2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg><div><h3>Рундове от 2 минути</h3><p>Пет въпроса на рунд. Лесно се играе в междучасие или в колата.</p></div></li>
+    <li><svg class="glyph" viewBox="0 0 28 28"><path d="M4 22h5v-6H4zM11.5 22h5V11h-5zM19 22h5V5h-5z" fill="currentColor"/></svg><div><h3>Трудност по възраст</h3><p>6–8 г.: големи области и избор от картинки. 9–11: пускане на пин. 12+: без граници и надписи, точност в км.</p></div></li>
+    <li><svg class="glyph" viewBox="0 0 28 28"><path d="M6 14a8 8 0 1 1 3 6.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 20h6v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><div><h3>Сбърканото се връща</h3><p>Местата, които детето бърка, се появяват отново след няколко дни, докато ги научи.</p></div></li>
+    <li><svg class="glyph" viewBox="0 0 28 28"><path d="M5 11h4l6-5v16l-6-5H5z" fill="currentColor"/><path d="M19 10a5 5 0 0 1 0 8M21.5 7a9 9 0 0 1 0 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><div><h3>Озвучени имена</h3><p>Всяко място се чете на глас. Така и децата, които още не четат бързо, могат да играят.</p></div></li>
+    <li><svg class="glyph" viewBox="0 0 28 28"><path d="M3 20l6-12 5 8 4-5 7 9z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><div><h3>Картата разцъфтява</h3><p>В началото България е сива. Всяка научена област се оцветява и получава илюстрации. Прогресът се вижда с един поглед.</p></div></li>
+    <li><svg class="glyph" viewBox="0 0 28 28"><rect x="6" y="12" width="16" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 12V9a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg><div><h3>Безопасно за деца</h3><p>Без реклами, без чат, без акаунт. Прякор и аватар; родителят или учителят дава код за групата.</p></div></li>
+  </ul>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Режими на игра</div>
+    <h2>Една карта, осем начина да се играе</h2>
+    <p class="muted">Маркираните три са достатъчни за първата версия. Останалите се добавят, когато основата работи.</p>
+  </div>
+  <div class="modes">
+    <div class="mode star"><span class="tag">Първа версия</span><h3>Намери ме!</h3><div class="from">като Seterra + GeoGuessr</div><p>Показва се име или снимка. Детето пуска пин. Точки по разстояние, факт след всеки отговор.</p><div class="age">6–14 г. · соло</div></div>
+    <div class="mode star"><span class="tag">Първа версия</span><h3>Загадка на деня</h3><div class="from">като Worldle + Globle</div><p>Едно скрито място за всички. Всеки опит светва по „топло–студено“. Резултатът се споделя в семейната група като редица квадратчета.</p><div class="age">8+ г. · семейство</div></div>
+    <div class="mode star"><span class="tag">Първа версия</span><h3>Паспорт с марки</h3><div class="from">като Stack the Countries</div><p>Всяко научено място дава марка с илюстрация. Колекции: ЮНЕСКО, крепости, пещери, Стоте национални туристически обекта.</p><div class="age">всички · колекция</div></div>
+    <div class="mode"><h3>Дуел</h3><div class="from">като GeoGuessr Duels</div><p>Двама играчи, по 6 сърца. Който е по-далеч, губи сърце. На един таблет или онлайн с код.</p><div class="age">9+ г. · 1 срещу 1</div></div>
+    <div class="mode"><h3>Пътят на щъркела</h3><div class="from">като Travle</div><p>От Видин до Бургас през съседни области с възможно най-малко стъпки.</p><div class="age">10+ г. · логика</div></div>
+    <div class="mode"><h3>Детектив</h3><div class="from">като Carmen Sandiego</div><p>„Тук е роден Христо Ботев.“ „Тук има седем езера.“ Уликите водят от място на място.</p><div class="age">10+ г. · история</div></div>
+    <div class="mode"><h3>Класна стая</h3><div class="from">като Kahoot + Blooket</div><p>Учителят прожектира, децата влизат с код. Отборите са области: „Пловдив води с 120 точки“.</p><div class="age">училище · отбори</div></div>
+    <div class="mode"><h3>Сглоби България</h3><div class="from">пъзел</div><p>Влачиш 28-те области на мястото им. Подходящо за най-малките и за загрявка.</p><div class="age">6–9 г. · соло</div></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Конкурентният момент</div>
+    <h2>Състезание, което мотивира и не наранява</h2>
+  </div>
+  <div class="split">
+    <div class="do">
+      <h3>Да</h3>
+      <ul>
+        <li><b>Призрачен щъркел.</b> Детето се състезава със своя предишен най-добър рунд. Всеки може да победи.</li>
+        <li><b>Лиги в малки групи.</b> Клас или приятели, до 20 души, нулират се всяка седмица. Под 10 г. без изпадане.</li>
+        <li><b>Отбор срещу отбор.</b> Клас срещу клас или област срещу област. Слабият играч също носи точки.</li>
+        <li><b>Дуел със сърца.</b> Напрежение, но кратко: 6 сърца, рундът свършва бързо.</li>
+        <li><b>Загадка на деня.</b> Всички решават едно и също, после сравняват. Естествен разговор в семейството.</li>
+      </ul>
+    </div>
+    <div class="dont">
+      <h3>Не</h3>
+      <ul>
+        <li><b>Публични класации с истински имена.</b> Само прякори и само в затворена група.</li>
+        <li><b>Серии, които се „губят“.</b> Пропуснатият ден не изтрива нищо. Щъркелът просто „почива“.</li>
+        <li><b>Таймер по подразбиране.</b> Времето е по избор. Blooket показва, че случайни точки намаляват натиска.</li>
+        <li><b>Наказание за грешка.</b> Грешният отговор пак дава малко точки и винаги учи нещо.</li>
+        <li><b>Чат и покупки в играта.</b> Нищо, което изисква родителски контрол.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Съдържание</div>
+    <h2>Четири колекции за научаване</h2>
+    <p class="muted">Около 200 места покриват програмата за 3.–7. клас. Всяко има координати, илюстрация, озвучено име и един факт.</p>
+  </div>
+  <div class="content">
+    <div><h3>Градове <small>28 + 50</small></h3><div class="pills"><span>София</span><span>Пловдив</span><span>Варна</span><span>Бургас</span><span>Русе</span><span>Велико Търново</span><span>Видин</span><span>Мелник</span><span>Копривщица</span><span>Созопол</span></div></div>
+    <div><h3>Природа <small>~60</small></h3><div class="pills"><span>Рила</span><span>Пирин</span><span>Родопи</span><span>Странджа</span><span>Седемте рилски езера</span><span>Белоградчишки скали</span><span>Побити камъни</span><span>Дяволското гърло</span><span>Райско пръскало</span><span>Сребърна</span></div></div>
+    <div><h3>История <small>~50</small></h3><div class="pills"><span>Плиска</span><span>Велики Преслав</span><span>Царевец</span><span>Перперикон</span><span>Шипка</span><span>Мадарски конник</span><span>Казанлъшка гробница</span><span>Свещарска гробница</span><span>Античен театър</span></div></div>
+    <div><h3>Култура <small>~40</small></h3><div class="pills"><span>Рилски манастир</span><span>Боянска църква</span><span>Ивановски скални църкви</span><span>Несебър</span><span>Розова долина</span><span>Кукери в Перник</span><span>Нестинари в Странджа</span><span>Бабини хора</span></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Визуални стилове</div>
+    <h2>Осем посоки за облика на играта</h2>
+    <p class="muted">Първите две са нарисувани по истинските граници, реки и релеф, същите като картата горе. Останалите шест са бързи скици на същата идея.</p>
+  </div>
+  <div class="styles" id="styles"></div>
+</section>
+
+<section>
+  <div class="sec-head">
+    <div class="eyebrow">Препоръка</div>
+    <h2>Приказна карта за света, шевица за детайлите, марки за наградите</h2>
+  </div>
+  <div class="rec">
+    <div class="rec-main">
+      <p>Приказната карта превръща България в свят за приключения: планините, горите и реките се виждат веднага, а всяко намерено място остава на картата като знаменце. Мастиленият стил е по-изискан и пасва на по-големите деца. Рисуваният е по-цветен и по-близо до игрите, които най-малките познават. Двата могат да са един и същ свят в два режима.</p>
+      <p>Шевицата остава за детайлите: рамки, бутони, марки и анимации. Така играта изглежда <b>българска</b>, а не като поредната карта на света.</p>
+      <p>Талисман: <b>щъркел</b>. Той прелита над цяла България всяка пролет, а Бургас е на един от най-големите прелетни пътища в Европа. Когато видиш щъркел, закачаш мартеницата на дърво: готова сцена за финала на всяка колекция.</p>
+      <p>Платформа: уеб приложение, което се инсталира на таблет и телефон и работи без интернет. Няма нужда от магазин за приложения, за да започне.</p>
+    </div>
+    <ol class="phases">
+      <li><div><h3>Прототип за 2 седмици</h3><p>„Намери ме!“ с 50 места, точки по км, факт след всеки отговор. Тест с 3–4 деца на различна възраст.</p></div></li>
+      <li><div><h3>Първа версия</h3><p>200 места, паспорт с марки, загадка на деня, разцъфтяваща карта, озвучаване, режим за най-малките.</p></div></li>
+      <li><div><h3>Съревнование</h3><p>Дуел, групи с код, клас срещу клас. Режим за учители с прожектиране.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><div class="eyebrow">Източници</div></div>
+  <ul class="sources">
+    <li><a href="https://thecurriculumchoice.com/seterra/">Seterra — The Curriculum Choice</a></li>
+    <li><a href="https://www.teachersfirst.com/single.cfm?id=15887">Seterra — TeachersFirst</a></li>
+    <li><a href="https://lr.eu.psf.lt/r/geoguessr/comments/qwop2o/duels_live_now">GeoGuessr Duels — обява на разработчиците (2021)</a></li>
+    <li><a href="https://strategywiki.org/wiki/Geoguessr/Gameplay">GeoGuessr gameplay — StrategyWiki</a></li>
+    <li><a href="https://www.traveller.com.au/worldle-a-geography-based-version-of-wordle-is-perfect-for-travel-lovers-h21q4b">Worldle — Traveller</a></li>
+    <li><a href="https://www.capitalle.app/blog/travle-alternatives">Travle и подобни — Capitalle</a></li>
+    <li><a href="https://www.commonsensemedia.org/app-reviews/stack-the-countries">Stack the Countries — Common Sense Media</a></li>
+    <li><a href="https://www.commonsense.org/education/reviews/stack-the-countries">Stack the Countries — Common Sense Education</a></li>
+    <li><a href="https://techlearning.com/news/kahoot-vs-blooket-which-is-best-for-teaching">Kahoot vs Blooket — Tech &amp; Learning</a></li>
+    <li><a href="https://www.commonsense.org/education/reviews/blooket">Blooket — Common Sense Education</a></li>
+    <li><a href="https://arxiv.org/pdf/2203.16175">Gamification misuse in Duolingo — arXiv 2203.16175</a></li>
+    <li><a href="https://nogood.io/blog/duolingo-case-study/">Duolingo growth case study — NoGood</a></li>
+    <li><a href="https://screenwiseapp.com/guides/managing-duolingo-streaks-when-gamification-becomes-stressful">Серии и детска тревожност — Screenwise</a></li>
+    <li><a href="https://9to5google.com/2019/05/15/carmen-sandiego-returns-to-google-earth-in-tutankhamums-mask-caper/">Carmen Sandiego в Google Earth — 9to5Google</a></li>
+    <li><a href="https://www.pockettactics.com/geography-games">Най-добрите географски игри — Pocket Tactics</a></li>
+  </ul>
+</section>
+
+</div>
+
+<script src="geo.js"></script>
+<script src="map.js"></script>
+<script>
+(function(){
+const W=483,H=320;
+const P=(lon,lat)=>[ (lon-22.2)*73.7, (44.35-lat)*100 ];
+const BORDER=[[22.68,44.22],[22.88,44.0],[22.95,43.83],[23.24,43.83],[23.5,43.82],[23.75,43.78],[24.1,43.72],[24.4,43.7],[24.65,43.72],[24.95,43.7],[25.2,43.66],[25.35,43.62],[25.6,43.65],[25.85,43.75],[25.97,43.88],[26.15,43.98],[26.4,44.03],[26.7,44.07],[27.0,44.14],[27.27,44.13],
+ [27.4,44.0],[27.65,43.97],[27.95,43.84],[28.25,43.76],[28.58,43.74],
+ [28.6,43.55],[28.47,43.38],[28.16,43.41],[28.0,43.3],[27.95,43.2],[27.92,43.05],[27.88,42.85],[27.73,42.7],[27.65,42.6],[27.47,42.5],[27.62,42.43],[27.72,42.34],[27.82,42.2],[27.95,42.08],[28.03,41.98],
+ [27.8,42.0],[27.5,41.95],[27.2,42.07],[26.95,42.0],[26.6,41.9],[26.36,41.71],
+ [26.25,41.55],[26.05,41.36],[25.75,41.32],[25.3,41.25],[24.85,41.4],[24.55,41.45],[24.25,41.55],[23.95,41.45],[23.65,41.4],[23.3,41.4],[22.93,41.34],
+ [22.95,41.62],[23.02,41.75],[22.88,42.0],[22.52,42.14],[22.36,42.32],
+ [22.45,42.5],[22.52,42.75],[22.45,42.85],[22.7,42.92],[22.95,43.08],[23.0,43.2],[22.75,43.38],[22.55,43.48],[22.42,43.75],[22.5,44.0],[22.6,44.15]];
+const COAST=BORDER.slice(24,40);
+const DANUBE=BORDER.slice(0,20);
+const SEA=[[28.62,44.5],...COAST,[28.05,41.0],[29,41.0],[29,44.5]];
+const RIDGES={
+  stara:[[22.6,43.55],[23.2,43.3],[23.6,43.02],[24.2,42.86],[24.8,42.76],[25.3,42.75],[25.8,42.76],[26.4,42.8],[27.0,42.86],[27.6,42.78],[27.85,42.74]],
+  rila:[[23.2,42.2],[23.45,42.16],[23.7,42.12]],
+  pirin:[[23.35,41.9],[23.42,41.75],[23.5,41.6]],
+  rhodopes:[[23.9,41.9],[24.4,41.75],[24.9,41.62],[25.4,41.55],[25.8,41.45]]
+};
+const RIVERS={
+  maritsa:[[23.6,42.25],[24.1,42.24],[24.75,42.16],[25.3,42.1],[25.75,42.0],[26.1,41.88],[26.36,41.71]],
+  iskar:[[23.45,42.3],[23.37,42.66],[23.75,43.0],[24.1,43.3],[24.4,43.71]],
+  struma:[[23.05,42.6],[23.1,42.2],[23.25,41.65],[23.33,41.4]]
+};
+const CITIES={"София":[23.32,42.70],"Пловдив":[24.75,42.15],"Варна":[27.91,43.21],"Бургас":[27.47,42.50],"Русе":[25.97,43.85],"Видин":[22.88,43.99],"Плевен":[24.62,43.42],"В. Търново":[25.63,43.08],"Стара Загора":[25.63,42.43],"Благоевград":[23.10,42.02],"Шумен":[26.93,43.27],"Смолян":[24.70,41.58]};
+const pts=(a)=>a.map(p=>P(p[0],p[1]).map(v=>v.toFixed(1)).join(",")).join(" ");
+const poly=(a)=>"M"+pts(a).replace(/ /g," L")+"Z";
+const line=(a)=>"M"+pts(a).replace(/ /g," L");
+const NS="http://www.w3.org/2000/svg";
+
+/* ---------- demo on the fantasy map ---------- */
+const POOL=[
+ {n:"Мадарски конник",c:[27.12,43.28],f:"Скален релеф от VIII век, издълбан високо в отвесна скала. Обект на ЮНЕСКО."},
+ {n:"Рилски манастир",c:[23.34,42.13],f:"Най-големият манастир в България, основан от св. Иван Рилски през X век."},
+ {n:"Белоградчишки скали",c:[22.68,43.62],f:"Червени скали с имена като Мадоната, Конникът и Адам и Ева."},
+ {n:"Несебър",c:[27.73,42.66],f:"Древен град на малък полуостров, пълен с църкви. Обект на ЮНЕСКО."},
+ {n:"Побити камъни",c:[27.70,43.23],f:"Каменни колони, стърчащи от пясъка. Наричат ги „каменната гора“."},
+ {n:"Шипка",c:[25.32,42.75],f:"Проход в Стара планина, символ на Освободителната война 1877–1878 г."},
+ {n:"Перперикон",c:[25.45,41.72],f:"Древен скален град в Източните Родопи, обитаван от траките."},
+ {n:"връх Мусала",c:[23.58,42.18],f:"Най-високият връх на Балканския полуостров: 2925 метра."},
+ {n:"Сребърна",c:[27.07,44.11],f:"Езеро край Дунав, дом на къдроглавия пеликан. Обект на ЮНЕСКО."},
+ {n:"Седемте рилски езера",c:[23.32,42.20],f:"Седем ледникови езера, подредени едно над друго в Рила."},
+ {n:"Казанлъшка гробница",c:[25.40,42.62],f:"Тракийска гробница със стенописи на около 2300 години."},
+ {n:"Мелнишки пирамиди",c:[23.40,41.52],f:"Пясъчни пирамиди край Мелник, най-малкия град в България."},
+ {n:"Дяволското гърло",c:[24.38,41.61],f:"Пещера в Родопите с най-високия подземен водопад в България."},
+ {n:"нос Калиакра",c:[28.47,43.36],f:"Тесен нос с червени скали, врязан на 2 км в морето, с останки от крепост."},
+ {n:"пещера Леденика",c:[23.49,43.20],f:"Пещера край Враца, в която през зимата висят ледени сталактити."},
+ {n:"Крушунски водопади",c:[25.03,43.24],f:"Каскади от варовик и тюркоазени езерца сред гората."},
+ {n:"Плиска",c:[27.12,43.38],f:"Първата столица на средновековна България, основана през VII век."}
+];
+const M=BGMap, stage=document.getElementById("stage"), canvas=document.getElementById("mapCanvas"), ov=document.getElementById("mapOverlay"), loading=document.getElementById("loading");
+const qEl=document.getElementById("q"),rEl=document.getElementById("round"),tEl=document.getElementById("total"),resEl=document.getElementById("resultText"),nextBtn=document.getElementById("next");
+let look="ink",order=[],round=0,total=0,answered=false,found=[],extra="",drawnW=0,drawing=Promise.resolve();
+const ink=()=>look==="ink";
+function draw(){
+  loading.hidden=false;
+  drawing=drawing.then(async()=>{
+    const w=canvas.clientWidth||1000;drawnW=w;
+    await M.render(canvas,look,Math.round(Math.min(2204,Math.max(800,w*Math.min(2,window.devicePixelRatio||1)))));
+    loading.hidden=true;
+  }).catch(err=>{loading.textContent="Картата не се зареди: "+err.message;});
+  return drawing;
+}
+function flag(x,y,n){
+  const col=ink()?"#f3e6bf":"#fff6d8",st=ink()?"#2a1a0b":"#3a2608",fl=ink()?"#b8442c":"#d9a531";
+  return `<g><path d="M${x} ${y}v-24" stroke="${st}" stroke-width="2.2"/><path d="M${x} ${y-24}l15 4.5-15 5.5z" fill="${fl}" stroke="${st}" stroke-width="1.2"/><circle cx="${x}" cy="${y}" r="3.2" fill="${st}"/><text x="${x+7}" y="${y+15}" font-size="16" fill="${col}" stroke="${st}" stroke-width="4">${n}</text></g>`;
+}
+function paintMarks(){ov.innerHTML=found.map(f=>{const [x,y]=M.P(...f.c);return flag(x,y,f.n);}).join("")+extra;}
+function start(){order=POOL.slice().sort(()=>Math.random()-.5).slice(0,5);round=0;total=0;found=[];extra="";tEl.textContent=0;ask();}
+function ask(){answered=false;extra="";paintMarks();nextBtn.hidden=true;rEl.textContent=round+1;qEl.innerHTML=`Къде е <span>${order[round].n}</span>?`;
+  if(round>0) resEl.innerHTML="Щракнете на картата.";}
+ov.addEventListener("click",e=>{
+  if(answered||round>=5||!order.length) return;
+  const pt=ov.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const p=pt.matrixTransform(ov.getScreenCTM().inverse());
+  const t=order[round],km=M.hav(M.U(p.x,p.y),t.c),pts=Math.round(1000*Math.exp(-km/55));
+  total+=pts;tEl.textContent=total;answered=true;found.push(t);
+  const [tx,ty]=M.P(...t.c),ln=ink()?"#f3e6bf":"#ffffff";
+  extra=`<line x1="${p.x}" y1="${p.y}" x2="${tx}" y2="${ty}" stroke="rgba(20,10,0,.55)" stroke-width="7" stroke-linecap="round"/>
+   <line x1="${p.x}" y1="${p.y}" x2="${tx}" y2="${ty}" stroke="${ln}" stroke-width="3.5" stroke-dasharray="9 7" stroke-linecap="round"/>
+   <g class="pinDrop"><ellipse cx="${p.x+2}" cy="${p.y+1}" rx="7" ry="2.6" fill="rgba(0,0,0,.35)"/><path d="M${p.x} ${p.y}c-10-13-10-27 0-27s10 14 0 27z" fill="#d23c3c" stroke="#3a0f0f" stroke-width="1.4"/><circle cx="${p.x}" cy="${p.y-18}" r="4" fill="#fff"/></g>
+   <circle cx="${tx}" cy="${ty}" r="16" fill="none" stroke="${ink()?"#f3e6bf":"#f2c75c"}" stroke-width="3"><animate attributeName="r" values="10;22;10" dur="1.6s" repeatCount="indefinite"/></circle>`;
+  paintMarks();
+  const verdict=km<12?"Точно попадение!":km<35?"Много близо!":km<90?"Топло!":"Студено. Ето къде е:";
+  resEl.innerHTML=`<strong>${verdict}</strong> <em>${Math.round(km)} км · +${pts} т.</em><br>${t.f}`;
+  nextBtn.textContent=round<4?"Следващ":"Резултат";nextBtn.hidden=false;nextBtn.focus({preventScroll:true});
+});
+nextBtn.addEventListener("click",()=>{
+  if(round===5){start();return;}
+  if(round<4){round++;ask();return;}
+  const stars=total>3500?3:total>2200?2:1;extra="";paintMarks();
+  qEl.innerHTML=`Край! <span>${"★".repeat(stars)}${"☆".repeat(3-stars)}</span>`;
+  resEl.innerHTML=`<strong>${total} от 5000 точки.</strong> Петте намерени места остават на картата като знаменца. В играта тук идва марка за паспорта.`;
+  nextBtn.textContent="Играй пак";round=5;
+});
+document.querySelectorAll(".looks button").forEach(b=>b.addEventListener("click",()=>{
+  if(b.dataset.look===look) return;look=b.dataset.look;stage.dataset.look=look;
+  document.querySelectorAll(".looks button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  paintMarks();draw();
+}));
+let rz;window.addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(()=>{const w=canvas.clientWidth;if(Math.abs(w-drawnW)/drawnW>.25)draw();},300);});
+start();
+draw().then(()=>{document.querySelectorAll("canvas.cardmap").forEach(cv=>{drawing=drawing.then(()=>M.render(cv,cv.dataset.look,966));});});
+
+/* ---------- style previews ---------- */
+const mtn=(x,y,s,fill,cap)=>`<path d="M${x-s} ${y+s*0.7} L${x} ${y-s} L${x+s} ${y+s*0.7}Z" fill="${fill}"/>`+(cap?`<path d="M${x-s*0.38} ${y-s*0.35} L${x} ${y-s} L${x+s*0.38} ${y-s*0.35} L${x+s*0.15} ${y-s*0.2} L${x} ${y-s*0.42} L${x-s*0.15} ${y-s*0.2}Z" fill="${cap}"/>`:"");
+const along=(a,step)=>{const out=[];for(let i=0;i<a.length-1;i++){const p=P(...a[i]),q=P(...a[i+1]);const d=Math.hypot(q[0]-p[0],q[1]-p[1]);const n=Math.max(1,Math.round(d/step));for(let j=0;j<n;j++){const t=j/n;out.push([p[0]+(q[0]-p[0])*t,p[1]+(q[1]-p[1])*t]);}}out.push(P(...a[a.length-1]));return out;};
+
+function storybook(){
+  let s=`<defs><filter id="sbRough"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="6"/></filter>
+  <filter id="sbPaper"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="2"/><feColorMatrix values="0 0 0 0 0.45 0 0 0 0 0.35 0 0 0 0 0.2 0 0 0 0.12 0"/></filter></defs>
+  <rect width="${W}" height="${H}" fill="#f1e4c3"/><rect width="${W}" height="${H}" filter="url(#sbPaper)"/>
+  <path d="${poly(SEA)}" fill="#a7d0d4" filter="url(#sbRough)"/>`;
+  for(let i=0;i<6;i++){const x=440+(i%2)*14,y=90+i*34;s+=`<path d="M${x} ${y} q5 -5 10 0 t10 0" fill="none" stroke="#e9f4f2" stroke-width="2" stroke-linecap="round"/>`;}
+  s+=`<path d="${poly(BORDER)}" fill="#cfdf9f" stroke="#7a5a2c" stroke-width="2.5" stroke-dasharray="7 4" filter="url(#sbRough)"/>`;
+  s+=`<path d="${line(DANUBE)}" fill="none" stroke="#5aa3bf" stroke-width="5" stroke-linecap="round" filter="url(#sbRough)"/>`;
+  for(const k in RIVERS) s+=`<path d="${line(RIVERS[k])}" fill="none" stroke="#69adc6" stroke-width="2.5" filter="url(#sbRough)"/>`;
+  for(const k in RIDGES){along(RIDGES[k],18).forEach(([x,y],i)=>{s+=mtn(x,y+(i%2?3:-2),k==="rila"||k==="pirin"?11:8,i%2?"#8c9a6a":"#a1ad7a","#fffaf0");});}
+  [["София",1],["Пловдив",1],["Варна",1],["В. Търново",1],["Бургас",0]].forEach(([n])=>{const [x,y]=P(...CITIES[n]);s+=`<circle cx="${x}" cy="${y}" r="5" fill="#c94a3a" stroke="#fff6e0" stroke-width="2"/><text x="${x+8}" y="${y+4}" font-family="Neucha,cursive" font-size="15" fill="#4a3417">${n}</text>`;});
+  s+=`<text x="430" y="300" font-family="Neucha,cursive" font-size="16" fill="#3f7d8e" transform="rotate(-8 430 300)">Черно море</text>`;
+  s+=`<g transform="translate(18 18)"><rect width="200" height="38" rx="19" fill="#fff8e6" stroke="#7a5a2c" stroke-width="2"/><text x="18" y="25" font-family="Neucha,cursive" font-size="17" fill="#4a3417">Къде е Мелник? 🐦</text></g>`;
+  return s;
+}
+function folk(){
+  let s=`<defs>
+  <pattern id="stitch" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="10" height="10" fill="#efe4cf"/><path d="M3 3l4 4M7 3l-4 4" stroke="#c2242f" stroke-width="1.1" opacity=".55"/></pattern>
+  <pattern id="linen" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="4" fill="#e7dcc6"/><path d="M0 0h4M0 0v4" stroke="#d9ccb2" stroke-width=".6"/></pattern></defs>
+  <rect width="${W}" height="${H}" fill="url(#linen)"/>`;
+  // sea as stitched waves
+  s+=`<path d="${poly(SEA)}" fill="#e3dccb"/>`;
+  for(let y=40;y<300;y+=16) s+=`<path d="M${P(28.3,44)[0]-10+((y/16)%2)*6} ${y} l6 -5 l6 5 l6 -5 l6 5 l6 -5 l6 5" fill="none" stroke="#1d3557" stroke-width="1.6"/>`;
+  s+=`<path d="${poly(BORDER)}" fill="url(#stitch)"/>`;
+  s+=`<path d="${poly(BORDER)}" fill="none" stroke="#1b1b1b" stroke-width="5" stroke-dasharray="6 3" stroke-linejoin="round"/>`;
+  s+=`<path d="${poly(BORDER)}" fill="none" stroke="#c2242f" stroke-width="2" stroke-linejoin="round"/>`;
+  // embroidered zigzag ridges
+  for(const k in RIDGES){const a=along(RIDGES[k],9);let d="";a.forEach(([x,y],i)=>{d+=(i?"L":"M")+x.toFixed(1)+" "+(y+(i%2?5:-5)).toFixed(1);});s+=`<path d="${d}" fill="none" stroke="#1b1b1b" stroke-width="3" stroke-linejoin="miter"/>`;}
+  s+=`<path d="${line(DANUBE)}" fill="none" stroke="#1d3557" stroke-width="3" stroke-dasharray="5 3"/>`;
+  // rhombus cities (шевица motif)
+  ["София","Пловдив","Варна","В. Търново","Бургас","Русе"].forEach(n=>{const [x,y]=P(...CITIES[n]);s+=`<path d="M${x} ${y-9}L${x+9} ${y}L${x} ${y+9}L${x-9} ${y}Z" fill="#c2242f" stroke="#1b1b1b" stroke-width="1.6"/><path d="M${x} ${y-4}L${x+4} ${y}L${x} ${y+4}L${x-4} ${y}Z" fill="#efe4cf"/>`;});
+  // corner rosette
+  const ro=(cx,cy)=>{let r="";for(let i=0;i<8;i++){const a=i*Math.PI/4;r+=`<path d="M${cx} ${cy}L${cx+Math.cos(a-0.3)*14} ${cy+Math.sin(a-0.3)*14}L${cx+Math.cos(a)*22} ${cy+Math.sin(a)*22}L${cx+Math.cos(a+0.3)*14} ${cy+Math.sin(a+0.3)*14}Z" fill="${i%2?"#1b1b1b":"#c2242f"}"/>`;}return r+`<circle cx="${cx}" cy="${cy}" r="5" fill="#efe4cf"/>`;};
+  s+=ro(40,290);
+  s+=`<g transform="translate(18 16)"><rect width="190" height="40" fill="#c2242f"/><rect x="3" y="3" width="184" height="34" fill="none" stroke="#efe4cf" stroke-width="1" stroke-dasharray="3 2"/><text x="14" y="27" font-family="'Yeseva One',serif" font-size="17" fill="#fbf4e4">Намери Шипка</text></g>`;
+  s+=`<text x="300" y="306" font-family="'Yeseva One',serif" font-size="15" fill="#1b1b1b">★★☆  1 840 т.</text>`;
+  return s;
+}
+function diorama(){
+  let s=`<defs><linearGradient id="dsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3f3f6"/><stop offset="1" stop-color="#fbefe2"/></linearGradient></defs>
+  <rect width="${W}" height="${H}" fill="url(#dsky)"/>
+  <path d="${poly(SEA)}" fill="#8fd1e1"/>`;
+  for(let i=0;i<7;i++){const x=430+(i%3)*14,y=60+i*36;s+=`<path d="M${x} ${y} a6 4 0 0 1 12 0" fill="none" stroke="#c5ecf4" stroke-width="2.2" stroke-linecap="round"/>`;}
+  for(let k=9;k>0;k--) s+=`<path d="${poly(BORDER)}" transform="translate(0 ${k})" fill="${k>5?"#4d8a63":"#5f9f73"}"/>`;
+  s+=`<path d="${poly(BORDER)}" fill="#a9dcb1" stroke="#e9f8ea" stroke-width="1.5"/>`;
+  s+=`<path d="${line(DANUBE)}" fill="none" stroke="#6fc0dc" stroke-width="4" stroke-linecap="round"/>`;
+  for(const k in RIVERS) s+=`<path d="${line(RIVERS[k])}" fill="none" stroke="#7fcbe3" stroke-width="2.5" stroke-linecap="round"/>`;
+  const lp=(x,y,h)=>`<path d="M${x-h*.9} ${y+h*.45}L${x} ${y-h}L${x} ${y+h*.45}Z" fill="#7fae86"/><path d="M${x} ${y-h}L${x+h*.9} ${y+h*.45}L${x} ${y+h*.45}Z" fill="#5d8f69"/>`+(h>11?`<path d="M${x-h*.3} ${y-h*.52}L${x} ${y-h}L${x} ${y-h*.45}Z" fill="#fff"/><path d="M${x} ${y-h}L${x+h*.3} ${y-h*.52}L${x} ${y-h*.45}Z" fill="#e6eef0"/>`:"");
+  for(const k in RIDGES){along(RIDGES[k],16).forEach(([x,y],i)=>{s+=lp(x,y,(k==="rila"||k==="pirin")?15:9+(i%3)*2);});}
+  const pin=(x,y,c,l)=>`<ellipse cx="${x}" cy="${y+2}" rx="6" ry="2.5" fill="#000" opacity=".18"/><path d="M${x} ${y} C${x-9} ${y-12} ${x-9} ${y-24} ${x} ${y-24} C${x+9} ${y-24} ${x+9} ${y-12} ${x} ${y}Z" fill="${c}"/><circle cx="${x}" cy="${y-17}" r="3.5" fill="#fff"/>`+(l?`<g transform="translate(${x+10} ${y-34})"><rect width="${l.length*8+16}" height="22" rx="11" fill="#fff"/><text x="8" y="15" font-family="Comfortaa,sans-serif" font-weight="700" font-size="12" fill="#2e4a3b">${l}</text></g>`:"");
+  const [rx,ry]=P(23.34,42.13),[vx,vy]=P(25.63,43.08),[nx,ny]=P(27.73,42.66);
+  s+=pin(rx,ry,"#ff7a59","Рилски манастир")+pin(vx,vy,"#ffb547")+pin(nx,ny,"#7a7aff");
+  s+=`<g transform="translate(16 16)"><rect width="128" height="34" rx="17" fill="#fff"/><text x="16" y="22" font-family="Comfortaa,sans-serif" font-weight="700" font-size="13" fill="#2e4a3b">⭐ 2 450 т.</text></g>`;
+  s+=`<g transform="translate(16 270)"><rect width="230" height="34" rx="17" fill="#2e4a3b"/><rect x="6" y="6" width="${218*0.64}" height="22" rx="11" fill="#a9dcb1"/><text x="16" y="22" font-family="Comfortaa,sans-serif" font-weight="700" font-size="12" fill="#1c2f25">Рила: 18 от 28 места</text></g>`;
+  return s;
+}
+function metro(){
+  let s=`<rect width="${W}" height="${H}" fill="#0f1726"/><path d="${poly(SEA)}" fill="#0b2233"/>`;
+  s+=`<path d="${poly(BORDER)}" fill="#16233a" stroke="#3b5079" stroke-width="1.5" stroke-linejoin="round"/>`;
+  for(const k in RIDGES) s+=`<path d="${line(RIDGES[k])}" fill="none" stroke="#2c3d5e" stroke-width="2" stroke-dasharray="1 5" stroke-linecap="round"/>`;
+  const route=(names,c)=>{const a=names.map(n=>P(...CITIES[n]));s+=`<path d="M${a.map(p=>p.map(v=>v.toFixed(1)).join(" ")).join(" L")}" fill="none" stroke="${c}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>`;};
+  route(["Видин","Плевен","В. Търново","Шумен","Варна"],"#ff4f8b");
+  route(["София","Пловдив","Стара Загора","Бургас"],"#ffd23f");
+  route(["Благоевград","София","Плевен","Русе"],"#3ddcff");
+  route(["Смолян","Пловдив"],"#8cff7a");
+  for(const n in CITIES){const [x,y]=P(...CITIES[n]);s+=`<circle cx="${x}" cy="${y}" r="5.5" fill="#fff" stroke="#0f1726" stroke-width="2.5"/>`;}
+  [["София",-38,16],["Варна",-34,-10],["Видин",8,4],["Бургас",8,14],["Пловдив",8,16]].forEach(([n,dx,dy])=>{const [x,y]=P(...CITIES[n]);s+=`<text x="${x+dx}" y="${y+dy}" font-family="'Sofia Sans Condensed',sans-serif" font-weight="700" font-size="12" letter-spacing="1" fill="#dbe6ff">${n.toUpperCase()}</text>`;});
+  const hearts=(n,c)=>[...Array(6)].map((_,i)=>`<path transform="translate(${i*15} 0) scale(.55)" d="M10 18 L2 10 A5 5 0 0 1 10 3 A5 5 0 0 1 18 10Z" fill="${i<n?c:"#2c3d5e"}"/>`).join("");
+  s+=`<g transform="translate(16 14)"><text y="12" font-family="Unbounded,sans-serif" font-weight="700" font-size="11" fill="#ffd23f">МАРИЯ</text><g transform="translate(0 18)">${hearts(5,"#ffd23f")}</g></g>`;
+  s+=`<g transform="translate(${W-112} 14)"><text y="12" font-family="Unbounded,sans-serif" font-weight="700" font-size="11" fill="#ff4f8b">ИВАН</text><g transform="translate(0 18)">${hearts(3,"#ff4f8b")}</g></g>`;
+  s+=`<text x="${W/2}" y="300" text-anchor="middle" font-family="Unbounded,sans-serif" font-weight="800" font-size="13" fill="#fff">ДУЕЛ · РУНД 4 · Видин → Бургас</text>`;
+  return s;
+}
+function pixel(){
+  const C=8,cols=Math.ceil(W/C),rows=Math.ceil(H/C);
+  const B=BORDER.map(p=>P(...p)),S=SEA.map(p=>P(...p));
+  const inside=(x,y,poly)=>{let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const [xi,yi]=poly[i],[xj,yj]=poly[j];if(((yi>y)!=(yj>y))&&(x<(xj-xi)*(y-yi)/(yj-yi)+xi))c=!c;}return c;};
+  const ridgePts=[];for(const k in RIDGES) along(RIDGES[k],4).forEach(p=>ridgePts.push([p[0],p[1],k==="rila"||k==="pirin"]));
+  const riv=[];[DANUBE,...Object.values(RIVERS)].forEach(r=>along(r,3).forEach(p=>riv.push(p)));
+  let s=`<rect width="${W}" height="${H}" fill="#3a3550"/>`;
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const x=c*C+C/2,y=r*C+C/2;let f=null;
+    if(inside(x,y,B)){let md=99,hi=false;for(const p of ridgePts){const d=Math.hypot(p[0]-x,p[1]-y);if(d<md){md=d;hi=p[2];}}
+      let rv=99;for(const p of riv){const d=Math.hypot(p[0]-x,p[1]-y);if(d<rv)rv=d;}
+      f=rv<4.5?"#4fa4e8":md<5?(hi?"#f4f4f4":"#9c7a4b"):md<11?"#6f9b3c":((r+c)%7===0?"#5fb04e":"#73c35a");}
+    else if(inside(x,y,S)) f=((r*3+c)%11===0)?"#5b9be6":"#3d7fd6";
+    else f=((r+c*2)%9===0)?"#4a4466":"#433d5c";
+    s+=`<rect x="${c*C}" y="${r*C}" width="${C}" height="${C}" fill="${f}"/>`;}
+  ["София","Пловдив","Варна","В. Търново","Бургас"].forEach(n=>{let [x,y]=P(...CITIES[n]);x=Math.floor(x/C)*C;y=Math.floor(y/C)*C;s+=`<rect x="${x-C/2}" y="${y-C/2}" width="${C*2}" height="${C*2}" fill="#ffd84a" stroke="#3a2a10" stroke-width="2"/>`;});
+  // little stork sprite near Burgas
+  const [bx,by]=P(27.2,42.2),sp=["..wwww..",".wwwwww.","wwkwwwwo","..wwww..","...k.k..","...k.k.."],col={w:"#ffffff",k:"#1d1d1d",o:"#ff8a1f"};
+  sp.forEach((row,j)=>[...row].forEach((ch,i)=>{if(col[ch])s+=`<rect x="${Math.floor(bx)+i*3}" y="${Math.floor(by)+j*3}" width="3" height="3" fill="${col[ch]}"/>`;}));
+  s+=`<g transform="translate(12 12)"><rect width="196" height="30" fill="#1d1a2b" stroke="#ffd84a" stroke-width="3"/><text x="10" y="20" font-family="'Press Start 2P',monospace" font-size="9" fill="#ffd84a">НИВО 3 · ПЕЩЕРИ</text></g>`;
+  s+=`<g transform="translate(${W-128} 280)"><rect width="116" height="28" fill="#1d1a2b" stroke="#fff" stroke-width="3"/><text x="10" y="19" font-family="'Press Start 2P',monospace" font-size="9" fill="#fff">XP 0420</text></g>`;
+  return s;
+}
+function stamps(){
+  let s=`<rect width="${W}" height="${H}" fill="#f6f1e7"/>`;
+  for(let x=12;x<W;x+=18)for(let y=12;y<H;y+=18) s+=`<circle cx="${x}" cy="${y}" r=".9" fill="#d9cfbd"/>`;
+  const perf=(x,y,w,h)=>{let d="";const r=4,st=12;for(let i=x+st/2;i<x+w;i+=st){d+=`<circle cx="${i}" cy="${y}" r="${r}" fill="#f6f1e7"/><circle cx="${i}" cy="${y+h}" r="${r}" fill="#f6f1e7"/>`;}for(let j=y+st/2;j<y+h;j+=st){d+=`<circle cx="${x}" cy="${j}" r="${r}" fill="#f6f1e7"/><circle cx="${x+w}" cy="${j}" r="${r}" fill="#f6f1e7"/>`;}return d;};
+  const stamp=(x,y,rot,bg,art,title,val,got)=>{const w=124,h=156;let g=`<g transform="translate(${x} ${y}) rotate(${rot} ${w/2} ${h/2})"><rect x="3" y="5" width="${w}" height="${h}" fill="#000" opacity=".08"/><rect width="${w}" height="${h}" fill="#fffdf8"/>${perf(0,0,w,h)}<rect x="10" y="10" width="${w-20}" height="${h-44}" fill="${bg}"/>${art(10,10,w-20,h-44)}<text x="12" y="${h-18}" font-family="'Rubik Mono One',sans-serif" font-size="9.5" fill="#2b2b2b">${title}</text><text x="${w-12}" y="${h-18}" text-anchor="end" font-family="'Rubik Mono One',sans-serif" font-size="9" fill="#c3305f">${val}</text>`;
+    if(!got) g+=`<rect width="${w}" height="${h}" fill="#f6f1e7" opacity=".72"/><text x="${w/2}" y="${h/2+8}" text-anchor="middle" font-family="'Rubik Mono One',sans-serif" font-size="26" fill="#b9ad97">?</text>`;
+    else g+=`<circle cx="${w-26}" cy="${h-62}" r="22" fill="none" stroke="#1d5c45" stroke-width="2.5" opacity=".75"/><text x="${w-26}" y="${h-58}" text-anchor="middle" font-family="'Rubik Mono One',sans-serif" font-size="8" fill="#1d5c45" opacity=".85">НАМЕРЕН</text>`;
+    return g+`</g>`;};
+  const monastery=(x,y,w,h)=>{let a=`<rect x="${x}" y="${y+h*.62}" width="${w}" height="${h*.38}" fill="#d9a441"/><path d="M${x} ${y+h*.62}L${x+w*.3} ${y+h*.25}L${x+w*.55} ${y+h*.55}L${x+w*.8} ${y+h*.2}L${x+w} ${y+h*.5}V${y+h*.62}H${x}Z" fill="#4f7d5a"/>`;for(let i=0;i<5;i++)a+=`<path d="M${x+8+i*19} ${y+h-4}v-12a6 6 0 0 1 12 0v12z" fill="#8b2f2f"/>`;return a+`<rect x="${x+w*.42}" y="${y+h*.38}" width="14" height="${h*.28}" fill="#efe6d2"/><path d="M${x+w*.42-3} ${y+h*.38}L${x+w*.42+7} ${y+h*.28}L${x+w*.42+17} ${y+h*.38}Z" fill="#3b3b3b"/>`;};
+  const peak=(x,y,w,h)=>`<circle cx="${x+w*.75}" cy="${y+h*.25}" r="10" fill="#ffd166"/><path d="M${x} ${y+h}L${x+w*.45} ${y+h*.18}L${x+w} ${y+h}Z" fill="#3e5c76"/><path d="M${x+w*.33} ${y+h*.4}L${x+w*.45} ${y+h*.18}L${x+w*.57} ${y+h*.4}L${x+w*.5} ${y+h*.36}L${x+w*.45} ${y+h*.44}L${x+w*.4} ${y+h*.36}Z" fill="#fff"/><text x="${x+6}" y="${y+16}" font-family="'Rubik Mono One',sans-serif" font-size="9" fill="#fff">2925</text>`;
+  const sea=(x,y,w,h)=>`<rect x="${x}" y="${y+h*.6}" width="${w}" height="${h*.4}" fill="#2f7fa3"/><rect x="${x+w*.3}" y="${y+h*.32}" width="${w*.4}" height="${h*.3}" fill="#e8d9b5"/><path d="M${x+w*.3} ${y+h*.32}a${w*.2} ${w*.2} 0 0 1 ${w*.4} 0z" fill="#b5523b"/><rect x="${x+w*.47}" y="${y+h*.42}" width="${w*.06}" height="${h*.2}" fill="#7a3a2a"/>`;
+  s+=stamp(28,70,-5,"#f3dfb2",monastery,"РИЛСКИ МАН.","ЮНЕСКО",true);
+  s+=stamp(178,56,3,"#bfe0ef",peak,"МУСАЛА","№ 43",true);
+  s+=stamp(330,74,-2,"#cfe6f0",sea,"НЕСЕБЪР","ЮНЕСКО",false);
+  s+=`<text x="28" y="40" font-family="'Rubik Mono One',sans-serif" font-size="14" fill="#2b2b2b">ПАСПОРТ · ЮНЕСКО</text><text x="${W-28}" y="40" text-anchor="end" font-family="'Rubik Mono One',sans-serif" font-size="14" fill="#c3305f">6 / 10</text>`;
+  return s;
+}
+
+const STYLES=[
+ {id:"inkmap",t:"Мастилена карта",ages:"8–14 г.",canvas:"ink",pick:true,
+  feel:"Тюркоазено море с румбови линии и роза на ветровете, пергаментова суша, гъсти иглолистни гори и планини с мастилени щрихи. Като картата от любима фентъзи книга.",
+  refs:"Референции: картите в „Хобитът“ и „Властелинът на пръстените“, Inkarnate, Wonderdraft",
+  pro:"Изглежда като истинско приключение. Харесва се и на по-големите деца, които бягат от всичко „бебешко“.",con:"Много детайл: пиновете и надписите в играта трябва да имат силен контраст.",
+  sw:["#0f3a40","#e3c98a","#2c5543","#2a1a0b"],font:"Cormorant Unicase"},
+ {id:"paintmap",t:"Рисувана приключенска карта",ages:"6–12 г.",canvas:"paint",pick:true,
+  feel:"Ярко море с вихри, обемни планини със сняг и облаци, пъстри ниви и гори, ленти с имената на градовете и златна рамка.",
+  refs:"Референции: Heroes of Might and Magic, Civilization, картите на Inkarnate в рисуван стил",
+  pro:"Най-цветната и „игрална“ посока. Прогресът може да се показва с облаци, които се разсейват над научените области.",con:"Пъстротата трябва да е премерена, за да не се губят надписите.",
+  sw:["#0a2f6a","#7ea64a","#d2bf68","#f3dc93"],font:"Kurale"},
+ {id:"folk",t:"Шевица",ages:"6–14 г. · всички",fn:folk,
+  feel:"Червено и черно върху ленено платно, ромбове вместо точки, зигзаг вместо планини. Веднага изглежда българско.",
+  refs:"Референции: народни шевици, Baba Is You (силна графична идентичност), плакатите на Студио Ghibli за местни празници",
+  pro:"Уникален облик, разпознаваем на един поглед. Работи като бранд и в училище.",con:"Трябва внимателна илюстрация, за да не изглежда като сувенир.",
+  sw:["#c2242f","#1b1b1b","#efe4cf","#1d3557"],font:"Yeseva One"},
+ {id:"diorama",t:"Диорама",ages:"7–12 г.",fn:diorama,
+  feel:"Мека, обемна карта като макет на маса. Ниско-полигонални планини, пинове-балончета, пастелни цветове.",
+  refs:"Референции: Townscaper, Mini Motorways, Monument Valley",
+  pro:"Най-лесна за четене: релефът се вижда без легенда. Изглежда скъпо.",con:"Повече работа за 3D или фалшив 3D ефект. Може да е тежка за стари таблети.",
+  sw:["#a9dcb1","#5d8f69","#8fd1e1","#ff7a59"],font:"Comfortaa"},
+ {id:"story",t:"Приказна карта",ages:"6–10 г.",fn:storybook,
+  feel:"Ръчно рисувана карта като в детска книжка: акварел, мастилени контури, планинки със снежни шапки.",
+  refs:"Референции: илюстровани карти за деца, Carcassonne, Lonely Planet Kids",
+  pro:"Топла и приветлива. Родителите я харесват веднага.",con:"По-малко подходяща за точно пускане на пин. По-големите деца я намират „бебешка“.",
+  sw:["#f1e4c3","#cfdf9f","#a7d0d4","#c94a3a"],font:"Neucha"},
+ {id:"metro",t:"Метро-карта",ages:"10–14 г. · състезание",fn:metro,
+  feel:"Тъмен фон, тънки контури, ярки линии като метро-схема. Изчистено, бързо, като е-спорт.",
+  refs:"Референции: Mini Metro, GeoGuessr Duels, Worldle",
+  pro:"Идеална за дуели и „Пътят на щъркела“. Лесна за изработка.",con:"Студена за най-малките. Губи природата и културата.",
+  sw:["#0f1726","#ff4f8b","#ffd23f","#3ddcff"],font:"Unbounded"},
+ {id:"pixel",t:"Пикселно приключение",ages:"8–13 г.",fn:pixel,
+  feel:"Ретро пиксели, нива и опит, малък пикселен щъркел, който обикаля картата.",
+  refs:"Референции: Pokémon, Stardew Valley, Celeste",
+  pro:"Децата го свързват с „истински“ игри. Нива и XP се вписват естествено.",con:"Ниската резолюция пречи на точността при малки обекти.",
+  sw:["#73c35a","#3d7fd6","#9c7a4b","#ffd84a"],font:"Press Start 2P"},
+ {id:"stamps",t:"Паспорт с марки",ages:"всички · слой награди",fn:stamps,
+  feel:"Не е стил на картата, а на наградите: албум с перфорирани марки и печат „Намерен“. Сяда върху всеки от стиловете.",
+  refs:"Референции: Stack the Countries, албумите Panini, книжката на Стоте национални туристически обекта",
+  pro:"Колекционирането е най-силният двигател за връщане. Връзка с реални пътувания.",con:"Нужни са десетки илюстрации. Може да се започне с прости силуети.",
+  sw:["#f6f1e7","#c3305f","#1d5c45","#d9a441"],font:"Rubik Mono One"}
+];
+const host=document.getElementById("styles");
+host.innerHTML=STYLES.map(st=>`<article class="style${st.pick?" pick":""}">
+  ${st.canvas?`<canvas class="cardmap" data-look="${st.canvas}" role="img" aria-label="Пример за стил ${st.t}"></canvas>`:`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Пример за стил ${st.t}">${st.fn()}</svg>`}
+  <div class="style-body">
+    <div class="style-title"><h3>${st.t}${st.pick?' <span style="color:var(--forest);font-family:var(--cond);font-size:.82rem">· препоръка</span>':""}</h3><span class="ages">${st.ages}</span></div>
+    <p>${st.feel}</p>
+    <div class="refs">${st.refs}</div>
+    <div class="pc"><div><b>Плюс</b>${st.pro}</div><div><b>Минус</b>${st.con}</div></div>
+    <div class="swatches">${st.sw.map(c=>`<i style="background:${c}"></i>`).join("")}<span>шрифт: ${st.font}</span></div>
+  </div></article>`).join("");
+})();
+</script>
+</body>
+</html>
