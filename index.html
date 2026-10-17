@@ -7,7 +7,7 @@
 <title>Български Лев</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&family=Cormorant+Unicase:wght@600;700&family=Kurale&family=Cormorant+Garamond:ital,wght@1,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&family=Caveat:wght@600;700&family=Cormorant+Unicase:wght@600;700&family=Kurale&family=Cormorant+Garamond:ital,wght@1,600&display=swap">
 <style>
 /* Layout: one full-screen map; a soft pastel HUD floats above it (top bar, deck bottom-left, drawn card on the left, collection bottom-right) */
 :root{
@@ -18,13 +18,16 @@
   color-scheme:light;
 }
 html,body{height:100%}
-body{margin:0;overflow:hidden;background:#0f4f8c;font-family:var(--font);color:var(--ink);-webkit-tap-highlight-color:transparent}
+body{margin:0;overflow:hidden;background:#1f74c4;font-family:var(--font);color:var(--ink);-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 button{font-family:inherit}
 #world{position:fixed;inset:0}
 #map,#fx{position:absolute;inset:0;width:100%;height:100%;display:block}
 #fx{pointer-events:none}
-#ov{position:absolute;display:block;cursor:crosshair;touch-action:manipulation}
+#ov,#lab{position:absolute;display:block}
+#ov{cursor:crosshair;touch-action:manipulation}
+#lab{pointer-events:none;overflow:visible}
+#lab .sign{filter:drop-shadow(0 1.5px 1.2px rgba(40,25,5,.35))}
 #ov text{font-family:var(--font);font-weight:900;paint-order:stroke;stroke-linejoin:round}
 .ring{transform-box:fill-box;transform-origin:center;animation:ringIn .45s cubic-bezier(.2,1.4,.4,1) both}
 .ring.r2{animation-delay:.08s}.ring.r3{animation-delay:.16s}
@@ -148,8 +151,13 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 .intro.leave{opacity:0;transform:scale(1.04);pointer-events:none}
 .intro::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(124,196,178,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(124,196,178,.12) 1px,transparent 1px);background-size:44px 44px;pointer-events:none}
 .intro > *{position:relative}
-.intro-art{width:min(620px,94vw);max-height:56vh;aspect-ratio:580/450}
+.intro-stage{position:relative;width:min(620px,94vw,72vh);aspect-ratio:580/450;animation:introFloat 4.5s ease-in-out infinite}
+.intro-art{position:absolute;inset:0}
 .intro-art svg{width:100%;height:100%;display:block}
+.intro-lion{position:absolute;left:17.9%;top:-2.9%;width:65.5%;height:84.4%;animation:lionIn .7s cubic-bezier(.3,1.6,.5,1) .5s both}
+.intro-lion svg{display:block}
+@keyframes introFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes lionIn{from{transform:translateY(40px) scale(.6);opacity:0}to{transform:none;opacity:1}}
 .intro-title{display:flex;align-items:center;gap:14px;animation:introIn .6s ease-out 1s both}
 .intro-sub{margin:0;color:var(--muted);font-weight:700;text-align:center;max-width:36ch;animation:introIn .6s ease-out 1.2s both}
 .intro-play{font-size:1.3rem;padding:14px 46px;animation:introIn .6s ease-out 1.4s both,pulse 2s ease-in-out 2.2s infinite}
@@ -314,6 +322,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 <div id="world">
   <canvas id="map" aria-hidden="true"></canvas>
   <canvas id="fx" aria-hidden="true"></canvas>
+  <svg id="lab" viewBox="0 0 1102 780" aria-hidden="true"></svg>
   <svg id="ov" viewBox="0 0 1102 780" role="img" aria-label="Карта на България. Докоснете мястото, което търсите."></svg>
 </div>
 <div class="loading" id="loading">Рисуваме картата…</div>
@@ -331,7 +340,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 </div>
 
 <div class="intro" id="start">
-  <div class="intro-art" id="introArt"></div>
+  <div class="intro-stage"><div class="intro-art" id="introArt"></div><div class="intro-lion" id="lion" role="img" aria-label="Лъвче откривател с раница"></div></div>
   <div class="intro-title"><h1 class="wordmark"><span>Български</span><b>Л<i>е</i>в</b></h1></div>
   <p class="intro-sub">Обърни карта, разгледай снимките и намери мястото на картата.</p>
   <button type="button" class="big intro-play" id="play">Опознай</button>
@@ -346,8 +355,10 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 </div>
 <div class="screen detail" id="detail" hidden><div class="dwrap"><button type="button" class="iconbtn pill dclose" id="detClose" aria-label="Затвори"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><div class="front" id="detFront"></div></div></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 <script src="geo.js"></script>
 <script src="map.js"></script>
+<script src="labels.js"></script>
 <script src="places.js"></script>
 <script src="photos.js"></script>
 <script>
@@ -370,8 +381,37 @@ let collected={}; try{collected=JSON.parse(localStorage.getItem(STORE)||"{}")||{
 const saveCollected=()=>{try{localStorage.setItem(STORE,JSON.stringify(collected));}catch(e){}};
 const look="paint"; let view=null, deck=[], hand=null, answered=false, game=[], found=[], extra="", busy=Promise.resolve();
 
+/* ---------- map signs (data in labels.js) ---------- */
+const SVGNS="http://www.w3.org/2000/svg";
+function svgEl(tag,attrs,parent){ const e=document.createElementNS(SVGNS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
+function buildSigns(){
+  const lab=$("lab"); lab.innerHTML="";
+  for(const L of (typeof MAP_LABELS!=="undefined"?MAP_LABELS:[])){
+    const [x,y]=M.P(L.lon,L.lat), g=svgEl("g",{transform:`translate(${x} ${y}) rotate(${L.a||0})`,class:"sign sign-"+L.kind},lab);
+    if(L.kind==="region"||L.kind==="city"){
+      const big=L.kind==="region", fs=big?12.5:10.5;
+      const tx=svgEl("text",{x:0,y:fs*0.36,"text-anchor":"middle","font-family":"Nunito, sans-serif","font-weight":900,"font-size":fs,"letter-spacing":big?1.4:0.6,fill:"#5a3a1a"},g); tx.textContent=big?L.t.toUpperCase():L.t;
+      const w=tx.getComputedTextLength()+(big?26:18), h=big?21:17, hw=w/2, hh=h/2, tail=big?9:6;
+      const back=svgEl("g",{},null);
+      [-1,1].forEach(sx=>svgEl("path",{d:`M${sx*(hw-3)} ${-hh+5} L${sx*(hw+tail)} ${-hh+5} L${sx*(hw+tail*0.45)} ${3} L${sx*(hw+tail)} ${hh+5} L${sx*(hw-3)} ${hh+5} Z`,fill:"#e2c895",stroke:"#b8925a","stroke-width":0.8},back));
+      svgEl("path",{d:`M${-hw} ${-hh} Q0 ${-hh-4} ${hw} ${-hh} L${hw} ${hh} Q0 ${hh-4} ${-hw} ${hh} Z`,fill:"#f8eacb",stroke:"#c9a66b","stroke-width":0.9},back);
+      g.insertBefore(back,tx);
+      if(!big){ g.setAttribute("transform",`translate(${x} ${y-16}) rotate(${L.a||0})`); svgEl("circle",{cx:0,cy:16,r:3,fill:"#d2482f",stroke:"#fff","stroke-width":1.2},g); }
+    } else if(L.kind==="sea"){
+      L.t.split(" ").forEach((w,i)=>{ const t=svgEl("text",{x:i*10,y:i*34,"text-anchor":"middle","font-family":"Caveat, cursive","font-weight":700,"font-size":40,"letter-spacing":2,fill:"#ffffff"},g); t.textContent=w; });
+    } else if(L.kind==="river"){
+      const t=svgEl("text",{"text-anchor":"middle","font-family":"Caveat, cursive","font-weight":700,"font-size":17,fill:"#1f5f9e",stroke:"rgba(255,255,255,.85)","stroke-width":3,"paint-order":"stroke"},g); t.textContent=L.t;
+    } else {
+      const t=svgEl("text",{"text-anchor":"middle","font-family":"Nunito, sans-serif","font-weight":800,"font-size":14,"letter-spacing":6,fill:"#5d7a52","fill-opacity":0.85},g); t.textContent=L.t.toUpperCase();
+    }
+  }
+}
+(document.fonts?Promise.race([Promise.all(['900 12px Nunito','700 20px Caveat'].map(f=>document.fonts.load(f,"БЪЛГАРИЯ"))),new Promise(r=>setTimeout(r,2500))]):Promise.resolve()).then(buildSigns);
+
 /* ---------- intro art ---------- */
 fetch("intro.svg").then(r=>r.ok?r.text():"").then(t=>{ if(t) $("introArt").innerHTML=t; }).catch(()=>{});
+fetch("lion.json").then(r=>r.json()).then(data=>{ if(!window.lottie) return; const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const a=lottie.loadAnimation({container:$("lion"),renderer:"svg",loop:true,autoplay:!still,animationData:data}); if(still) a.goToAndStop(0,true); }).catch(()=>{});
 
 /* ---------- map layout + render ---------- */
 function layout(){
@@ -384,14 +424,14 @@ function layout(){
   if(M.H*s>=vh) oy=Math.min(0,Math.max(vh-M.H*s,oy));
   return {vw,vh,s,ox,oy};
 }
-function placeOverlay(){ const v=view; Object.assign(ov.style,{left:v.ox+"px",top:v.oy+"px",width:M.W*v.s+"px",height:M.H*v.s+"px"}); }
+function placeOverlay(){ const v=view, st={left:v.ox+"px",top:v.oy+"px",width:M.W*v.s+"px",height:M.H*v.s+"px"}; Object.assign(ov.style,st); Object.assign($("lab").style,st); }
 function draw(){
   view=layout(); placeOverlay(); $("loading").hidden=false;
   const d=Math.min(2,window.devicePixelRatio||1), v=view;
-  busy=busy.then(()=>M.render(canvas,look,{cw:Math.round(v.vw*d),ch:Math.round(v.vh*d),s:v.s*d,ox:v.ox*d,oy:v.oy*d,frame:false,compass:false,cityLabels:false,fade:true}))
+  busy=busy.then(()=>M.render(canvas,look,{cw:Math.round(v.vw*d),ch:Math.round(v.vh*d),s:v.s*d,ox:v.ox*d,oy:v.oy*d,frame:false,compass:true,cityLabels:false,labels:false,fade:true}))
     .then(()=>{$("loading").hidden=true;})
     .catch(e=>{$("loading").textContent="Картата не се зареди: "+e.message;});
-  document.body.style.background="#0f4f8c";
+  document.body.style.background="#1f74c4";
   fxResize();
 }
 let rz; addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(()=>{draw();paintMarks();},250);});
