@@ -183,7 +183,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 
 /* fan of cards at the bottom */
 .fan{position:absolute;left:0;right:0;bottom:0;height:0;pointer-events:none}
-.fc{position:absolute;left:50%;bottom:-40px;width:320px;height:540px;margin-left:-160px;transform-origin:50% 100%;transition:transform .6s cubic-bezier(.3,1.15,.45,1),opacity .4s;pointer-events:auto;cursor:pointer;perspective:1600px}
+.fc{position:absolute;left:var(--fanx,50%);bottom:-40px;width:320px;height:540px;margin-left:-160px;transform-origin:50% 100%;transition:transform .6s cubic-bezier(.3,1.15,.45,1),opacity .4s;pointer-events:auto;cursor:pointer;perspective:1600px}
 .fc.off{opacity:0;pointer-events:none}
 .fc-flip{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .6s cubic-bezier(.3,1.2,.5,1)}
 .fc.up .fc-flip{transform:rotateY(180deg)}
@@ -223,28 +223,14 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 .fc .pc-body li::before{width:11px;height:11px;background-size:7px}
 
 /* category designs */
-.cb.cat-city,.cb.cat-nature,.cb.cat-history,.cb.cat-culture{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
-.cb[class*='cat-']::after{display:none}
-.cb .emb{width:38%;aspect-ratio:1;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 0 0 6px rgba(255,255,255,.35)}
-.cb .emb svg{width:56%;height:56%}
-.cb .cb-lbl{font-weight:900;font-size:2.1rem;letter-spacing:.14em;text-transform:uppercase;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.15)}
-.mcard.down .emb{width:44%;box-shadow:0 0 0 4px rgba(255,255,255,.35)}
 .front{position:relative}
 .fc-face.front{position:absolute}
-.cb.cat-city{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='34'%3E%3Cpath d='M3 32V18l7-7 7 7v14zM20 32V12h9v20zM6 22h3v3H6zM23 16h3v3h-3zM23 22h3v3h-3zM32 32V20l5-5 5 5v12z' fill='%23ffffff' fill-opacity='.18'/%3E%3C/svg%3E"),linear-gradient(160deg,#6fa8e6,#2f6fb3)!important;box-shadow:var(--shadow),inset 0 0 0 10px #fff,inset 0 0 0 14px #2f6fb355!important}
-.cb.cat-city .emb{color:#2f6fb3}
 .front.cat-city{background:#f4f8fe}
 .front.cat-city .pc-head{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='34'%3E%3Cpath d='M3 32V18l7-7 7 7v14zM20 32V12h9v20zM6 22h3v3H6zM23 16h3v3h-3zM23 22h3v3h-3zM32 32V20l5-5 5 5v12z' fill='%23ffffff' fill-opacity='.18'/%3E%3C/svg%3E") 0 0/auto 100%,linear-gradient(90deg,#6fa8e6,#2f6fb3)}
-.cb.cat-nature{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='32'%3E%3Cpath d='M1 30l10-17 10 17zM19 30l7-12 7 12z' fill='%23ffffff' fill-opacity='.18'/%3E%3Cpath d='M31 10l3-6 3 6z' fill='%23ffffff' fill-opacity='.18'/%3E%3C/svg%3E"),linear-gradient(160deg,#7fcf7a,#3c8a3e)!important;box-shadow:var(--shadow),inset 0 0 0 10px #fff,inset 0 0 0 14px #3c8a3e55!important}
-.cb.cat-nature .emb{color:#3c8a3e}
 .front.cat-nature{background:#f4fbee}
 .front.cat-nature .pc-head{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='32'%3E%3Cpath d='M1 30l10-17 10 17zM19 30l7-12 7 12z' fill='%23ffffff' fill-opacity='.18'/%3E%3Cpath d='M31 10l3-6 3 6z' fill='%23ffffff' fill-opacity='.18'/%3E%3C/svg%3E") 0 0/auto 100%,linear-gradient(90deg,#7fcf7a,#3c8a3e)}
-.cb.cat-history{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34'%3E%3Cpath d='M9 6h16v10c0 7-8 12-8 12s-8-5-8-12z' fill='%23ffffff' fill-opacity='.15'/%3E%3Cpath d='M0 33h6v-3h4v3h6v-3h4v3h6v-3h4v3h4' fill='none' stroke='%23ffffff' stroke-opacity='.15' stroke-width='2'/%3E%3C/svg%3E"),linear-gradient(160deg,#e48a6a,#a8402e)!important;box-shadow:var(--shadow),inset 0 0 0 10px #fff,inset 0 0 0 14px #a8402e55!important}
-.cb.cat-history .emb{color:#a8402e}
 .front.cat-history{background:#fbf1de}
 .front.cat-history .pc-head{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='34' height='34'%3E%3Cpath d='M9 6h16v10c0 7-8 12-8 12s-8-5-8-12z' fill='%23ffffff' fill-opacity='.15'/%3E%3Cpath d='M0 33h6v-3h4v3h6v-3h4v3h6v-3h4v3h4' fill='none' stroke='%23ffffff' stroke-opacity='.15' stroke-width='2'/%3E%3C/svg%3E") 0 0/auto 100%,linear-gradient(90deg,#e48a6a,#a8402e)}
-.cb.cat-culture{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Cpath d='M13 2l11 11-11 11L2 13z' fill='none' stroke='%23ffffff' stroke-opacity='.3' stroke-width='2'/%3E%3Cpath d='M13 8l5 5-5 5-5-5z' fill='%23ffffff' fill-opacity='.3'/%3E%3C/svg%3E"),linear-gradient(160deg,#b896e2,#6f46a0)!important;box-shadow:var(--shadow),inset 0 0 0 10px #fff,inset 0 0 0 14px #6f46a055!important}
-.cb.cat-culture .emb{color:#6f46a0}
 .front.cat-culture{background:#faf6ff}
 .front.cat-culture .pc-head{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='26'%3E%3Cpath d='M13 2l11 11-11 11L2 13z' fill='none' stroke='%23ffffff' stroke-opacity='.3' stroke-width='2'/%3E%3Cpath d='M13 8l5 5-5 5-5-5z' fill='%23ffffff' fill-opacity='.3'/%3E%3C/svg%3E") 0 0/auto 100%,linear-gradient(90deg,#b896e2,#6f46a0)}
 .front.cat-city{border-radius:14px}
@@ -485,9 +471,10 @@ function refill(){deck=shuffle(PLACES.slice());}
 let round=[], cur=0, open=false, revealed=[], els=[];
 function updateTop(){ $("pips").innerHTML=[0,1,2,3,4].map(i=>`<i class="${i<game.length?"p"+game[i].pts:i===game.length?"now":""}"></i>`).join(""); }
 function bigScale(){return Math.min(1.15,(innerWidth-24)/320,(innerHeight-40)/540);}
-function backFace(p){ return `<div class="fc-face cb cat-${p.cat}"><div class="emb">${ICON[p.cat]}</div><div class="cb-lbl">${CATS[p.cat].label}</div></div>`; }
+function backFace(){ return `<div class="fc-face cb"></div>`; }
 function layoutFan(){
   const small=innerWidth<600?0.27:0.33, step=Math.min(118,innerWidth/7.2), n=els.length;
+  const fanX=innerWidth<700?innerWidth/2:Math.min(innerWidth/2,2*step+82); $("fan").style.setProperty("--fanx",fanX+"px");
   els.forEach((el,i)=>{
     let k=((cur-i)%n+n)%n; if(k>n>>1) k-=n; const isNow=i===cur;
     const prev=el._k; el._k=k;
@@ -496,10 +483,10 @@ function layoutFan(){
     el.classList.toggle("up",i<cur||(isNow&&revealed[i]));
 
     el.style.zIndex=isNow?(open?60:40):30-Math.abs(k);
-    if(isNow&&open){ const b=bigScale(); el.style.transform=`translateY(${-((innerHeight-540*b)/2+40)}px) scale(${b})`; }
+    if(isNow&&open){ const b=bigScale(); el.style.transform=`translate(${innerWidth/2-fanX}px,${-((innerHeight-540*b)/2+40)}px) scale(${b})`; }
     else el.style.transform=`translate(${k*step}px,${k*k*10+(isNow?-34:-20)}px) rotate(${k*10}deg) scale(${isNow?small*1.15:small})`;
   });
-  const tap=$("fanTap"); if(tap) tap.hidden=!(round[cur]&&!revealed[cur]&&!open);
+  const tap=$("fanTap"); if(tap){ tap.hidden=!(round[cur]&&!revealed[cur]&&!open); tap.style.left=fanX+"px"; }
   updateAim();
 }
 function updateAim(){ ov.classList.toggle("aim",!!hand&&!answered&&!open); }
@@ -600,7 +587,7 @@ function openAlbum(){
   $("albChips").innerHTML=Object.entries(CATS).map(([k,c])=>chip(c.label,c.color,PLACES.filter(p=>p.cat===k&&collected[p.id]).length,PLACES.filter(p=>p.cat===k).length)).join("")
     +Object.entries(RARITY).map(([k,r])=>`<span>${gems(k)}${r.label} ${PLACES.filter(p=>p.r===k&&collected[p.id]).length}/${PLACES.filter(p=>p.r===k).length}</span>`).join("");
   $("albGrid").innerHTML=PLACES.map(p=>{const c=CATS[p.cat], got=collected[p.id];
-    if(!got) return `<div class="mcard down cb cat-${p.cat}" aria-label="Неоткрита карта № ${p.no}"><div class="emb">${ICON[p.cat]}</div><span class="no">№ ${p.no}</span>${gems(p.r)}</div>`;
+    if(!got) return `<div class="mcard down cb" aria-label="Неоткрита карта № ${p.no}"><span class="no">№ ${p.no}</span>${gems(p.r)}</div>`;
     const ph=photosOf(p)[0];
     return `<button type="button" class="mcard up${p.r==="rare"?" rare":""}" data-id="${p.id}" style="--cc:${c.color};--cd:${c.dark}"><div class="ph" style="background-image:url('${ph?ph.f:""}')"></div><div class="bd"><small>${ICON[p.cat]}${c.label}</small><b>${p.n}</b><div class="row2">${gems(p.r)}<span class="pts">${"★".repeat(got)}</span></div></div></button>`;}).join("");
   $("albGrid").querySelectorAll(".mcard.up").forEach(b=>b.addEventListener("click",()=>{renderFront(PLACES.find(p=>p.id===b.dataset.id),$("detFront"),false);$("detail").hidden=false;}));
