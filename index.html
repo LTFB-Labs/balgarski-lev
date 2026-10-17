@@ -627,7 +627,7 @@ function newGame(){
 }
 
 /* ---------- controls ---------- */
-$("play").addEventListener("click",()=>{ $("start").classList.add("leave"); setTimeout(()=>{$("start").hidden=true;},500); dealRound(); document.documentElement.requestFullscreen?.().catch(()=>{}); });
+$("play").addEventListener("click",()=>{ $("start").classList.add("leave"); setTimeout(()=>{$("start").hidden=true;},500); dealRound(); });
 
 refill(); updateTop(); updateAlbumCount(); draw();
 })();
