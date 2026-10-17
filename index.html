@@ -18,7 +18,7 @@
   color-scheme:light;
 }
 html,body{height:100%}
-body{margin:0;overflow:hidden;background:#1f74c4;font-family:var(--font);color:var(--ink);-webkit-tap-highlight-color:transparent}
+body{margin:0;overflow:hidden;background:#cadd95;font-family:var(--font);color:var(--ink);-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 button{font-family:inherit}
 #world{position:fixed;inset:0}
@@ -302,8 +302,8 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 <div id="world">
   <canvas id="map" aria-hidden="true"></canvas>
   <canvas id="fx" aria-hidden="true"></canvas>
-  <svg id="lab" viewBox="0 0 1102 780" aria-hidden="true"></svg>
-  <svg id="ov" viewBox="0 0 1102 780" role="img" aria-label="Карта на България. Докоснете мястото, което търсите."></svg>
+  <svg id="lab" viewBox="0 0 1639 960" aria-hidden="true"></svg>
+  <svg id="ov" viewBox="0 0 1639 960" role="img" aria-label="Карта на България. Докоснете мястото, което търсите."></svg>
 </div>
 <div class="loading" id="loading">Рисуваме картата…</div>
 
@@ -337,6 +337,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 
 <script src="geo.js"></script>
 <script src="map.js"></script>
+<script src="warp.js"></script>
 <script src="labels.js"></script>
 <script src="places.js"></script>
 <script src="photos.js"></script>
@@ -345,8 +346,15 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 const M=BGMap, $=id=>document.getElementById(id);
 const canvas=$("map"), ov=$("ov");
 const RINGS=[[7.5,3],[17.5,2],[32.5,1]];             // km radius → points
-const KM=200/111.2;                                // map units per km
-const BB={x0:50,y0:85,x1:990,y1:700};             // Bulgaria with a margin, in map units
+const BB={x0:80,y0:15,x1:1600,y1:935};             // Bulgaria with a margin, in image pixels
+/* The map is an illustration; WARP (warp.js) bends real coordinates onto it and back. */
+function tps(t,x,y){ const X=x/t.S, Y=y/t.S; let u=t.a[0][0]+t.a[1][0]*X+t.a[2][0]*Y, v=t.a[0][1]+t.a[1][1]*X+t.a[2][1]*Y;
+  for(let i=0;i<t.c.length;i++){ const dx=X-t.c[i][0], dy=Y-t.c[i][1], r2=dx*dx+dy*dy; if(r2>1e-18){ const k=0.5*r2*Math.log(r2); u+=t.w[i][0]*k; v+=t.w[i][1]*k; } } return [u,v]; }
+const G={W:WARP.W, H:WARP.H,
+  P:(lon,lat)=>{ const [x,y]=M.P(lon,lat); return tps(WARP.F,x,y); },
+  U:(u,v)=>{ const [x,y]=tps(WARP.I,u,v); return M.U(x,y); },
+  pxPerKm:(lon,lat)=>{ const a=G.P(lon,lat), b=G.P(lon,lat+0.05); return Math.hypot(b[0]-a[0],b[1]-a[1])/(0.05*111.2); }};
+const mapImg=new Image(); mapImg.src="map-illustrated.jpg"; const mapReady=mapImg.decode().catch(()=>{});
 const ICON={
   city:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 21V10l5-3v4l5-3v13H3zm11 0V5l7 3v13h-7z"/></svg>',
   history:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 21V9h2V6h2v3h2V6h4v3h2V6h2v3h2v12h-6v-5a2 2 0 0 0-4 0v5H4z"/></svg>',
@@ -366,7 +374,7 @@ function svgEl(tag,attrs,parent){ const e=document.createElementNS(SVGNS,tag); f
 function buildSigns(){
   const lab=$("lab"); lab.innerHTML="";
   for(const L of (typeof MAP_LABELS!=="undefined"?MAP_LABELS:[])){
-    const [x,y]=M.P(L.lon,L.lat), g=svgEl("g",{transform:`translate(${x} ${y}) rotate(${L.a||0})`,class:"sign sign-"+L.kind},lab);
+    const [x,y]=G.P(L.lon,L.lat), g=svgEl("g",{transform:`translate(${x} ${y}) rotate(${L.a||0})`,class:"sign sign-"+L.kind},lab);
     if(L.kind==="region"||L.kind==="city"){
       const big=L.kind==="region", fs=big?12.5:10.5;
       const tx=svgEl("text",{x:0,y:fs*0.36,"text-anchor":"middle","font-family":"Nunito, sans-serif","font-weight":900,"font-size":fs,"letter-spacing":big?1.4:0.6,fill:"#5a3a1a"},g); tx.textContent=big?L.t.toUpperCase():L.t;
@@ -394,21 +402,29 @@ fetch("intro.svg?v=monster2").then(r=>r.ok?r.text():"").then(t=>{ if(t) $("intro
 function layout(){
   const vw=innerWidth, vh=innerHeight, bw=BB.x1-BB.x0, bh=BB.y1-BB.y0;
   const top=vw<900?86:90, bottom=vw<900?20:24;
-  const fit=Math.min((vw-24)/bw,(vh-top-bottom)/bh), cover=Math.max(vw/M.W,vh/M.H);
-  const s=cover<=fit*1.12?Math.max(fit,cover):fit;
+  const fit=Math.min((vw-24)/bw,(vh-top-bottom)/bh), cover=Math.max(vw/G.W,vh/G.H);
+  const s=cover<=fit*1.05?Math.max(fit,cover):fit;
   let ox=vw/2-(BB.x0+bw/2)*s, oy=top+(vh-top-bottom)/2-(BB.y0+bh/2)*s;
-  if(M.W*s>=vw) ox=Math.min(0,Math.max(vw-M.W*s,ox));
-  if(M.H*s>=vh) oy=Math.min(0,Math.max(vh-M.H*s,oy));
+  if(G.W*s>=vw) ox=Math.min(0,Math.max(vw-G.W*s,ox));
+  if(G.H*s>=vh) oy=Math.min(0,Math.max(vh-G.H*s,oy));
   return {vw,vh,s,ox,oy};
 }
-function placeOverlay(){ const v=view, st={left:v.ox+"px",top:v.oy+"px",width:M.W*v.s+"px",height:M.H*v.s+"px"}; Object.assign(ov.style,st); Object.assign($("lab").style,st); }
+function placeOverlay(){ const v=view, st={left:v.ox+"px",top:v.oy+"px",width:G.W*v.s+"px",height:G.H*v.s+"px"}; Object.assign(ov.style,st); Object.assign($("lab").style,st); }
 function draw(){
   view=layout(); placeOverlay(); $("loading").hidden=false;
   const d=Math.min(2,window.devicePixelRatio||1), v=view;
-  busy=busy.then(()=>M.render(canvas,look,{cw:Math.round(v.vw*d),ch:Math.round(v.vh*d),s:v.s*d,ox:v.ox*d,oy:v.oy*d,frame:false,compass:true,cityLabels:false,labels:false,fade:true}))
-    .then(()=>{$("loading").hidden=true;})
+  busy=busy.then(()=>mapReady).then(()=>{
+    canvas.width=Math.round(v.vw*d); canvas.height=Math.round(v.vh*d); const c=canvas.getContext("2d");
+    c.setTransform(1,0,0,1,0,0); c.fillStyle="#cadd95"; c.fillRect(0,0,canvas.width,canvas.height);
+    // fill any uncovered edge with the same picture, enlarged and softened, so there are no empty bands
+    const cs=Math.max(canvas.width/G.W,canvas.height/G.H)*1.04; c.save(); c.filter="blur(14px) saturate(.85)";
+    c.drawImage(mapImg,(canvas.width-G.W*cs)/2,(canvas.height-G.H*cs)/2,G.W*cs,G.H*cs); c.restore();
+    c.save(); c.shadowColor="rgba(40,60,20,.35)"; c.shadowBlur=30*d; c.fillStyle="#cadd95"; c.fillRect(v.ox*d,v.oy*d,G.W*v.s*d,G.H*v.s*d); c.restore();
+    c.setTransform(v.s*d,0,0,v.s*d,v.ox*d,v.oy*d); c.imageSmoothingEnabled=true; c.imageSmoothingQuality="high"; c.drawImage(mapImg,0,0,G.W,G.H);
+    $("loading").hidden=true;
+  })
     .catch(e=>{$("loading").textContent="Картата не се зареди: "+e.message;});
-  document.body.style.background="#1f74c4";
+  document.body.style.background="#cadd95";
   fxResize();
 }
 let rz; addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(()=>{draw();paintMarks();},250);});
@@ -419,8 +435,10 @@ let fxD=1, fxLast=0, fxT=0, glints=[], clouds=[], flocks=[], nextFlock=3;
 function fxResize(){ fxD=Math.min(1.5,window.devicePixelRatio||1); fx.width=Math.round(innerWidth*fxD); fx.height=Math.round(innerHeight*fxD); }
 function fxInit(){
   const R=M.rng(4242);
-  for(let i=0;i<90&&glints.length<55;i++){ const x=R()*M.W, y=R()*M.H; if(!M.inLand(x,y)) glints.push({x,y,ph:R()*6.3,sp:0.5+R()*0.7,w:4+R()*4}); }
-  for(let i=0;i<5;i++) clouds.push({x:R()*M.W, y:110+R()*520, sp:5+R()*5, k:0.75+R()*0.5, img:cloudSprite(R)});
+  const cv=document.createElement("canvas"); cv.width=G.W; cv.height=G.H; const cg=cv.getContext("2d"); cg.drawImage(mapImg,0,0); const px=cg.getImageData(0,0,G.W,G.H).data;
+  const isSea=(x,y)=>{ const o=(Math.round(y)*G.W+Math.round(x))*4; return px[o+2]>150&&px[o+2]>px[o]+60; };
+  for(let i=0;i<4000&&glints.length<60;i++){ const x=R()*G.W, y=R()*G.H; if(isSea(x,y)&&isSea(x+8,y)&&isSea(x-8,y)) glints.push({x,y,ph:R()*6.3,sp:0.5+R()*0.7,w:5+R()*5}); }
+  for(let i=0;i<5;i++) clouds.push({x:R()*G.W, y:120+R()*680, sp:5+R()*5, k:0.75+R()*0.5, img:cloudSprite(R)});
 }
 function cloudSprite(R){
   const cv=document.createElement("canvas"), w=220, h=110; cv.width=w; cv.height=h; const g=cv.getContext("2d");
@@ -431,7 +449,7 @@ function cloudSprite(R){
 }
 function spawnFlock(){
   const R=Math.random, fromLeft=R()<0.5, n=3+Math.floor(R()*3), y=120+R()*480;
-  flocks.push({x:fromLeft?-40:M.W+40, y, vx:(fromLeft?1:-1)*(34+R()*14), vy:(R()-.5)*6, birds:Array.from({length:n},(_,i)=>({dx:-Math.abs(i-(n>>1))*9*(fromLeft?1:-1), dy:(i-(n>>1))*7, ph:R()*6.3}))});
+  flocks.push({x:fromLeft?-40:G.W+40, y, vx:(fromLeft?1:-1)*(34+R()*14), vy:(R()-.5)*6, birds:Array.from({length:n},(_,i)=>({dx:-Math.abs(i-(n>>1))*9*(fromLeft?1:-1), dy:(i-(n>>1))*7, ph:R()*6.3}))});
 }
 function fxFrame(now){
   requestAnimationFrame(fxFrame);
@@ -440,17 +458,13 @@ function fxFrame(now){
   const dt=Math.min(0.1,(now-fxLast)/1000); fxLast=now; fxT+=dt;
   const v=view, s=v.s*fxD; fc.setTransform(1,0,0,1,0,0); fc.clearRect(0,0,fx.width,fx.height);
   fc.setTransform(s,0,0,s,v.ox*fxD,v.oy*fxD); fc.lineCap="round";
-  // rivers: light dashes drifting downstream
-  fc.save(); fc.setLineDash([3,12]); fc.lineDashOffset=-fxT*9; fc.strokeStyle="rgba(230,252,255,.7)"; fc.lineWidth=1.3;
-  for(const r of GEO.rv){ fc.beginPath(); M.smooth(fc,r.p); fc.stroke(); }
-  fc.restore();
   // sea: small glints that come and go
   fc.strokeStyle="#ffffff";
   for(const g of glints){ const a=Math.pow(Math.max(0,Math.sin(fxT*g.sp+g.ph)),6)*0.75; if(a<0.02) continue; fc.globalAlpha=a; fc.lineWidth=1.3; fc.beginPath(); fc.moveTo(g.x-g.w/2,g.y); fc.quadraticCurveTo(g.x,g.y-2.2,g.x+g.w/2,g.y); fc.stroke(); }
   fc.globalAlpha=1;
   // clouds with their soft shadows
   for(const c of clouds){
-    c.x+=c.sp*dt; if(c.x-110*c.k>M.W) { c.x=-120*c.k; c.y=110+Math.random()*520; }
+    c.x+=c.sp*dt; if(c.x-110*c.k>G.W) { c.x=-120*c.k; c.y=120+Math.random()*680; }
     const cw=150*c.k, ch=75*c.k;
     fc.globalAlpha=0.1; fc.drawImage(c.img.sh,c.x-cw/2+22*c.k,c.y-ch/2+30*c.k,cw,ch);
     fc.globalAlpha=0.55; fc.drawImage(c.img.img,c.x-cw/2,c.y-ch/2,cw,ch); fc.globalAlpha=1;
@@ -458,12 +472,12 @@ function fxFrame(now){
   // birds: a small flock now and then
   nextFlock-=dt; if(nextFlock<=0){ spawnFlock(); nextFlock=9+Math.random()*10; }
   fc.strokeStyle="rgba(35,35,48,.75)"; fc.lineWidth=1.1;
-  flocks=flocks.filter(f=>f.x>-80&&f.x<M.W+80);
+  flocks=flocks.filter(f=>f.x>-80&&f.x<G.W+80);
   for(const f of flocks){ f.x+=f.vx*dt; f.y+=f.vy*dt;
     for(const b of f.birds){ const x=f.x+b.dx, y=f.y+b.dy+Math.sin(fxT*1.4+b.ph)*1.5, w=Math.sin(fxT*9+b.ph)*2.2;
       fc.beginPath(); fc.moveTo(x-4,y-w); fc.quadraticCurveTo(x-2,y-1.2-w*0.3,x,y); fc.quadraticCurveTo(x+2,y-1.2-w*0.3,x+4,y-w); fc.stroke(); } }
 }
-if(!calm){ fxInit(); requestAnimationFrame(fxFrame); }
+if(!calm) mapReady.then(()=>{ fxInit(); requestAnimationFrame(fxFrame); });
 
 /* ---------- deck + fan ---------- */
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -540,15 +554,15 @@ function renderFront(p, root, inGame){
   show(0);
 }
 /* ---------- guessing ---------- */
-function ringsSVG(x,y){
+function ringsSVG(x,y,ppk){
   const cols=[["#f2c75c","rgba(253,229,138,.55)"],["#ffffff","rgba(255,255,255,.38)"],["#f2a0a8","rgba(242,160,168,.32)"]];
   let s="";
-  for(let i=2;i>=0;i--){const r=RINGS[i][0]*KM;s+=`<circle class="ring r${i+1}" cx="${x}" cy="${y}" r="${r}" fill="${cols[i][1]}" stroke="rgba(20,30,60,.45)" stroke-width="5"/><circle class="ring r${i+1}" cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${cols[i][0]}" stroke-width="2.5"/>`;}
-  RINGS.forEach(([km,pt],i)=>{const r=km*KM;s+=`<g class="ring r${i+1}"><circle cx="${x}" cy="${y-r}" r="7" fill="${cols[i][0]}" stroke="#fff" stroke-width="1.6"/><text x="${x}" y="${y-r+3.5}" text-anchor="middle" font-size="9.5" fill="#3a2a08">${pt}</text></g>`;});
+  for(let i=2;i>=0;i--){const r=RINGS[i][0]*ppk;s+=`<circle class="ring r${i+1}" cx="${x}" cy="${y}" r="${r}" fill="${cols[i][1]}" stroke="rgba(20,30,60,.45)" stroke-width="5"/><circle class="ring r${i+1}" cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${cols[i][0]}" stroke-width="2.5"/>`;}
+  RINGS.forEach(([km,pt],i)=>{const r=km*ppk;s+=`<g class="ring r${i+1}"><circle cx="${x}" cy="${y-r}" r="7" fill="${cols[i][0]}" stroke="#fff" stroke-width="1.6"/><text x="${x}" y="${y-r+3.5}" text-anchor="middle" font-size="9.5" fill="#3a2a08">${pt}</text></g>`;});
   return s;
 }
 function foundSVG(f){
-  const [x,y]=M.P(...f.p.c), c=CATS[f.p.cat];
+  const [x,y]=G.P(...f.p.c), c=CATS[f.p.cat];
   const ink=look==="ink", fg=ink?"#f3e6bf":"#ffffff", st=ink?"#2a1a0b":"rgba(20,30,50,.85)";
   return `<g><ellipse cx="${x+2}" cy="${y+2}" rx="10" ry="3.5" fill="rgba(0,0,0,.3)"/><circle cx="${x}" cy="${y-14}" r="13" fill="${c.color}" stroke="#fff" stroke-width="3"/><g transform="translate(${x-8} ${y-22}) scale(.67)" color="#fff">${ICON[f.p.cat].replace('<svg viewBox="0 0 24 24"','<svg width="24" height="24" viewBox="0 0 24 24"')}</g><path d="M${x-5} ${y-3}L${x} ${y+3}L${x+5} ${y-3}Z" fill="#fff"/><text x="${x}" y="${y+20}" text-anchor="middle" font-size="15" fill="${fg}" stroke="${st}" stroke-width="4">${f.p.n}</text></g>`;
 }
@@ -558,12 +572,12 @@ ov.addEventListener("click",e=>{
   if(!hand){ const el=els[cur]; if(el){el.classList.remove("wiggle");void el.offsetWidth;el.classList.add("wiggle");} return; }
   if(open){closeCard();return;}
   const pt=ov.createSVGPoint(); pt.x=e.clientX; pt.y=e.clientY; const p=pt.matrixTransform(ov.getScreenCTM().inverse());
-  const km=M.hav(M.U(p.x,p.y),hand.c); const pts=(RINGS.find(([r])=>km<=r)||[0,0])[1];
+  const km=M.hav(G.U(p.x,p.y),hand.c); const pts=(RINGS.find(([r])=>km<=r)||[0,0])[1];
   answered=true; updateAim();
-  const [tx,ty]=M.P(...hand.c);
-  extra=ringsSVG(tx,ty)+`<line x1="${p.x}" y1="${p.y}" x2="${tx}" y2="${ty}" stroke="rgba(20,20,40,.55)" stroke-width="6" stroke-linecap="round"/><line x1="${p.x}" y1="${p.y}" x2="${tx}" y2="${ty}" stroke="#fff" stroke-width="3" stroke-dasharray="8 7" stroke-linecap="round"/>
+  const [tx,ty]=G.P(...hand.c), ppk=G.pxPerKm(...hand.c);
+  extra=ringsSVG(tx,ty,ppk)+`<line x1="${p.x}" y1="${p.y}" x2="${tx}" y2="${ty}" stroke="rgba(20,20,40,.55)" stroke-width="6" stroke-linecap="round"/><line x1="${p.x}" y1="${p.y}" x2="${tx}" y2="${ty}" stroke="#fff" stroke-width="3" stroke-dasharray="8 7" stroke-linecap="round"/>
     <g class="pinDrop"><ellipse cx="${p.x}" cy="${p.y+1}" rx="8" ry="3.2" fill="rgba(20,20,60,.35)"/><path d="M${p.x-3} ${p.y}c-12-15-13-33 0-33s12 18 0 33z" fill="#c9505a"/><path d="M${p.x} ${p.y}c-12-15-13-33 0-33s12 18 0 33z" fill="#e46a6a"/><ellipse cx="${p.x-1}" cy="${p.y-22}" rx="5.6" ry="6" fill="#c9505a"/><ellipse cx="${p.x}" cy="${p.y-22}" rx="4.6" ry="5.2" fill="#fff"/><path d="M${p.x-7} ${p.y-27}a8 8 0 0 1 6-5" fill="none" stroke="#f6a3a3" stroke-width="1.8" stroke-linecap="round"/></g>
-    <text class="floatpts" x="${tx}" y="${ty-RINGS[2][0]*KM-18}" text-anchor="middle" font-size="34" fill="${pts?"#fde58a":"#ffffff"}" stroke="#3a2a08" stroke-width="6">${pts?"+"+pts:"0"}</text>`;
+    <text class="floatpts" x="${tx}" y="${ty-RINGS[2][0]*ppk-18}" text-anchor="middle" font-size="34" fill="${pts?"#fde58a":"#ffffff"}" stroke="#3a2a08" stroke-width="6">${pts?"+"+pts:"0"}</text>`;
   const isNew=pts>0&&!collected[hand.id]; if(pts>0){collected[hand.id]=Math.max(collected[hand.id]||0,pts); saveCollected(); updateAlbumCount();}
   found.push({p:hand}); paintMarks();
   game.push({p:hand,pts}); updateTop();
