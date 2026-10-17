@@ -26,7 +26,7 @@ button{font-family:inherit}
 #fx{pointer-events:none}
 #ov,#lab{position:absolute;display:block}
 #ov{cursor:default;touch-action:manipulation}
-#ov.aim{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='25' viewBox='-16 -36 32 38'%3E%3Cellipse cx='0' cy='0.5' rx='7' ry='2.4' fill='rgba(20,20,60,.35)'/%3E%3Cpath d='M-3 0c-12-15-13-33 0-33s12 18 0 33z' fill='%23c9505a'/%3E%3Cpath d='M0 0c-12-15-13-33 0-33s12 18 0 33z' fill='%23e46a6a'/%3E%3Cellipse cx='-1' cy='-22' rx='5.6' ry='6' fill='%23c9505a'/%3E%3Cellipse cx='0' cy='-22' rx='4.6' ry='5.2' fill='%23fff'/%3E%3C/svg%3E") 10 24,crosshair}
+#ov.aim{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='36' viewBox='-16 -36 32 38'%3E%3Cellipse cx='0' cy='0.5' rx='7' ry='2.4' fill='rgba(20,20,60,.35)'/%3E%3Cpath d='M-3 0c-12-15-13-33 0-33s12 18 0 33z' fill='%23c9505a'/%3E%3Cpath d='M0 0c-12-15-13-33 0-33s12 18 0 33z' fill='%23e46a6a'/%3E%3Cellipse cx='-1' cy='-22' rx='5.6' ry='6' fill='%23c9505a'/%3E%3Cellipse cx='0' cy='-22' rx='4.6' ry='5.2' fill='%23fff'/%3E%3C/svg%3E") 15 34,crosshair}
 #lab{pointer-events:none;overflow:visible}
 #lab .sign{filter:drop-shadow(0 1.5px 1.2px rgba(40,25,5,.35))}
 #ov text{font-family:var(--font);font-weight:900;paint-order:stroke;stroke-linejoin:round}
@@ -121,7 +121,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 .card.mini{max-height:none}
 
 /* collection */
-.coll{position:absolute;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));padding:12px 16px 12px 12px;font-size:1rem}
+.coll{position:absolute;left:max(18px,env(safe-area-inset-left,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));padding:12px 16px 12px 12px;font-size:1rem}
 .findbtn{align-self:stretch;margin-top:6px}
 
 .coll .stack{position:relative;width:60px;height:80px}
@@ -130,21 +130,15 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 .coll .lbl{padding:8px 14px;font-weight:800;font-size:.9rem}
 .coll .lbl b{font-weight:900}
 
-/* result */
-.result{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:16px;padding:12px 12px 12px 14px;border-radius:24px;max-width:min(620px,calc(100vw - 260px));animation:rise .35s cubic-bezier(.3,1.4,.5,1) both}
-@keyframes rise{from{transform:translate(-50%,30px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+/* points medal and buttons */
 .medal{flex:none;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:1.6rem;color:#5a3d06;box-shadow:inset 0 -3px 0 rgba(0,0,0,.15)}
 .medal.p3{background:radial-gradient(circle at 35% 30%,#fff3b8,#f2c75c 60%,#c99a2e)}
 .medal.p2{background:radial-gradient(circle at 35% 30%,#ffffff,#d4d9e2 60%,#9aa3b2);color:#3c4452}
 .medal.p1{background:radial-gradient(circle at 35% 30%,#ffe2c4,#e0a26a 60%,#b0703c);color:#4a2a0e}
 .medal.p0{background:radial-gradient(circle at 35% 30%,#fff,#f3d3d6 60%,#d9a3a9);color:#7a3440}
-.result .txt{min-width:0}
-.result .txt strong{display:block;font-weight:900;font-size:1.15rem}
-.result .txt span{color:var(--muted);font-weight:700;font-size:.92rem}
 .big{border:0;border-radius:16px;background:var(--butter);color:#4a3a06;font-weight:900;font-size:1.1rem;padding:12px 22px;cursor:pointer;box-shadow:0 4px 0 var(--butter-d),0 8px 18px -6px rgba(0,0,0,.35);white-space:nowrap}
 .big:active{transform:translateY(3px);box-shadow:0 1px 0 var(--butter-d)}
 .big.ghost{background:#efeff3;color:var(--ink);box-shadow:0 4px 0 #d3d3db}
-.hint{position:absolute;left:50%;bottom:max(24px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);padding:11px 20px;font-weight:800;white-space:nowrap;animation:rise .35s ease-out both}
 
 /* intro */
 .intro{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
@@ -172,12 +166,6 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 .legend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px}
 .legend span{display:flex;align-items:center;gap:6px;font-weight:800;font-size:.85rem;padding:5px 11px 5px 6px;border-radius:999px;background:#f4f2ec}
 .legend i{width:16px;height:16px;border-radius:5px;background:var(--cc);display:block}
-.stars{display:flex;gap:6px}
-.stars svg{width:46px;height:46px}
-.endcards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%}
-.endcards div{border-radius:12px;background:#f7f5ef;box-shadow:inset 0 0 0 3px var(--cc);padding:8px 6px;display:flex;flex-direction:column;gap:4px;align-items:center;min-width:0}
-.endcards b{font-size:.78rem;line-height:1.15;font-weight:800;overflow-wrap:anywhere}
-.endcards span{font-weight:900;font-size:1rem;color:var(--cd)}
 .row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
 .loading{position:fixed;inset:0;display:grid;place-items:center;color:#fff;font-weight:900;font-size:1.2rem;pointer-events:none;z-index:1}
 
@@ -203,7 +191,6 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 .fc-badge{position:absolute;right:-14px;top:-14px;width:84px;height:84px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:2.4rem;color:#5a3d06;box-shadow:0 6px 16px -4px rgba(0,0,0,.4),inset 0 -4px 0 rgba(0,0,0,.15);z-index:2}
 .fc-tap{white-space:nowrap;font-weight:900;font-size:1rem;padding:10px 18px;pointer-events:none;animation:bob 1.6s ease-in-out infinite}
 @keyframes bob{0%,100%{translate:0 0}50%{translate:0 -10px}}
-.result{top:max(110px,calc(env(safe-area-inset-top,0px) + 96px));bottom:auto!important;z-index:80}
 
 /* compact text on cards in the fan */
 .pc-foot{flex:none;padding:8px 10px 10px;border-top:1px solid var(--line);background:var(--paper)}
@@ -248,6 +235,8 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 
 /* album */
 .albbtn{display:flex;align-items:center;gap:7px;border:0;padding:8px 14px 8px 10px;font-weight:900;font-size:.9rem;cursor:pointer;color:var(--ink)}
+.albbtn.pulse{animation:albPulse .9s ease-out}
+@keyframes albPulse{0%{transform:scale(1)}30%{transform:scale(1.14)}100%{transform:scale(1)}}
 .albbtn b{background:var(--mint);color:#fff;border-radius:999px;padding:1px 8px;font-size:.78rem}
 .album{place-items:stretch;padding:0;background:rgba(20,40,70,.45)}
 .apanel{background:#f7f5ef;margin:max(14px,env(safe-area-inset-top,0px)) max(14px,env(safe-area-inset-right,0px)) max(14px,env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));border-radius:28px;box-shadow:var(--shadow);display:flex;flex-direction:column;min-height:0;overflow:hidden}
@@ -290,7 +279,6 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
   .card.mini{bottom:10px}
   .deck{width:72px;height:98px}
   .deck-tip{left:104px;bottom:44px}
-  .result{max-width:calc(100vw - 24px);bottom:10px;gap:10px;z-index:5}
   .coll .lbl{display:none}
   .coll .stack{width:44px;height:60px}
   .wordmark b{font-size:2rem}
@@ -316,7 +304,6 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 
     <button type="button" class="albbtn pill coll" id="albOpen"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><rect x="3" y="4" width="8" height="16" rx="2"/><rect x="13" y="4" width="8" height="16" rx="2"/></svg>Албум <b id="albCount">0</b></button>
 
-  <div class="result pill" id="result" hidden></div>
 </div>
 
 <div class="intro" id="start">
@@ -325,7 +312,6 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
   <p class="intro-sub">Обърни карта, разгледай снимките и намери мястото на картата.</p>
   <button type="button" class="big intro-play" id="play">Опознай</button>
 </div>
-<div class="screen" id="end" hidden><div class="panel" id="endPanel"></div></div>
 <div class="screen album" id="album" hidden>
   <div class="apanel">
     <div class="ahead"><button type="button" class="big ghost" id="albClose">Към играта</button><h2>Албум</h2><div class="prog"><b id="albN">0 от 26</b><div class="bar"><i id="albBar"></i></div></div></div>
@@ -402,8 +388,8 @@ fetch("intro.svg?v=monster2").then(r=>r.ok?r.text():"").then(t=>{ if(t) $("intro
 function layout(){
   const vw=innerWidth, vh=innerHeight, bw=BB.x1-BB.x0, bh=BB.y1-BB.y0;
   const top=vw<900?86:90, bottom=vw<900?20:24;
-  const fit=Math.min((vw-24)/bw,(vh-top-bottom)/bh), cover=Math.max(vw/G.W,vh/G.H);
-  const s=cover<=fit*1.05?Math.max(fit,cover):fit;
+  const cover=Math.max(vw/G.W,vh/G.H);
+  const s=cover;
   let ox=vw/2-(BB.x0+bw/2)*s, oy=top+(vh-top-bottom)/2-(BB.y0+bh/2)*s;
   if(G.W*s>=vw) ox=Math.min(0,Math.max(vw-G.W*s,ox));
   if(G.H*s>=vh) oy=Math.min(0,Math.max(vh-G.H*s,oy));
@@ -488,7 +474,7 @@ function bigScale(){return Math.min(1.15,(innerWidth-24)/320,(innerHeight-40)/54
 function backFace(){ return `<div class="fc-face cb"></div>`; }
 function layoutFan(){
   const small=innerWidth<600?0.27:0.33, step=Math.min(118,innerWidth/7.2), n=els.length;
-  const fanX=innerWidth<700?innerWidth/2:Math.min(innerWidth/2,2*step+82); $("fan").style.setProperty("--fanx",fanX+"px");
+  const fanX=innerWidth<700?innerWidth/2:Math.max(innerWidth/2,innerWidth-(2*step+82)); $("fan").style.setProperty("--fanx",fanX+"px");
   els.forEach((el,i)=>{
     let k=((cur-i)%n+n)%n; if(k>n>>1) k-=n; const isNow=i===cur;
     const prev=el._k; el._k=k;
@@ -512,7 +498,7 @@ function dealRound(){
   els.forEach((el,i)=>{ renderFront(round[i],el.querySelector(".fc-front"),true); el.addEventListener("click",e=>onCard(i,e)); el.style.transition="none"; el.style.transform=`translateY(420px) rotate(${(i-2)*12}deg) scale(.3)`; });
   requestAnimationFrame(()=>requestAnimationFrame(()=>{ els.forEach((el,i)=>{el.style.transition="";el.style.transitionDelay=(i*70)+"ms";}); layoutFan(); setTimeout(()=>els.forEach(el=>el.style.transitionDelay=""),900); }));
   const tap=$("fanTap"); if(tap){ $("fan").appendChild(tap); tap.style.position="fixed"; tap.style.bottom=(innerWidth<600?130:170)+"px"; tap.style.transform="translateX(-50%)"; tap.style.zIndex=70; tap.style.left="50%"; }
-  $("q").hidden=true; $("result").hidden=true; updateTop();
+  $("q").hidden=true; updateTop();
 }
 function onCard(i,e){
   if(e.target.closest("a,.nav,.findbtn")) return;
@@ -581,15 +567,15 @@ ov.addEventListener("click",e=>{
   const isNew=pts>0&&!collected[hand.id]; if(pts>0){collected[hand.id]=Math.max(collected[hand.id]||0,pts); saveCollected(); updateAlbumCount();}
   found.push({p:hand}); paintMarks();
   game.push({p:hand,pts}); updateTop();
-  const verdict=["Опитай пак следващия път!","Близо си!","Много близо!","Точно в целта!"][pts];
-  $("result").innerHTML=`<div class="medal p${pts}">${pts?"+"+pts:"0"}</div><div class="txt"><strong>${verdict}</strong><span>${Math.round(km)} км от ${hand.n}</span>${isNew?`<br><span class="newbadge">Нова карта в албума!</span>`:""}</div><button type="button" class="big" id="nextBtn">${game.length<5?"Следваща карта":"Резултат"}</button>`;
+  if(isNew){ const ab=$("albOpen"); ab.classList.remove("pulse"); void ab.offsetWidth; ab.classList.add("pulse"); }
   const bd=els[cur].querySelector(".fc-badge"); bd.className=`fc-badge medal p${pts}`; bd.textContent=pts?"+"+pts:"0"; bd.hidden=false;
-  $("result").hidden=false; $("nextBtn").addEventListener("click",nextCard); $("nextBtn").focus({preventScroll:true});
+  nextCard();
 });
+let marksTimer=0;
 function nextCard(){
-  $("result").hidden=true; $("q").hidden=true; extra=""; paintMarks();
+  $("q").hidden=true; clearTimeout(marksTimer); marksTimer=setTimeout(()=>{ extra=""; paintMarks(); },1700);
   hand=null; answered=false; open=false; cur++; layoutFan(); updateTop();
-  if(game.length>=5) setTimeout(showEnd,650);
+  if(cur>=round.length) setTimeout(()=>{ game=[]; found=[]; extra=""; paintMarks(); dealRound(); },900);
 }
 
 /* ---------- album ---------- */
@@ -612,21 +598,6 @@ $("albClose").addEventListener("click",()=>{$("album").hidden=true;});
 $("detClose").addEventListener("click",()=>{$("detail").hidden=true;});
 $("detail").addEventListener("click",e=>{if(e.target.id==="detail")$("detail").hidden=true;});
 addEventListener("keydown",e=>{if(e.key==="Escape"){if(!$("detail").hidden)$("detail").hidden=true;else $("album").hidden=true;}});
-
-/* ---------- end ---------- */
-const STAR=(on)=>`<svg viewBox="0 0 24 24"><path d="M12 2l3 7 7 .6-5.3 4.6 1.7 7.3L12 17.7 5.6 21.5l1.7-7.3L2 9.6 9 9z" fill="${on?"#f2c75c":"#ece8df"}" stroke="${on?"#c99a2e":"#d8d3c8"}" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
-function showEnd(){
-  const pts=game.reduce((a,g)=>a+g.pts,0), stars=pts>=12?3:pts>=7?2:pts>=1?1:0;
-  $("endPanel").innerHTML=`<div class="stars">${[0,1,2].map(i=>STAR(i<stars)).join("")}</div>
-    <h1 class="wordmark"><b>${pts} от 15</b></h1>
-    <p>${["Опитай пак, картата вече е по-позната!","Добро начало!","Браво, много добре!","Невероятно! Ти си истински пътешественик!"][stars]}</p>
-    <div class="endcards">${game.map(g=>`<div style="--cc:${CATS[g.p.cat].color};--cd:${CATS[g.p.cat].dark}"><b>${g.p.n}</b><span>${g.pts?"+"+g.pts:"0"}</span></div>`).join("")}</div>
-    <div class="row"><button type="button" class="big ghost" id="toAlbum">Виж албума</button><button type="button" class="big" id="again">Нова игра</button></div>`;
-  $("end").hidden=false; $("again").addEventListener("click",newGame); $("toAlbum").addEventListener("click",()=>{$("end").hidden=true;openAlbum();$("albClose").onclick=()=>{$("album").hidden=true;newGame();};});
-}
-function newGame(){
-  game=[]; found=[]; extra=""; paintMarks(); $("end").hidden=true; dealRound();
-}
 
 /* ---------- controls ---------- */
 $("play").addEventListener("click",()=>{ $("start").classList.add("leave"); setTimeout(()=>{$("start").hidden=true;},500); dealRound(); });
