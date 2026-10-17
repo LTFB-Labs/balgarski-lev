@@ -151,13 +151,8 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 .intro.leave{opacity:0;transform:scale(1.04);pointer-events:none}
 .intro::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(124,196,178,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(124,196,178,.12) 1px,transparent 1px);background-size:44px 44px;pointer-events:none}
 .intro > *{position:relative}
-.intro-stage{position:relative;width:min(620px,94vw,72vh);aspect-ratio:580/450;animation:introFloat 4.5s ease-in-out infinite}
-.intro-art{position:absolute;inset:0}
+.intro-art{width:min(620px,94vw);max-height:56vh;aspect-ratio:580/450}
 .intro-art svg{width:100%;height:100%;display:block}
-.intro-lion{position:absolute;left:17.9%;top:-2.9%;width:65.5%;height:84.4%;animation:lionIn .7s cubic-bezier(.3,1.6,.5,1) .5s both}
-.intro-lion svg{display:block}
-@keyframes introFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes lionIn{from{transform:translateY(40px) scale(.6);opacity:0}to{transform:none;opacity:1}}
 .intro-title{display:flex;align-items:center;gap:14px;animation:introIn .6s ease-out 1s both}
 .intro-sub{margin:0;color:var(--muted);font-weight:700;text-align:center;max-width:36ch;animation:introIn .6s ease-out 1.2s both}
 .intro-play{font-size:1.3rem;padding:14px 46px;animation:introIn .6s ease-out 1.4s both,pulse 2s ease-in-out 2.2s infinite}
@@ -340,7 +335,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 </div>
 
 <div class="intro" id="start">
-  <div class="intro-stage"><div class="intro-art" id="introArt"></div><div class="intro-lion" id="lion" role="img" aria-label="Лъвче откривател с раница"></div></div>
+  <div class="intro-art" id="introArt"></div>
   <div class="intro-title"><h1 class="wordmark"><span>Български</span><b>Л<i>е</i>в</b></h1></div>
   <p class="intro-sub">Обърни карта, разгледай снимките и намери мястото на картата.</p>
   <button type="button" class="big intro-play" id="play">Опознай</button>
@@ -355,7 +350,6 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 </div>
 <div class="screen detail" id="detail" hidden><div class="dwrap"><button type="button" class="iconbtn pill dclose" id="detClose" aria-label="Затвори"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><div class="front" id="detFront"></div></div></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
 <script src="geo.js"></script>
 <script src="map.js"></script>
 <script src="labels.js"></script>
@@ -410,8 +404,6 @@ function buildSigns(){
 
 /* ---------- intro art ---------- */
 fetch("intro.svg").then(r=>r.ok?r.text():"").then(t=>{ if(t) $("introArt").innerHTML=t; }).catch(()=>{});
-fetch("lion.json").then(r=>r.json()).then(data=>{ if(!window.lottie) return; const still=matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const a=lottie.loadAnimation({container:$("lion"),renderer:"svg",loop:true,autoplay:!still,animationData:data}); if(still) a.goToAndStop(0,true); }).catch(()=>{});
 
 /* ---------- map layout + render ---------- */
 function layout(){

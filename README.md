@@ -14,7 +14,7 @@
 - `places.js` — 26 места: вид, ниво, описание и факти
 - `labels.js` — табелките върху картата (региони, морета, съседи); добави ред, за да сложиш табелка на град или друго място
 - `photos.js`, `photos/` — снимките и кой ги е направил
-- `intro.svg`, `lion.json` — началната илюстрация и анимацията на лъва (Lottie)
+- `intro.svg` — началната илюстрация
 
 Не е нужна компилация: всичко е обикновен HTML, CSS и JavaScript.
 
@@ -24,4 +24,3 @@
 - Съседни държави, реки и езера: [Natural Earth](https://www.naturalearthdata.com) (public domain)
 - Снимки: Wikimedia Commons, вижте [CREDITS.md](CREDITS.md)
 - Шрифтове: Google Fonts (Nunito, Caveat, Kurale, Cormorant)
-- Анимация: [lottie-web](https://github.com/airbnb/lottie-web) от cdnjs
