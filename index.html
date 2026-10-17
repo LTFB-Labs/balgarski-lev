@@ -403,7 +403,7 @@ function buildSigns(){
 (document.fonts?Promise.race([Promise.all(['900 12px Nunito','700 20px Caveat'].map(f=>document.fonts.load(f,"БЪЛГАРИЯ"))),new Promise(r=>setTimeout(r,2500))]):Promise.resolve()).then(buildSigns);
 
 /* ---------- intro art ---------- */
-fetch("intro.svg").then(r=>r.ok?r.text():"").then(t=>{ if(t) $("introArt").innerHTML=t; }).catch(()=>{});
+fetch("intro.svg?v=monster2").then(r=>r.ok?r.text():"").then(t=>{ if(t) $("introArt").innerHTML=t; }).catch(()=>{});
 
 /* ---------- map layout + render ---------- */
 function layout(){
