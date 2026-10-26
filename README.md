@@ -2,8 +2,8 @@
 
 Детска игра за география на България. Обръщаш карта от ветрилото, разглеждаш снимките и фактите и намираш мястото на приказната карта. Колкото по-близо, толкова повече точки (3, 2 или 1). В играта има 106 места: градове, природа, история и култура. Намерените места се събират в албум.
 
-**Играй:** https://aleksandrenko.github.io/balgarski-lev/
-**Идеи и проучване:** https://aleksandrenko.github.io/balgarski-lev/ideas.html
+**Играй:** https://ltfb-labs.github.io/balgarski-lev/
+**Идеи и проучване:** https://ltfb-labs.github.io/balgarski-lev/ideas.html
 
 ## Какво има вътре
 
