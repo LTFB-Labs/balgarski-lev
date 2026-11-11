@@ -330,6 +330,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 <script src="soils.js"></script>
 <script src="animals.js"></script>
 <script src="landmarks.js"></script>
+<script src="regions.js"></script>
 <script src="places.js"></script>
 <script src="photos.js"></script>
 <script>
@@ -430,7 +431,9 @@ function buildThemeLayers(svg){
   if(typeof SOILS!=="undefined") svgEl("image",{href:"img/real-soils.webp",x:0,y:0,width:REAL.W,height:REAL.H,preserveAspectRatio:"none","clip-path":"url(#bgClip)",opacity:.85},layerAt("soils"));
   // natural regions: soft fills with their names
   if(typeof REGIONS!=="undefined"){ const g=layerAt("regions");
-    for(const r of REGIONS) svgEl("path",{d:r.d,fill:r.color,"fill-opacity":r.parent?.25:.45,stroke:"#fff","stroke-width":r.parent?.8:1.8,"stroke-opacity":.9,"stroke-dasharray":r.parent?"3 2":"none"},g); }
+    // the five regions in colour, their sub-regions as dashed lines on top
+    for(const r of REGIONS) if(!r.parent) svgEl("path",{d:r.d,fill:r.color,"fill-opacity":.5,stroke:"#fff","stroke-width":2.2,"stroke-opacity":.95},g);
+    for(const r of REGIONS) if(r.parent) svgEl("path",{d:r.d,fill:"none",stroke:"#5a4b33","stroke-width":.9,"stroke-opacity":.6,"stroke-dasharray":"4 3"},g); }
   // landforms: outlined mountains, plains, valleys and plateaus
   if(typeof LANDFORMS!=="undefined"){ const g=layerAt("landforms"), C={mountain:"#8a5a2b",plain:"#4f8a3c",lowland:"#4f8a3c",plateau:"#b8862e",valley:"#c9a227"};
     for(const f of LANDFORMS) svgEl("path",{d:f.d,fill:C[f.k]||"#888","fill-opacity":.12,stroke:C[f.k]||"#888","stroke-width":1.3,"stroke-dasharray":"4 2.5","stroke-linejoin":"round"},g); }
@@ -563,12 +566,15 @@ function applyView(){
 // names never sit on each other: in order of importance (cities by rank, peaks, landmarks, minerals), a name that would
 // overlap one already shown is hidden until the view changes
 let declutterT=0;
-const LABEL_ORDER=["#layer-cities .pin:not(.c3) .lbl","#layer-cities .c3 .lbl","#layer-peaks .lbl","#layer-landmarks .lbl","#layer-minerals-names .lbl"];
+const LABEL_ORDER=["#layer-cities .pin:not(.c3) .lbl","#layer-regions-names .lbl","#layer-landforms-names .lbl","#layer-animals-names .lbl","#layer-cities .c3 .lbl","#layer-peaks .lbl","#layer-landmarks .lbl","#layer-minerals-names .lbl"];
 function declutter(){
   const placed=[], hit=(a,b)=>a.left<b.right&&b.left<a.right&&a.top<b.bottom&&b.top<a.bottom;
   for(const sel of LABEL_ORDER) for(const t of document.querySelectorAll(sel)){
-    t.style.visibility=""; const r=t.getBoundingClientRect(); if(!r.width) continue;
-    const box={left:r.left-2,right:r.right+2,top:r.top-1,bottom:r.bottom+1};
+    // a name beside its symbol tries the right side first, then the left; one that fits neither is hidden
+    t.style.visibility=""; const x0=t.dataset.x??(t.dataset.x=t.getAttribute("x")||"");
+    const side=(left)=>{ if(x0&&+x0>0){ t.setAttribute("x",left?-x0:x0); t.setAttribute("text-anchor",left?"end":"start"); } const r=t.getBoundingClientRect(); return {w:r.width,left:r.left-2,right:r.right+2,top:r.top-1,bottom:r.bottom+1}; };
+    let box=side(false); if(!box.w) continue;
+    if(placed.some(p=>hit(p,box))&&x0&&+x0>0) box=side(true);
     if(placed.some(p=>hit(p,box))) t.style.visibility="hidden"; else placed.push(box);
   }
 }
