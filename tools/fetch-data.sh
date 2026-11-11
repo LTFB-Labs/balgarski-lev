@@ -9,6 +9,7 @@ q bg-rel.json '[out:json][timeout:180];rel(186382);out geom;'
 q coast.json  '[out:json][timeout:180];way["natural"="coastline"](41.2,27.2,44.6,29.4);out geom;'
 q obl.json    '[out:json][timeout:300];area(3600186382)->.a;rel(area.a)["boundary"="administrative"]["admin_level"="4"];out geom;'
 q rivers.json '[out:json][timeout:300];way["waterway"="river"]["name"](40.9,21.6,44.6,29.2);out tags geom;'
+q roads.json  '[out:json][timeout:300];area(3600186382)->.a;way["highway"~"^(motorway|trunk|primary)$"](area.a);out tags geom;'
 q lakes.json  '[out:json][timeout:300];area(3600186382)->.a;(way["natural"="water"]["name"](area.a);rel["natural"="water"]["name"](area.a););out tags geom;'
 NE=https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson
 for f in ne_10m_land ne_10m_admin_0_boundary_lines_land ne_10m_rivers_lake_centerlines ne_10m_rivers_europe ne_10m_lakes ne_10m_lakes_europe; do

@@ -15,6 +15,7 @@ export const W = Math.round((LON1 - LON0) * CX * K), H = Math.round((LAT1 - LAT0
 const BG_BOX = { lon0: 22.357, lon1: 28.609, lat0: 41.235, lat1: 44.215 }; // Bulgaria's extent, checked below
 const DETAIL = { lon0: 21.6, lon1: 29.2, lat0: 40.9, lat1: 44.6 }; // the box the OSM rivers were fetched for (fetch-data.sh)
 const P = ([lon, lat]) => [(lon - LON0) * CX * K, (LAT1 - lat) * K];
+const U = ([x, y]) => [x / (CX * K) + LON0, LAT1 - y / K];
 const box = (b) => [[[[b.lon0, b.lat0], [b.lon1, b.lat0], [b.lon1, b.lat1], [b.lon0, b.lat1], [b.lon0, b.lat0]]]];
 const FRAME = box({ lon0: LON0 - .3, lon1: LON1 + .3, lat0: LAT0 - .3, lat1: LAT1 + .3 });
 const inWorld = ([lon, lat]) => lon > LON0 - .3 && lon < LON1 + .3 && lat > LAT0 - .3 && lat < LAT1 + .3;
@@ -142,8 +143,27 @@ for (const f of ['ne_10m_rivers_lake_centerlines.geojson', 'ne_10m_rivers_europe
   if (!byName.has(key)) byName.set(key, []);
   byName.get(key).push(...parts.map((l) => Object.assign(l, { far: true })));
 }
-const rivers = [];
+const rivers = [], riverLabels = [];
 let danube = '';
+// a river's name runs along a calm copy of its middle stretch, left to right so it never reads upside down; only rivers whose
+// middle lies in Bulgaria get one
+const inPoly = (m, [x, y]) => m.some((poly) => poly.reduce((acc, r, i) => { let c = false;
+  for (let a = 0, b = r.length - 1; a < r.length; b = a++) { const [xa, ya] = r[a], [xb, yb] = r[b]; if (ya > y !== yb > y && x < ((xb - xa) * (y - ya)) / (yb - ya) + xa) c = !c; }
+  return i === 0 ? c : acc && !c; }, false));
+function labelPath(lines) {
+  if (!lines.length) return '';
+  const l = lines.sort((a, b) => lineKm(b) - lineKm(a))[0], q = l.map(P), cum = [0];
+  for (let i = 1; i < q.length; i++) cum.push(cum[i - 1] + Math.hypot(q[i][0] - q[i - 1][0], q[i][1] - q[i - 1][1]));
+  const total = cum[cum.length - 1], span = Math.min(total * .6, 200), from = (total - span) / 2;
+  if (span < 40) return '';
+  const at = (t) => { let i = cum.findIndex((c) => c >= t); if (i <= 0) return q[Math.max(0, i)]; const f = (t - cum[i - 1]) / (cum[i] - cum[i - 1] || 1); return [q[i - 1][0] + (q[i][0] - q[i - 1][0]) * f, q[i - 1][1] + (q[i][1] - q[i - 1][1]) * f]; };
+  let pts = []; for (let t = from - 30; t <= from + span + 30; t += 3) pts.push(at(Math.max(0, Math.min(total, t))));
+  for (let k = 0; k < 4; k++) pts = pts.map((p, i) => { const w = pts.slice(Math.max(0, i - 4), i + 5); return [w.reduce((s, v) => s + v[0], 0) / w.length, w.reduce((s, v) => s + v[1], 0) / w.length]; });
+  pts = pts.slice(10, -10); // drop the ends the smoothing pulled in
+  if (!inPoly(bgLand, U(pts[pts.length >> 1]))) return '';
+  if (pts[pts.length - 1][0] < pts[0][0]) pts.reverse();
+  return 'M' + pts.map((p) => r1(p[0]) + ' ' + r1(p[1])).join('L');
+}
 for (const [n, parts] of byName) {
   if (n.startsWith('ne:')) { // Natural Earth rivers: big ones only, sized by their rank
     const rank = +n.split(':').pop(); if (rank > 10) continue;
@@ -151,10 +171,12 @@ for (const [n, parts] of byName) {
   }
   const len = parts.reduce((s, l) => s + (l.far ? 0 : lineKm(l)), 0);
   const d = join(parts).map((l) => linePath(l, 0.35)).join('');
+  if (len >= 60) { const lp = labelPath(join(parts.filter((l) => !l.far))); if (lp) riverLabels.push({ n: n === 'Дунав' ? 'Дунав' : n.replace(/^р\. /, ''), km: Math.round(len), d: lp }); }
   if (n === 'Дунав') { danube = d; continue; }
   if (len < 45) continue;
   rivers.push({ n, km: Math.round(len), w: len >= 250 ? 3 : len >= 120 ? 2 : 1, d });
 }
+riverLabels.sort((a, b) => b.km - a.km);
 rivers.sort((a, b) => b.km - a.km);
 
 // ---- lakes and reservoirs: named OSM water inside Bulgaria, larger than 0.6 km² ----
@@ -189,6 +211,7 @@ const REAL = {
   obl: oblLines.map((l) => linePath(l, 0.25)).join(''),
   danube,
   rivers: rivers.map(({ n, w, d }) => ({ n, w, d })),
+  riverLabels: riverLabels.map(({ n, d }) => ({ n, d })),
   lakes: polyPath(lakePoly, 0.2),
 };
 

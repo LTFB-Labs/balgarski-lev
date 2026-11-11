@@ -5,7 +5,9 @@
   "scripts": {
     "real-map": "node build-real-map.mjs",
     "relief": "node build-relief.mjs",
-    "forest": "node build-forest.mjs"
+    "forest": "node build-forest.mjs",
+    "cities": "node build-cities.mjs",
+    "roads": "node build-roads.mjs"
   },
   "devDependencies": {
     "geotiff": "^2.1.3",

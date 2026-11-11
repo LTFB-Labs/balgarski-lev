@@ -25,6 +25,22 @@ button{font-family:inherit}
 #fx,#real,#ov{position:absolute;inset:0;width:100%;height:100%;display:block}
 #fx,#real{pointer-events:none}
 #world{transform-origin:50% 50%}
+/* layers: a "Слоеве" button top right opens a list of checkboxes */
+.layers{position:fixed;top:max(14px,env(safe-area-inset-top,0px));right:max(14px,env(safe-area-inset-right,0px));z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.layers > button{display:flex;align-items:center;gap:8px;border:0;padding:9px 16px 9px 12px;font-weight:900;font-size:.95rem;color:var(--ink);cursor:pointer}
+.layers > button svg{width:20px;height:20px}
+.layers .list{background:var(--paper);border-radius:18px;box-shadow:var(--shadow);padding:8px 6px;min-width:230px;max-height:calc(100vh - 90px);overflow:auto}
+.layers h3{margin:8px 12px 4px;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.layers label{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:10px;font-weight:700;font-size:.92rem;cursor:pointer}
+.layers label:hover{background:#f4f1e8}
+.layers input{width:18px;height:18px;accent-color:var(--mint-d);margin:0}
+.layers i{width:14px;height:14px;border-radius:4px;flex:none}
+/* labels on the map keep their screen size: applyView sets --k to one screen pixel in map units */
+#real .lbl{font-family:var(--font);paint-order:stroke;stroke-linejoin:round;pointer-events:none}
+#real .pin{transform:translate(var(--x),var(--y)) scale(var(--k))}
+#real .c3{display:none}
+#real.z2 .c3{display:inline}
+#real .rl{font-size:calc(13px * var(--k));stroke-width:calc(3px * var(--k))}
 .attr{position:fixed;left:max(10px,env(safe-area-inset-left,0px));top:max(4px,env(safe-area-inset-top,0px));font-size:10px;color:rgba(43,45,58,.55);pointer-events:auto}
 .attr a{color:inherit}
 #ov{cursor:grab;touch-action:none}
@@ -278,6 +294,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
   <canvas id="fx" aria-hidden="true"></canvas>
   <svg id="ov" role="img" aria-label="Карта на България. Докоснете мястото, което търсите. Влачете, за да местите картата; колелцето или два пръста я приближават."></svg>
 </div>
+<div class="layers" id="layers"><button type="button" class="pill" id="layersBtn" aria-expanded="false" aria-controls="layersList"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Слоеве</button><div class="list" id="layersList" hidden></div></div>
 <div class="attr">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · Natural Earth · Terrain Tiles · © ESA WorldCover 2021</div>
 <div class="loading" id="loading">Рисуваме картата…</div>
 
@@ -305,6 +322,8 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 <script src="geo.js"></script>
 <script src="map.js"></script>
 <script src="real-map.js"></script>
+<script src="cities.js"></script>
+<script src="roads.js"></script>
 <script src="places.js"></script>
 <script src="photos.js"></script>
 <script>
@@ -372,26 +391,95 @@ function buildMap(){
   const lines=layer("outline");
   svgEl("path",{d:R.land,fill:"none",stroke:"#5b4a33","stroke-width":.9,"stroke-opacity":.8},lines);
   svgEl("path",{d:R.bg,fill:"none",stroke:"#c8402f","stroke-width":2.2,"stroke-opacity":.85,"stroke-linejoin":"round"},lines);
+  buildLabelLayers();
 }
 
+/* ---------- layers with names: they keep their screen size (see .pin and --k) ---------- */
+// a group at [lon, lat] that does not grow with the zoom; its content is drawn in screen pixels around 0,0
+function pin(parent,lon,lat,cls){ const [x,y]=G.P(lon,lat), g=svgEl("g",{class:"pin"+(cls?" "+cls:"")},parent); g.style.setProperty("--x",x.toFixed(1)+"px"); g.style.setProperty("--y",y.toFixed(1)+"px"); return g; }
+function text(parent,t,attrs){ const e=svgEl("text",{class:"lbl",...attrs},parent); e.textContent=t; return e; }
+const COUNTRIES=[["Румъния",25.3,44.62],["Сърбия",21.0,43.9],["Северна Македония",21.7,41.62],["Гърция",22.2,39.75],["Турция",32.4,39.4],["Турция",27.15,41.45],
+  ["Албания",20.0,40.9],["Косово",20.9,42.62],["Черна гора",19.3,42.75],["Босна и Херцеговина",17.9,44.15],["Хърватия",16.3,45.55],["Унгария",19.6,46.62],
+  ["Молдова",28.55,46.72],["Украйна",32.6,46.75],["Италия",16.55,40.85]];
+const SEAS=[["Черно море",31.4,43.35],["Егейско море",25.2,39.15],["Мраморно море",28.1,40.72],["Адриатическо море",17.4,42.25],["Йонийско море",19.2,38.4],["Азовско море",35.9,46.15]];
+function buildLabelLayers(){
+  const svg=$("real");
+  // roads: motorways red on a white casing, first-class roads orange, the rest yellow
+  const roads=svgEl("g",{id:"layer-roads"},svg);
+  if(typeof ROADS!=="undefined"){
+    svgEl("path",{d:ROADS.primary,fill:"none",stroke:"#e4b84a","stroke-width":.9,"stroke-linecap":"round","stroke-linejoin":"round"},roads);
+    svgEl("path",{d:ROADS.trunk,fill:"none",stroke:"#e08a2c","stroke-width":1.3,"stroke-linecap":"round","stroke-linejoin":"round"},roads);
+    svgEl("path",{d:ROADS.motorway,fill:"none",stroke:"#fff","stroke-width":3.2,"stroke-linecap":"round","stroke-linejoin":"round"},roads);
+    svgEl("path",{d:ROADS.motorway,fill:"none",stroke:"#c8402f","stroke-width":2,"stroke-linecap":"round","stroke-linejoin":"round"},roads);
+  }
+  // river names along the rivers
+  const rn=svgEl("g",{id:"layer-rivernames"},svg), rdefs=svgEl("defs",{},rn);
+  (REAL.riverLabels||[]).forEach((r,i)=>{ svgEl("path",{id:"rl"+i,d:r.d},rdefs);
+    const t=svgEl("text",{class:"lbl rl","font-style":"italic","font-weight":800,fill:"#2f6f8f",stroke:"rgba(255,255,255,.85)"},rn);
+    const tp=svgEl("textPath",{href:"#rl"+i,startOffset:"50%","text-anchor":"middle"},t); tp.textContent=r.n; });
+  // countries and seas: always on
+  const names=svgEl("g",{id:"layer-countries"},svg);
+  for(const [n,lon,lat] of COUNTRIES) text(pin(names,lon,lat),n.toUpperCase(),{"text-anchor":"middle",y:5,"font-size":13,"font-weight":800,"letter-spacing":3,fill:"#6d6250","fill-opacity":.8,stroke:"rgba(255,255,255,.6)","stroke-width":3});
+  for(const [n,lon,lat] of SEAS) text(pin(names,lon,lat),n,{"text-anchor":"middle",y:5,"font-size":17,"font-style":"italic","font-weight":700,"letter-spacing":1,fill:"#3d6f88","fill-opacity":.85});
+  // cities: a dot and a name; the small towns only when zoomed in
+  const cities=svgEl("g",{id:"layer-cities"},svg);
+  if(typeof CITIES!=="undefined") for(const c of CITIES){
+    const big=c.r===1, g=pin(cities,c.c[0],c.c[1],c.r===3?"c3":"");
+    if(big&&c.bg) svgEl("rect",{x:-5,y:-5,width:10,height:10,fill:"#fff",stroke:"#2b2d3a","stroke-width":2.2},g);
+    else svgEl("circle",{r:c.r===3?2.8:big?4.5:3.8,fill:c.bg?"#fff":"#f6f1e4",stroke:"#2b2d3a","stroke-width":c.r===3?1.4:1.9},g);
+    text(g,c.n,{x:7,y:4,"font-size":big?15:c.r===2?13:11.5,"font-weight":c.r===3?700:900,fill:c.bg?"#2b2d3a":"#5b5446",stroke:"rgba(255,253,248,.9)","stroke-width":3.2});
+  }
+}
+
+/* ---------- the layers list: one checkbox per layer, remembered in this browser ---------- */
+const LAYER_KEY="bl-layers";
+const LAYERS=[
+  {h:"Карта"},
+  {id:"relief",n:"Релеф (сенки)",on:true},
+  {id:"forest",n:"Гори",on:true,c:"#2e6e34"},
+  {id:"borders",n:"Граници на областите",on:true},
+  {id:"water",n:"Реки и езера",on:true,c:"#5c8fa3"},
+  {h:"Имена и обекти"},
+  {id:"countries",n:"Съседни държави и морета",on:true},
+  {id:"cities",n:"Градове",on:true,c:"#2b2d3a",need:"CITIES"},
+  {id:"rivernames",n:"Имена на реките",on:false,c:"#2f6f8f"},
+  {id:"roads",n:"Големи пътища",on:false,c:"#c8402f",need:"ROADS"},
+];
+let layerOn={}; try{ layerOn=JSON.parse(localStorage.getItem(LAYER_KEY)||"{}")||{}; }catch(e){}
+function showLayer(id,on){ const g=$("layer-"+id); if(g) g.style.display=on?"":"none"; }
+function buildLayerList(){
+  const list=$("layersList"); list.innerHTML="";
+  for(const L of LAYERS){
+    if(L.h){ const h=document.createElement("h3"); h.textContent=L.h; list.appendChild(h); continue; }
+    if(L.need&&!new Function(`return typeof ${L.need}!=="undefined"`)()) continue; // its data file is not there (yet)
+    const on=layerOn[L.id]??L.on, lab=document.createElement("label");
+    lab.innerHTML=`<input type="checkbox"${on?" checked":""}><i style="background:${L.c||"#d8cfb8"}"></i><span></span>`; lab.querySelector("span").textContent=L.n;
+    lab.querySelector("input").addEventListener("change",e=>{ layerOn[L.id]=e.target.checked; showLayer(L.id,e.target.checked); try{ localStorage.setItem(LAYER_KEY,JSON.stringify(layerOn)); }catch(err){} });
+    list.appendChild(lab); showLayer(L.id,on);
+  }
+}
+$("layersBtn").addEventListener("click",()=>{ const l=$("layersList"), open=l.hidden; l.hidden=!open; $("layersBtn").setAttribute("aria-expanded",String(open)); });
+
 /* ---------- camera: Bulgaria fills the screen; drag moves the world (it leans toward the move), wheel or two fingers zoom ---------- */
-const MAX_S=14;                                     // closest zoom: screen pixels per map unit (~38 px per km)
+const MAX_ZOOM=1.75;                                // closest zoom, relative to Bulgaria filling the screen
+let homeS=1;
 function homeView(){
   const vw=innerWidth, vh=innerHeight, bw=BB.x1-BB.x0, bh=BB.y1-BB.y0, top=vw<900?86:90, bottom=vw<900?20:24;
-  const s=Math.min(vw/bw,(vh-top-bottom)/bh);
+  const s=homeS=Math.min(vw/bw,(vh-top-bottom)/bh);
   return clampView({vw,vh,s,ox:vw/2-(BB.x0+bw/2)*s,oy:top+(vh-top-bottom)/2-(BB.y0+bh/2)*s});
 }
 // the world never ends inside the window
 function clampView(v){
-  const s=Math.max(Math.max(v.vw/G.W,v.vh/G.H),Math.min(MAX_S,v.s));
+  const s=Math.max(Math.max(v.vw/G.W,v.vh/G.H),Math.min(homeS*MAX_ZOOM,v.s));
   return {...v,s,ox:Math.min(0,Math.max(v.vw-G.W*s,v.ox)),oy:Math.min(0,Math.max(v.vh-G.H*s,v.oy))};
 }
 function applyView(){
   const v=view, vb=`${(-v.ox/v.s).toFixed(2)} ${(-v.oy/v.s).toFixed(2)} ${(v.vw/v.s).toFixed(2)} ${(v.vh/v.s).toFixed(2)}`;
-  $("real").setAttribute("viewBox",vb); ov.setAttribute("viewBox",vb);
+  const svg=$("real"); svg.setAttribute("viewBox",vb); ov.setAttribute("viewBox",vb);
+  svg.style.setProperty("--k",(1/v.s).toFixed(4)); svg.classList.toggle("z2",v.s>=homeS*1.3);
 }
 function draw(){ view=homeView(); applyView(); fxResize(); }
-const zoomAt=(v,f,sx,sy)=>{ const s=Math.max(Math.max(v.vw/G.W,v.vh/G.H),Math.min(MAX_S,v.s*f)), k=s/v.s; return clampView({...v,s,ox:sx-(sx-v.ox)*k,oy:sy-(sy-v.oy)*k}); };
+const zoomAt=(v,f,sx,sy)=>{ const s=Math.max(Math.max(v.vw/G.W,v.vh/G.H),Math.min(homeS*MAX_ZOOM,v.s*f)), k=s/v.s; return clampView({...v,s,ox:sx-(sx-v.ox)*k,oy:sy-(sy-v.oy)*k}); };
 const SLOP=6, pointers=new Map(); let dragged=false;
 const spread=()=>{ const [a,b=a]=pointers.values(); return {x:(a.x+b.x)/2,y:(a.y+b.y)/2,d:Math.hypot(a.x-b.x,a.y-b.y)||1}; };
 ov.addEventListener("pointerdown",e=>{ ov.setPointerCapture(e.pointerId); pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,x0:e.clientX,y0:e.clientY}); dragged=pointers.size>1; });
@@ -610,7 +698,7 @@ addEventListener("keydown",e=>{if(e.key==="Escape"){if(!$("detail").hidden)$("de
 
 /* ---------- controls ---------- */
 
-buildMap(); refill(); updateTop(); updateAlbumCount(); draw(); $("loading").hidden=true;
+buildMap(); buildLayerList(); refill(); updateTop(); updateAlbumCount(); draw(); $("loading").hidden=true;
 })();
 </script>
 </body>
