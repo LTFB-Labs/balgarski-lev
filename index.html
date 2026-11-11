@@ -332,6 +332,8 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 <script src="landmarks.js"></script>
 <script src="regions.js"></script>
 <script src="minerals.js"></script>
+<script src="landforms.js"></script>
+<script src="peaks.js"></script>
 <script src="places.js"></script>
 <script src="photos.js"></script>
 <script>
@@ -453,7 +455,8 @@ function buildThemeLabels(svg){
     for(const f of LANDFORMS){ const [lon,lat]=G.U(...f.at), p=pin(g,lon,lat), inner=svgEl("g",{transform:`rotate(${f.angle||0})`},p);
       text(inner,f.n,{"text-anchor":"middle",y:4,"font-size":f.k==="mountain"?12.5:11.5,"font-style":f.k==="mountain"?"normal":"italic","font-weight":800,"letter-spacing":f.k==="mountain"?1.5:.5,fill:C[f.k]||"#555",stroke:"rgba(255,255,255,.85)","stroke-width":3}); } }
   if(typeof PEAKS!=="undefined"){ const g=svgEl("g",{id:"layer-peaks"},svg);
-    for(const k of PEAKS){ const p=pin(g,k.c[0],k.c[1],k.h<2000?"c3":""); svgEl("path",{d:"M0 -6L6 4H-6Z",fill:"#6b4220",stroke:"#fff","stroke-width":1.4},p);
+    // highest first, so the declutter keeps Мусала and Вихрен
+    for(const k of [...PEAKS].sort((a,b)=>b.h-a.h)){ const p=pin(g,k.c[0],k.c[1],k.h<2000?"c3":""); svgEl("path",{d:"M0 -6L6 4H-6Z",fill:"#6b4220",stroke:"#fff","stroke-width":1.4},p);
       text(p,`${k.n} ${k.h}`,{x:8,y:4,"font-size":11,"font-weight":800,fill:"#4a2e16",stroke:"rgba(255,255,255,.9)","stroke-width":3}); } }
   if(typeof ANIMALS!=="undefined"){ const g=svgEl("g",{id:"layer-animals-names"},svg);
     for(const a of ANIMALS){ const [lon,lat]=G.U(...a.at), p=pin(g,lon,lat); p.id="animal-name-"+a.id;
@@ -567,7 +570,7 @@ function applyView(){
 // names never sit on each other: in order of importance (cities by rank, peaks, landmarks, minerals), a name that would
 // overlap one already shown is hidden until the view changes
 let declutterT=0;
-const LABEL_ORDER=["#layer-cities .pin:not(.c3) .lbl","#layer-regions-names .lbl","#layer-landforms-names .lbl","#layer-animals-names .lbl","#layer-cities .c3 .lbl","#layer-peaks .lbl","#layer-landmarks .lbl","#layer-minerals-names .lbl"];
+const LABEL_ORDER=["#layer-cities .pin:not(.c3) .lbl","#layer-peaks .lbl","#layer-regions-names .lbl","#layer-landforms-names .lbl","#layer-animals-names .lbl","#layer-cities .c3 .lbl","#layer-landmarks .lbl","#layer-minerals-names .lbl"];
 function declutter(){
   const placed=[], hit=(a,b)=>a.left<b.right&&b.left<a.right&&a.top<b.bottom&&b.top<a.bottom;
   for(const sel of LABEL_ORDER) for(const t of document.querySelectorAll(sel)){

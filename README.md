@@ -31,6 +31,7 @@ cd tools && npm install && ./fetch-data.sh && npm run real-map && npm run relief
 - Градове: Wikidata (CC0); пътища: OpenStreetMap (ODbL)
 - Забележителности: 100-те национални туристически обекта (БТС, по bg Уикипедия) и други известни места, координати от Wikidata (CC0)
 - Полезни изкопаеми: OpenStreetMap (ODbL), Wikidata, USGS Minerals Yearbook Bulgaria 2019
+- Форми на релефа: изчислени от Terrain Tiles и OpenStreetMap; върхове: Wikidata и bg Уикипедия
 - Животни: докладите на България по чл. 17 от Директивата за местообитанията (EEA, CC BY 4.0) и наблюдения от GBIF (CC BY)
 - Съседни държави, реки и езера далеч от България: [Natural Earth](https://www.naturalearthdata.com) (public domain)
 - Релеф: [Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) (Mapzen, AWS Open Data; източници: SRTM, GMTED, ETOPO1 и др.)

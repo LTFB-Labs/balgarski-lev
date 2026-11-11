@@ -11,7 +11,8 @@
     "soils": "node build-soils.mjs",
     "animals": "node build-animals.mjs",
     "regions": "node build-regions.mjs",
-    "minerals": "node build-minerals.mjs"
+    "minerals": "node build-minerals.mjs",
+    "landforms": "node build-landforms.mjs"
   },
   "devDependencies": {
     "geotiff": "^2.1.3",
