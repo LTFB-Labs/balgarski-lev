@@ -8,7 +8,8 @@
     "forest": "node build-forest.mjs",
     "cities": "node build-cities.mjs",
     "roads": "node build-roads.mjs",
-    "soils": "node build-soils.mjs"
+    "soils": "node build-soils.mjs",
+    "animals": "node build-animals.mjs"
   },
   "devDependencies": {
     "geotiff": "^2.1.3",

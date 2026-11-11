@@ -328,6 +328,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 <script src="cities.js"></script>
 <script src="roads.js"></script>
 <script src="soils.js"></script>
+<script src="animals.js"></script>
 <script src="places.js"></script>
 <script src="photos.js"></script>
 <script>
@@ -513,7 +514,7 @@ const LAYERS=[
   {id:"landforms",n:"Форми на релефа",on:false,c:"#8a5a2b",need:"LANDFORMS",also:["landforms-names"]},
   {id:"peaks",n:"Планини и върхове",on:false,c:"#6b4220",need:"PEAKS"},
   {id:"soils",n:"Почви",on:false,c:"#cf905c",need:"SOILS",legend:()=>SOILS.map(x=>({n:x.n,c:x.color}))},
-  {id:"animals",n:"Животни",on:false,c:"#8a5a3c",need:"ANIMALS",also:["animals-names"],sub:()=>ANIMALS.map(a=>({k:a.id,n:`${a.icon} ${a.n}`,c:a.color,sel:`#animal-${a.id},#animal-name-${a.id}`}))},
+  {id:"animals",n:"Животни",on:false,c:"#8a5a3c",need:"ANIMALS",also:["animals-names"],sub:()=>ANIMALS.map((a,i)=>({k:a.id,n:`${a.icon} ${a.n}`,c:a.color,on:i===0,sel:`#animal-${a.id},#animal-name-${a.id}`}))},
   {id:"minerals",n:"Полезни изкопаеми",on:false,c:"#c56a2d",need:"MINERALS",also:["minerals-names"],sub:()=>Object.entries(MINERAL_KINDS).filter(([k])=>MINERALS.some(m=>m.k===k)).map(([k,v])=>({k,n:v.n,c:v.color,sel:`#layer-minerals [data-k="${k}"],#layer-minerals-names [data-k="${k}"]`}))},
 ];
 let layerOn={}; try{ layerOn=JSON.parse(localStorage.getItem(LAYER_KEY)||"{}")||{}; }catch(e){}
@@ -529,7 +530,7 @@ function buildLayerList(){
     // a legend (soils) or sub-checkboxes (kinds, animals) show under the layer while it is on
     const more=document.createElement("div"); more.className="more"; more.hidden=!on;
     if(L.legend) for(const x of L.legend()){ const r=document.createElement("div"); r.className="leg"; r.innerHTML=`<i style="background:${x.c}"></i><span></span>`; r.querySelector("span").textContent=x.n; more.appendChild(r); }
-    if(L.sub) for(const x of L.sub()){ const key=L.id+":"+x.k, sOn=layerOn[key]??true, r=document.createElement("label"); r.className="sub";
+    if(L.sub) for(const x of L.sub()){ const key=L.id+":"+x.k, sOn=layerOn[key]??(x.on??true), r=document.createElement("label"); r.className="sub";
       r.innerHTML=`<input type="checkbox"${sOn?" checked":""}><i style="background:${x.c}"></i><span></span>`; r.querySelector("span").textContent=x.n;
       const apply=(v)=>document.querySelectorAll(x.sel).forEach(el=>el.style.display=v?"":"none"); apply(sOn);
       r.querySelector("input").addEventListener("change",e=>{ layerOn[key]=e.target.checked; apply(e.target.checked); save(); }); more.appendChild(r); }
