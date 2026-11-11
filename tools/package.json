@@ -1,0 +1,15 @@
+{
+  "name": "balgarski-lev-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "real-map": "node build-real-map.mjs",
+    "relief": "node build-relief.mjs",
+    "forest": "node build-forest.mjs"
+  },
+  "devDependencies": {
+    "geotiff": "^2.1.3",
+    "polygon-clipping": "^0.15.7",
+    "sharp": "^0.33.5"
+  }
+}
