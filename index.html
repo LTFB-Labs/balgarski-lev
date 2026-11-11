@@ -331,6 +331,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 <script src="animals.js"></script>
 <script src="landmarks.js"></script>
 <script src="regions.js"></script>
+<script src="minerals.js"></script>
 <script src="places.js"></script>
 <script src="photos.js"></script>
 <script>
@@ -461,7 +462,7 @@ function buildThemeLabels(svg){
   if(typeof MINERALS!=="undefined"){ const g=svgEl("g",{id:"layer-minerals-names"},svg);
     for(const m of MINERALS){ const k=MINERAL_KINDS[m.k]||{color:"#555",n:m.k}, p=pin(g,m.c[0],m.c[1]); p.dataset.k=m.k;
       svgEl("rect",{x:-6,y:-6,width:12,height:12,transform:"rotate(45)",fill:k.color,stroke:"#fff","stroke-width":1.6,"stroke-dasharray":m.active===false?"2 1.5":"none"},p);
-      text(p,m.n,{x:10,y:4,"font-size":10.5,"font-weight":800,fill:"#2b2d3a",stroke:"rgba(255,255,255,.9)","stroke-width":3,class:"lbl c3"}); } }
+      text(p,m.n,{x:10,y:4,"font-size":10.5,"font-weight":800,fill:"#2b2d3a",stroke:"rgba(255,255,255,.9)","stroke-width":3}); } }
   if(typeof LANDMARKS!=="undefined"){ const g=svgEl("g",{id:"layer-landmarks"},svg);
     for(const m of LANDMARKS){ const [label,color]=KIND[m.k]||["",'#555'], p=pin(g,m.c[0],m.c[1]); p.dataset.k=m.k;
       svgEl("circle",{r:8,fill:color,stroke:"#fff","stroke-width":1.6},p); const ic=svgEl("g",{transform:"translate(-6 -6) scale(.5)"},p); ic.innerHTML=KIND_ICON[m.k]||"";
