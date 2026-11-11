@@ -35,6 +35,9 @@ button{font-family:inherit}
 .layers label:hover{background:#f4f1e8}
 .layers input{width:18px;height:18px;accent-color:var(--mint-d);margin:0}
 .layers i{width:14px;height:14px;border-radius:4px;flex:none}
+.layers .more{margin:0 0 4px 28px;padding-left:6px;border-left:2px solid var(--line)}
+.layers .sub{padding:4px 10px;font-size:.84rem}
+.layers .leg{display:flex;align-items:center;gap:8px;padding:3px 10px;font-size:.82rem;font-weight:700;color:var(--muted)}
 /* labels on the map keep their screen size: applyView sets --k to one screen pixel in map units */
 #real .lbl{font-family:var(--font);paint-order:stroke;stroke-linejoin:round;pointer-events:none}
 #real .pin{transform:translate(var(--x),var(--y)) scale(var(--k))}
@@ -295,7 +298,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
   <svg id="ov" role="img" aria-label="Карта на България. Докоснете мястото, което търсите. Влачете, за да местите картата; колелцето или два пръста я приближават."></svg>
 </div>
 <div class="layers" id="layers"><button type="button" class="pill" id="layersBtn" aria-expanded="false" aria-controls="layersList"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Слоеве</button><div class="list" id="layersList" hidden></div></div>
-<div class="attr">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · Natural Earth · Terrain Tiles · © ESA WorldCover 2021</div>
+<div class="attr">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · Natural Earth · Terrain Tiles · © ESA WorldCover 2021 · HWSD v2.0 (FAO/IIASA)</div>
 <div class="loading" id="loading">Рисуваме картата…</div>
 
 <!-- the cards and the album are hidden while we work on the map itself; remove "hidden" and call dealRound() to bring the game back -->
@@ -324,6 +327,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 <script src="real-map.js"></script>
 <script src="cities.js"></script>
 <script src="roads.js"></script>
+<script src="soils.js"></script>
 <script src="places.js"></script>
 <script src="photos.js"></script>
 <script>
@@ -402,8 +406,65 @@ const COUNTRIES=[["Румъния",25.3,44.62],["Сърбия",21.0,43.9],["Се
   ["Албания",20.0,40.9],["Косово",20.9,42.62],["Черна гора",19.3,42.75],["Босна и Херцеговина",17.9,44.15],["Хърватия",16.3,45.55],["Унгария",19.6,46.62],
   ["Молдова",28.55,46.72],["Украйна",32.6,46.75],["Италия",16.55,40.85]];
 const SEAS=[["Черно море",31.4,43.35],["Егейско море",25.2,39.15],["Мраморно море",28.1,40.72],["Адриатическо море",17.4,42.25],["Йонийско море",19.2,38.4],["Азовско море",35.9,46.15]];
+// the thematic layers: data from their own files (tools/build-*.mjs); each is skipped while its file is missing
+const KIND_ICON={ // small white glyphs (24×24) for landmark kinds
+  monastery:'<path d="M12 2v4M10 4h4M6 21V11l6-4 6 4v10M10 21v-5h4v5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/>',
+  fortress:'<path d="M4 21V9h3V6h2v3h2V6h2v3h2V6h2v3h3v12h-6v-5a2 2 0 0 0-4 0v5z" fill="#fff"/>',
+  museum:'<path d="M3 9l9-5 9 5M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>',
+  monument:'<path d="M10 3h4l1 14H9zM6 21h12v-3H6z" fill="#fff"/>',
+  peak:'<path d="M2 20l7-12 3 5 2-3 8 10z" fill="#fff"/>',
+  cave:'<path d="M3 20c0-9 4-15 9-15s9 6 9 15h-6c0-4-1-7-3-7s-3 3-3 7z" fill="#fff"/>',
+  water:'<path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z" fill="#fff"/>',
+  rock:'<path d="M4 20l3-9 4-3 3 4 3-2 3 10z" fill="#fff"/>',
+  town:'<path d="M3 21V10l5-3v4l5-3v13zm11 0V5l7 3v13z" fill="#fff"/>',
+  sea:'<path d="M2 15c3-3 5 3 8 0s5 3 8 0 3-1 4 0M2 19c3-3 5 3 8 0s5 3 8 0 3-1 4 0" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="16" cy="7" r="3" fill="#fff"/>'};
+const KIND={monastery:["Манастири и църкви","#7b4fa0"],fortress:["Крепости и древни места","#b03a2e"],museum:["Музеи","#2f6fb3"],monument:["Паметници","#6b5a45"],
+  peak:["Върхове","#8a5a2b"],cave:["Пещери","#4d4d5a"],water:["Водопади и езера","#2d8fb5"],rock:["Скални феномени и природа","#3c8a3e"],town:["Стари градове и курорти","#c77a2a"],sea:["Морски места","#1f7f9a"]};
+function buildThemeLayers(svg){
+  const defs=svg.querySelector("defs");
+  if(!$("bgClip")) svgEl("path",{d:REAL.bg},svgEl("clipPath",{id:"bgClip"},defs));
+  const before=$("layer-borders"), layerAt=(id)=>{ const g=svgEl("g",{id:"layer-"+id},null); svg.insertBefore(g,before); return g; };
+  // soils: a coloured image clipped to Bulgaria
+  if(typeof SOILS!=="undefined") svgEl("image",{href:"img/real-soils.webp",x:0,y:0,width:REAL.W,height:REAL.H,preserveAspectRatio:"none","clip-path":"url(#bgClip)",opacity:.85},layerAt("soils"));
+  // natural regions: soft fills with their names
+  if(typeof REGIONS!=="undefined"){ const g=layerAt("regions");
+    for(const r of REGIONS) svgEl("path",{d:r.d,fill:r.color,"fill-opacity":r.parent?.25:.45,stroke:"#fff","stroke-width":r.parent?.8:1.8,"stroke-opacity":.9,"stroke-dasharray":r.parent?"3 2":"none"},g); }
+  // landforms: outlined mountains, plains, valleys and plateaus
+  if(typeof LANDFORMS!=="undefined"){ const g=layerAt("landforms"), C={mountain:"#8a5a2b",plain:"#4f8a3c",lowland:"#4f8a3c",plateau:"#b8862e",valley:"#c9a227"};
+    for(const f of LANDFORMS) svgEl("path",{d:f.d,fill:C[f.k]||"#888","fill-opacity":.12,stroke:C[f.k]||"#888","stroke-width":1.3,"stroke-dasharray":"4 2.5","stroke-linejoin":"round"},g); }
+  // animals: each one's range in its colour (sub-checkboxes pick which)
+  if(typeof ANIMALS!=="undefined"){ const g=layerAt("animals");
+    for(const a of ANIMALS){ const ga=svgEl("g",{id:"animal-"+a.id},g); svgEl("path",{d:a.d,fill:a.color,"fill-opacity":.28,stroke:a.color,"stroke-width":1.2,"stroke-opacity":.9},ga); } }
+  // minerals: basins as hatched areas
+  if(typeof MINERALS!=="undefined"){ const g=layerAt("minerals");
+    for(const m of MINERALS) if(m.area){ const k=MINERAL_KINDS[m.k]||{color:"#555"}; svgEl("path",{d:"M"+m.area.map(([lo,la])=>G.P(lo,la).map(v=>v.toFixed(1)).join(" ")).join("L")+"Z",fill:k.color,"fill-opacity":.25,stroke:k.color,"stroke-width":1,"data-k":m.k},g); } }
+}
+// their names and symbols, on top of everything
+function buildThemeLabels(svg){
+  if(typeof REGIONS!=="undefined"){ const g=svgEl("g",{id:"layer-regions-names"},svg);
+    for(const r of REGIONS){ const [lon,lat]=G.U(...r.at); text(pin(g,lon,lat),r.parent?r.n:r.n.toUpperCase(),{"text-anchor":"middle",y:5,"font-size":r.parent?11:13,"font-weight":900,"letter-spacing":r.parent?.5:2,fill:"#4a3f2e",stroke:"rgba(255,255,255,.85)","stroke-width":3}); } }
+  if(typeof LANDFORMS!=="undefined"){ const g=svgEl("g",{id:"layer-landforms-names"},svg), C={mountain:"#6b4220",plain:"#3d6e2e",lowland:"#3d6e2e",plateau:"#8a621c",valley:"#8a7016"};
+    for(const f of LANDFORMS){ const [lon,lat]=G.U(...f.at), p=pin(g,lon,lat), inner=svgEl("g",{transform:`rotate(${f.angle||0})`},p);
+      text(inner,f.n,{"text-anchor":"middle",y:4,"font-size":f.k==="mountain"?12.5:11.5,"font-style":f.k==="mountain"?"normal":"italic","font-weight":800,"letter-spacing":f.k==="mountain"?1.5:.5,fill:C[f.k]||"#555",stroke:"rgba(255,255,255,.85)","stroke-width":3}); } }
+  if(typeof PEAKS!=="undefined"){ const g=svgEl("g",{id:"layer-peaks"},svg);
+    for(const k of PEAKS){ const p=pin(g,k.c[0],k.c[1],k.h<2000?"c3":""); svgEl("path",{d:"M0 -6L6 4H-6Z",fill:"#6b4220",stroke:"#fff","stroke-width":1.4},p);
+      text(p,`${k.n} ${k.h}`,{x:8,y:4,"font-size":11,"font-weight":800,fill:"#4a2e16",stroke:"rgba(255,255,255,.9)","stroke-width":3}); } }
+  if(typeof ANIMALS!=="undefined"){ const g=svgEl("g",{id:"layer-animals-names"},svg);
+    for(const a of ANIMALS){ const [lon,lat]=G.U(...a.at), p=pin(g,lon,lat); p.id="animal-name-"+a.id;
+      svgEl("circle",{r:13,fill:"#fff",stroke:a.color,"stroke-width":2.2},p); text(p,a.icon,{"text-anchor":"middle",y:5,"font-size":15},p);
+      text(p,a.n,{"text-anchor":"middle",y:27,"font-size":11,"font-weight":900,fill:a.color,stroke:"rgba(255,255,255,.9)","stroke-width":3}); } }
+  if(typeof MINERALS!=="undefined"){ const g=svgEl("g",{id:"layer-minerals-names"},svg);
+    for(const m of MINERALS){ const k=MINERAL_KINDS[m.k]||{color:"#555",n:m.k}, p=pin(g,m.c[0],m.c[1]); p.dataset.k=m.k;
+      svgEl("rect",{x:-6,y:-6,width:12,height:12,transform:"rotate(45)",fill:k.color,stroke:"#fff","stroke-width":1.6,"stroke-dasharray":m.active===false?"2 1.5":"none"},p);
+      text(p,m.n,{x:10,y:4,"font-size":10.5,"font-weight":800,fill:"#2b2d3a",stroke:"rgba(255,255,255,.9)","stroke-width":3,class:"lbl c3"}); } }
+  if(typeof LANDMARKS!=="undefined"){ const g=svgEl("g",{id:"layer-landmarks"},svg);
+    for(const m of LANDMARKS){ const [label,color]=KIND[m.k]||["",'#555'], p=pin(g,m.c[0],m.c[1]); p.dataset.k=m.k;
+      svgEl("circle",{r:8,fill:color,stroke:"#fff","stroke-width":1.6},p); const ic=svgEl("g",{transform:"translate(-6 -6) scale(.5)"},p); ic.innerHTML=KIND_ICON[m.k]||"";
+      text(p,m.n,{x:11,y:4,"font-size":10.5,"font-weight":800,fill:"#2b2d3a",stroke:"rgba(255,255,255,.9)","stroke-width":3,class:"lbl c3"}); } }
+}
 function buildLabelLayers(){
   const svg=$("real");
+  buildThemeLayers(svg);
   // roads: motorways red on a white casing, first-class roads orange, the rest yellow
   const roads=svgEl("g",{id:"layer-roads"},svg);
   if(typeof ROADS!=="undefined"){
@@ -429,6 +490,8 @@ function buildLabelLayers(){
     else svgEl("circle",{r:c.r===3?2.8:big?4.5:3.8,fill:c.bg?"#fff":"#f6f1e4",stroke:"#2b2d3a","stroke-width":c.r===3?1.4:1.9},g);
     text(g,c.n,{x:7,y:4,"font-size":big?15:c.r===2?13:11.5,"font-weight":c.r===3?700:900,fill:c.bg?"#2b2d3a":"#5b5446",stroke:"rgba(255,253,248,.9)","stroke-width":3.2});
   }
+  // the thematic names go under the cities so city names stay readable
+  const tl=svgEl("g",{},null); svg.insertBefore(tl,cities); buildThemeLabels(tl);
 }
 
 /* ---------- the layers list: one checkbox per layer, remembered in this browser ---------- */
@@ -444,9 +507,17 @@ const LAYERS=[
   {id:"cities",n:"Градове",on:true,c:"#2b2d3a",need:"CITIES"},
   {id:"rivernames",n:"Имена на реките",on:false,c:"#2f6f8f"},
   {id:"roads",n:"Големи пътища",on:false,c:"#c8402f",need:"ROADS"},
+  {h:"Теми"},
+  {id:"landmarks",n:"Забележителности",on:false,c:"#b03a2e",need:"LANDMARKS",sub:()=>Object.entries(KIND).filter(([k])=>LANDMARKS.some(m=>m.k===k)).map(([k,[n,c]])=>({k,n,c,sel:`#layer-landmarks [data-k="${k}"]`}))},
+  {id:"regions",n:"Природни области",on:false,c:"#c9b26b",need:"REGIONS",also:["regions-names"]},
+  {id:"landforms",n:"Форми на релефа",on:false,c:"#8a5a2b",need:"LANDFORMS",also:["landforms-names"]},
+  {id:"peaks",n:"Планини и върхове",on:false,c:"#6b4220",need:"PEAKS"},
+  {id:"soils",n:"Почви",on:false,c:"#cf905c",need:"SOILS",legend:()=>SOILS.map(x=>({n:x.n,c:x.color}))},
+  {id:"animals",n:"Животни",on:false,c:"#8a5a3c",need:"ANIMALS",also:["animals-names"],sub:()=>ANIMALS.map(a=>({k:a.id,n:`${a.icon} ${a.n}`,c:a.color,sel:`#animal-${a.id},#animal-name-${a.id}`}))},
+  {id:"minerals",n:"Полезни изкопаеми",on:false,c:"#c56a2d",need:"MINERALS",also:["minerals-names"],sub:()=>Object.entries(MINERAL_KINDS).filter(([k])=>MINERALS.some(m=>m.k===k)).map(([k,v])=>({k,n:v.n,c:v.color,sel:`#layer-minerals [data-k="${k}"],#layer-minerals-names [data-k="${k}"]`}))},
 ];
 let layerOn={}; try{ layerOn=JSON.parse(localStorage.getItem(LAYER_KEY)||"{}")||{}; }catch(e){}
-function showLayer(id,on){ const g=$("layer-"+id); if(g) g.style.display=on?"":"none"; }
+function showLayer(L,on){ for(const id of [L.id,...(L.also||[])]){ const g=$("layer-"+id); if(g) g.style.display=on?"":"none"; } }
 function buildLayerList(){
   const list=$("layersList"); list.innerHTML="";
   for(const L of LAYERS){
@@ -454,8 +525,16 @@ function buildLayerList(){
     if(L.need&&!new Function(`return typeof ${L.need}!=="undefined"`)()) continue; // its data file is not there (yet)
     const on=layerOn[L.id]??L.on, lab=document.createElement("label");
     lab.innerHTML=`<input type="checkbox"${on?" checked":""}><i style="background:${L.c||"#d8cfb8"}"></i><span></span>`; lab.querySelector("span").textContent=L.n;
-    lab.querySelector("input").addEventListener("change",e=>{ layerOn[L.id]=e.target.checked; showLayer(L.id,e.target.checked); try{ localStorage.setItem(LAYER_KEY,JSON.stringify(layerOn)); }catch(err){} });
-    list.appendChild(lab); showLayer(L.id,on);
+    const save=()=>{ try{ localStorage.setItem(LAYER_KEY,JSON.stringify(layerOn)); }catch(err){} };
+    // a legend (soils) or sub-checkboxes (kinds, animals) show under the layer while it is on
+    const more=document.createElement("div"); more.className="more"; more.hidden=!on;
+    if(L.legend) for(const x of L.legend()){ const r=document.createElement("div"); r.className="leg"; r.innerHTML=`<i style="background:${x.c}"></i><span></span>`; r.querySelector("span").textContent=x.n; more.appendChild(r); }
+    if(L.sub) for(const x of L.sub()){ const key=L.id+":"+x.k, sOn=layerOn[key]??true, r=document.createElement("label"); r.className="sub";
+      r.innerHTML=`<input type="checkbox"${sOn?" checked":""}><i style="background:${x.c}"></i><span></span>`; r.querySelector("span").textContent=x.n;
+      const apply=(v)=>document.querySelectorAll(x.sel).forEach(el=>el.style.display=v?"":"none"); apply(sOn);
+      r.querySelector("input").addEventListener("change",e=>{ layerOn[key]=e.target.checked; apply(e.target.checked); save(); }); more.appendChild(r); }
+    lab.querySelector("input").addEventListener("change",e=>{ layerOn[L.id]=e.target.checked; showLayer(L,e.target.checked); more.hidden=!e.target.checked; save(); });
+    list.appendChild(lab); if(more.childNodes.length) list.appendChild(more); showLayer(L,on);
   }
 }
 $("layersBtn").addEventListener("click",()=>{ const l=$("layersList"), open=l.hidden; l.hidden=!open; $("layersBtn").setAttribute("aria-expanded",String(open)); });

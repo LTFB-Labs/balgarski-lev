@@ -27,6 +27,8 @@ cd tools && npm install && ./fetch-data.sh && npm run real-map && npm run relief
 
 - Граници на България, областите, брегът, реките, езерата и язовирите: © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors (ODbL; `real-map.js` е производна база данни под същия лиценз)
 - Гори: © ESA WorldCover 2021 (CC BY 4.0), класът „дървесна покривка“
+- Почви: Harmonized World Soil Database v2.0 (FAO & IIASA 2023, CC BY-NC-SA 3.0 IGO), типовете по „Атлас на почвите в България“ (1998)
+- Градове: Wikidata (CC0); пътища: OpenStreetMap (ODbL)
 - Съседни държави, реки и езера далеч от България: [Natural Earth](https://www.naturalearthdata.com) (public domain)
 - Релеф: [Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) (Mapzen, AWS Open Data; източници: SRTM, GMTED, ETOPO1 и др.)
 - Снимки: Wikimedia Commons, вижте [CREDITS.md](CREDITS.md)
