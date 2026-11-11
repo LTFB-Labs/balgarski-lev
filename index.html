@@ -329,6 +329,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 <script src="roads.js"></script>
 <script src="soils.js"></script>
 <script src="animals.js"></script>
+<script src="landmarks.js"></script>
 <script src="places.js"></script>
 <script src="photos.js"></script>
 <script>
@@ -461,7 +462,7 @@ function buildThemeLabels(svg){
   if(typeof LANDMARKS!=="undefined"){ const g=svgEl("g",{id:"layer-landmarks"},svg);
     for(const m of LANDMARKS){ const [label,color]=KIND[m.k]||["",'#555'], p=pin(g,m.c[0],m.c[1]); p.dataset.k=m.k;
       svgEl("circle",{r:8,fill:color,stroke:"#fff","stroke-width":1.6},p); const ic=svgEl("g",{transform:"translate(-6 -6) scale(.5)"},p); ic.innerHTML=KIND_ICON[m.k]||"";
-      text(p,m.n,{x:11,y:4,"font-size":10.5,"font-weight":800,fill:"#2b2d3a",stroke:"rgba(255,255,255,.9)","stroke-width":3,class:"lbl c3"}); } }
+      text(p,m.n,{x:11,y:4,"font-size":10.5,"font-weight":800,fill:"#2b2d3a",stroke:"rgba(255,255,255,.9)","stroke-width":3}); } }
 }
 function buildLabelLayers(){
   const svg=$("real");
@@ -533,8 +534,8 @@ function buildLayerList(){
     if(L.sub) for(const x of L.sub()){ const key=L.id+":"+x.k, sOn=layerOn[key]??(x.on??true), r=document.createElement("label"); r.className="sub";
       r.innerHTML=`<input type="checkbox"${sOn?" checked":""}><i style="background:${x.c}"></i><span></span>`; r.querySelector("span").textContent=x.n;
       const apply=(v)=>document.querySelectorAll(x.sel).forEach(el=>el.style.display=v?"":"none"); apply(sOn);
-      r.querySelector("input").addEventListener("change",e=>{ layerOn[key]=e.target.checked; apply(e.target.checked); save(); }); more.appendChild(r); }
-    lab.querySelector("input").addEventListener("change",e=>{ layerOn[L.id]=e.target.checked; showLayer(L,e.target.checked); more.hidden=!e.target.checked; save(); });
+      r.querySelector("input").addEventListener("change",e=>{ layerOn[key]=e.target.checked; apply(e.target.checked); save(); declutter(); }); more.appendChild(r); }
+    lab.querySelector("input").addEventListener("change",e=>{ layerOn[L.id]=e.target.checked; showLayer(L,e.target.checked); more.hidden=!e.target.checked; save(); declutter(); });
     list.appendChild(lab); if(more.childNodes.length) list.appendChild(more); showLayer(L,on);
   }
 }
@@ -557,6 +558,19 @@ function applyView(){
   const v=view, vb=`${(-v.ox/v.s).toFixed(2)} ${(-v.oy/v.s).toFixed(2)} ${(v.vw/v.s).toFixed(2)} ${(v.vh/v.s).toFixed(2)}`;
   const svg=$("real"); svg.setAttribute("viewBox",vb); ov.setAttribute("viewBox",vb);
   svg.style.setProperty("--k",(1/v.s).toFixed(4)); svg.classList.toggle("z2",v.s>=homeS*1.3);
+  clearTimeout(declutterT); declutterT=setTimeout(declutter,120);
+}
+// names never sit on each other: in order of importance (cities by rank, peaks, landmarks, minerals), a name that would
+// overlap one already shown is hidden until the view changes
+let declutterT=0;
+const LABEL_ORDER=["#layer-cities .pin:not(.c3) .lbl","#layer-cities .c3 .lbl","#layer-peaks .lbl","#layer-landmarks .lbl","#layer-minerals-names .lbl"];
+function declutter(){
+  const placed=[], hit=(a,b)=>a.left<b.right&&b.left<a.right&&a.top<b.bottom&&b.top<a.bottom;
+  for(const sel of LABEL_ORDER) for(const t of document.querySelectorAll(sel)){
+    t.style.visibility=""; const r=t.getBoundingClientRect(); if(!r.width) continue;
+    const box={left:r.left-2,right:r.right+2,top:r.top-1,bottom:r.bottom+1};
+    if(placed.some(p=>hit(p,box))) t.style.visibility="hidden"; else placed.push(box);
+  }
 }
 function draw(){ view=homeView(); applyView(); fxResize(); }
 const zoomAt=(v,f,sx,sy)=>{ const s=Math.max(Math.max(v.vw/G.W,v.vh/G.H),Math.min(homeS*MAX_ZOOM,v.s*f)), k=s/v.s; return clampView({...v,s,ox:sx-(sx-v.ox)*k,oy:sy-(sy-v.oy)*k}); };
@@ -778,7 +792,7 @@ addEventListener("keydown",e=>{if(e.key==="Escape"){if(!$("detail").hidden)$("de
 
 /* ---------- controls ---------- */
 
-buildMap(); buildLayerList(); refill(); updateTop(); updateAlbumCount(); draw(); $("loading").hidden=true;
+buildMap(); buildLayerList(); declutter(); refill(); updateTop(); updateAlbumCount(); draw(); $("loading").hidden=true;
 })();
 </script>
 </body>
