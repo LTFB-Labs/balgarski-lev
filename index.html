@@ -18,17 +18,37 @@
   color-scheme:light;
 }
 html,body{height:100%}
-body{margin:0;overflow:hidden;background:#cadd95;font-family:var(--font);color:var(--ink);-webkit-tap-highlight-color:transparent}
+body{margin:0;overflow:hidden;background:#bdd2d8;font-family:var(--font);color:var(--ink);-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 button{font-family:inherit}
 #world{position:fixed;inset:0}
-#map,#fx{position:absolute;inset:0;width:100%;height:100%;display:block}
-#fx{pointer-events:none}
-#ov,#lab{position:absolute;display:block}
-#ov{cursor:default;touch-action:manipulation}
+#fx,#real,#ov{position:absolute;inset:0;width:100%;height:100%;display:block}
+#fx,#real{pointer-events:none}
+#world{transform-origin:50% 50%}
+/* layers: a "Слоеве" button top right opens a list of checkboxes */
+.layers{position:fixed;top:max(14px,env(safe-area-inset-top,0px));right:max(14px,env(safe-area-inset-right,0px));z-index:5;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.layers > button{display:flex;align-items:center;gap:8px;border:0;padding:9px 16px 9px 12px;font-weight:900;font-size:.95rem;color:var(--ink);cursor:pointer}
+.layers > button svg{width:20px;height:20px}
+.layers .list{background:var(--paper);border-radius:18px;box-shadow:var(--shadow);padding:8px 6px;min-width:230px;max-height:calc(100vh - 90px);overflow:auto}
+.layers h3{margin:8px 12px 4px;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.layers label{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:10px;font-weight:700;font-size:.92rem;cursor:pointer}
+.layers label:hover{background:#f4f1e8}
+.layers input{width:18px;height:18px;accent-color:var(--mint-d);margin:0}
+.layers i{width:14px;height:14px;border-radius:4px;flex:none}
+.layers .more{margin:0 0 4px 28px;padding-left:6px;border-left:2px solid var(--line)}
+.layers .sub{padding:4px 10px;font-size:.84rem}
+.layers .leg{display:flex;align-items:center;gap:8px;padding:3px 10px;font-size:.82rem;font-weight:700;color:var(--muted)}
+/* labels on the map keep their screen size: applyView sets --k to one screen pixel in map units */
+#real .lbl{font-family:var(--font);paint-order:stroke;stroke-linejoin:round;pointer-events:none}
+#real .pin{transform:translate(var(--x),var(--y)) scale(var(--k))}
+#real .c3{display:none}
+#real.z2 .c3{display:inline}
+#real .rl{font-size:calc(13px * var(--k));stroke-width:calc(3px * var(--k))}
+.attr{position:fixed;left:max(10px,env(safe-area-inset-left,0px));top:max(4px,env(safe-area-inset-top,0px));font-size:10px;color:rgba(43,45,58,.55);pointer-events:auto}
+.attr a{color:inherit}
+#ov{cursor:grab;touch-action:none}
+#ov.grabbing{cursor:grabbing}
 #ov.aim{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='36' viewBox='-16 -36 32 38'%3E%3Cellipse cx='0' cy='0.5' rx='7' ry='2.4' fill='rgba(20,20,60,.35)'/%3E%3Cpath d='M-3 0c-12-15-13-33 0-33s12 18 0 33z' fill='%23c9505a'/%3E%3Cpath d='M0 0c-12-15-13-33 0-33s12 18 0 33z' fill='%23e46a6a'/%3E%3Cellipse cx='-1' cy='-22' rx='5.6' ry='6' fill='%23c9505a'/%3E%3Cellipse cx='0' cy='-22' rx='4.6' ry='5.2' fill='%23fff'/%3E%3C/svg%3E") 15 34,crosshair}
-#lab{pointer-events:none;overflow:visible}
-#lab .sign{filter:drop-shadow(0 1.5px 1.2px rgba(40,25,5,.35))}
 #ov text{font-family:var(--font);font-weight:900;paint-order:stroke;stroke-linejoin:round}
 .ring{transform-box:fill-box;transform-origin:center;animation:ringIn .45s cubic-bezier(.2,1.4,.4,1) both}
 .ring.r2{animation-delay:.08s}.ring.r3{animation-delay:.16s}
@@ -139,21 +159,6 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 .big{border:0;border-radius:16px;background:var(--butter);color:#4a3a06;font-weight:900;font-size:1.1rem;padding:12px 22px;cursor:pointer;box-shadow:0 4px 0 var(--butter-d),0 8px 18px -6px rgba(0,0,0,.35);white-space:nowrap}
 .big:active{transform:translateY(3px);box-shadow:0 1px 0 var(--butter-d)}
 .big.ghost{background:#efeff3;color:var(--ink);box-shadow:0 4px 0 #d3d3db}
-
-/* intro */
-.intro{position:fixed;inset:0;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
-  background:radial-gradient(ellipse at 50% 35%,#f4fbf7 0%,#dff1e9 55%,#cfe8de 100%);overflow:hidden;transition:opacity .5s,transform .5s}
-.intro.leave{opacity:0;transform:scale(1.04);pointer-events:none}
-.intro::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(124,196,178,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(124,196,178,.12) 1px,transparent 1px);background-size:44px 44px;pointer-events:none}
-.intro > *{position:relative}
-.intro-art{width:min(620px,94vw);max-height:56vh;aspect-ratio:580/450}
-.intro-art svg{width:100%;height:100%;display:block}
-.intro-title{display:flex;align-items:center;gap:14px;animation:introIn .6s ease-out 1s both}
-.intro-sub{margin:0;color:var(--muted);font-weight:700;text-align:center;max-width:36ch;animation:introIn .6s ease-out 1.2s both}
-.intro-play{font-size:1.3rem;padding:14px 46px;animation:introIn .6s ease-out 1.4s both,pulse 2s ease-in-out 2.2s infinite}
-@keyframes introIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-.wordmark{text-align:center}
 
 /* start + end screens */
 .screen{position:fixed;inset:0;display:grid;place-items:center;padding:20px;background:rgba(20,40,70,.35);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:10}
@@ -288,14 +293,16 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 </head>
 <body>
 <div id="world">
-  <canvas id="map" aria-hidden="true"></canvas>
+  <svg id="real" aria-hidden="true"></svg>
   <canvas id="fx" aria-hidden="true"></canvas>
-  <svg id="lab" viewBox="0 0 1639 960" aria-hidden="true"></svg>
-  <svg id="ov" viewBox="0 0 1639 960" role="img" aria-label="Карта на България. Докоснете мястото, което търсите."></svg>
+  <svg id="ov" role="img" aria-label="Карта на България. Докоснете мястото, което търсите. Влачете, за да местите картата; колелцето или два пръста я приближават."></svg>
 </div>
+<div class="layers" id="layers"><button type="button" class="pill" id="layersBtn" aria-expanded="false" aria-controls="layersList"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg>Слоеве</button><div class="list" id="layersList" hidden></div></div>
+<div class="attr">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · Natural Earth · Terrain Tiles · © ESA WorldCover 2021 · HWSD v2.0 (FAO/IIASA)</div>
 <div class="loading" id="loading">Рисуваме картата…</div>
 
-<div class="hud" id="hud">
+<!-- the cards and the album are hidden while we work on the map itself; remove "hidden" and call dealRound() to bring the game back -->
+<div class="hud" id="hud" hidden>
   <div class="top">
     <div class="q pill" id="q" hidden><div class="lbl">Къде е</div><div class="name" id="qName"></div><div class="pips" id="pips"></div></div>
   </div>
@@ -306,12 +313,6 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 
 </div>
 
-<div class="intro" id="start">
-  <div class="intro-art" id="introArt"></div>
-  <div class="intro-title"><h1 class="wordmark"><span>Български</span><b>Л<i>е</i>в</b></h1></div>
-  <p class="intro-sub">Обърни карта, разгледай снимките и намери мястото на картата.</p>
-  <button type="button" class="big intro-play" id="play">Опознай</button>
-</div>
 <div class="screen album" id="album" hidden>
   <div class="apanel">
     <div class="ahead"><button type="button" class="big ghost" id="albClose">Към играта</button><h2>Албум</h2><div class="prog"><b id="albN">0 от 26</b><div class="bar"><i id="albBar"></i></div></div></div>
@@ -323,24 +324,31 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 
 <script src="geo.js"></script>
 <script src="map.js"></script>
-<script src="warp.js"></script>
-<script src="labels.js"></script>
+<script src="real-map.js"></script>
+<script src="cities.js"></script>
+<script src="roads.js"></script>
+<script src="soils.js"></script>
+<script src="animals.js"></script>
+<script src="landmarks.js"></script>
+<script src="regions.js"></script>
+<script src="minerals.js"></script>
+<script src="landforms.js"></script>
+<script src="peaks.js"></script>
 <script src="places.js"></script>
 <script src="photos.js"></script>
 <script>
 (function(){
 const M=BGMap, $=id=>document.getElementById(id);
-const canvas=$("map"), ov=$("ov");
+const ov=$("ov");
 const RINGS=[[7.5,3],[17.5,2],[32.5,1]];             // km radius → points
-const BB={x0:80,y0:15,x1:1600,y1:935};             // Bulgaria with a margin, in image pixels
-/* The map is an illustration; WARP (warp.js) bends real coordinates onto it and back. */
-function tps(t,x,y){ const X=x/t.S, Y=y/t.S; let u=t.a[0][0]+t.a[1][0]*X+t.a[2][0]*Y, v=t.a[0][1]+t.a[1][1]*X+t.a[2][1]*Y;
-  for(let i=0;i<t.c.length;i++){ const dx=X-t.c[i][0], dy=Y-t.c[i][1], r2=dx*dx+dy*dy; if(r2>1e-18){ const k=0.5*r2*Math.log(r2); u+=t.w[i][0]*k; v+=t.w[i][1]*k; } } return [u,v]; }
-const G={W:WARP.W, H:WARP.H,
-  P:(lon,lat)=>{ const [x,y]=M.P(lon,lat); return tps(WARP.F,x,y); },
-  U:(u,v)=>{ const [x,y]=tps(WARP.I,u,v); return M.U(x,y); },
-  pxPerKm:(lon,lat)=>{ const a=G.P(lon,lat), b=G.P(lon,lat+0.05); return Math.hypot(b[0]-a[0],b[1]-a[1])/(0.05*111.2); }};
-const mapImg=new Image(); mapImg.src="map-illustrated.jpg"; const mapReady=mapImg.decode().catch(()=>{});
+/* The map: today's Bulgaria in its real place (real-map.js, built by tools/), one plain projection true to scale on 42.7° N,
+   so a place's real lon/lat lands where it really is. */
+const G={W:REAL.W, H:REAL.H,
+  P:(lon,lat)=>[(lon-REAL.lon0)*REAL.cx*REAL.k,(REAL.lat1-lat)*REAL.k],
+  U:(x,y)=>[x/(REAL.cx*REAL.k)+REAL.lon0,REAL.lat1-y/REAL.k]};
+G.pxPerKm=(lon,lat)=>{ const a=G.P(lon,lat), b=G.P(lon,lat+0.05); return Math.hypot(b[0]-a[0],b[1]-a[1])/(0.05*111.2); };
+const BB=REAL.bb;                                   // Bulgaria with a margin, in map units
+const SEA="#bdd2d8";
 const ICON={
   city:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 21V10l5-3v4l5-3v13H3zm11 0V5l7 3v13h-7z"/></svg>',
   history:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 21V9h2V6h2v3h2V6h4v3h2V6h2v3h2v12h-6v-5a2 2 0 0 0-4 0v5H4z"/></svg>',
@@ -352,67 +360,256 @@ const gems=r=>`<span class="gems">${GEM.repeat(RARITY[r].gems)}</span>`;
 const STORE="opoznai-bg-found";
 let collected={}; try{collected=JSON.parse(localStorage.getItem(STORE)||"{}")||{};}catch(e){collected={};}
 const saveCollected=()=>{try{localStorage.setItem(STORE,JSON.stringify(collected));}catch(e){}};
-const look="paint"; let view=null, deck=[], hand=null, answered=false, game=[], found=[], extra="", busy=Promise.resolve();
+const look="paint"; let view=null, deck=[], hand=null, answered=false, game=[], found=[], extra="";
 
-/* ---------- map signs (data in labels.js) ---------- */
 const SVGNS="http://www.w3.org/2000/svg";
 function svgEl(tag,attrs,parent){ const e=document.createElementNS(SVGNS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(parent) parent.appendChild(e); return e; }
-function buildSigns(){
-  const lab=$("lab"); lab.innerHTML="";
-  for(const L of (typeof MAP_LABELS!=="undefined"?MAP_LABELS:[])){
-    const [x,y]=G.P(L.lon,L.lat), g=svgEl("g",{transform:`translate(${x} ${y}) rotate(${L.a||0})`,class:"sign sign-"+L.kind},lab);
-    if(L.kind==="region"||L.kind==="city"){
-      const big=L.kind==="region", fs=big?12.5:10.5;
-      const tx=svgEl("text",{x:0,y:fs*0.36,"text-anchor":"middle","font-family":"Nunito, sans-serif","font-weight":900,"font-size":fs,"letter-spacing":big?1.4:0.6,fill:"#5a3a1a"},g); tx.textContent=big?L.t.toUpperCase():L.t;
-      const w=tx.getComputedTextLength()+(big?26:18), h=big?21:17, hw=w/2, hh=h/2, tail=big?9:6;
-      const back=svgEl("g",{},null);
-      [-1,1].forEach(sx=>svgEl("path",{d:`M${sx*(hw-3)} ${-hh+5} L${sx*(hw+tail)} ${-hh+5} L${sx*(hw+tail*0.45)} ${3} L${sx*(hw+tail)} ${hh+5} L${sx*(hw-3)} ${hh+5} Z`,fill:"#e2c895",stroke:"#b8925a","stroke-width":0.8},back));
-      svgEl("path",{d:`M${-hw} ${-hh} Q0 ${-hh-4} ${hw} ${-hh} L${hw} ${hh} Q0 ${hh-4} ${-hw} ${hh} Z`,fill:"#f8eacb",stroke:"#c9a66b","stroke-width":0.9},back);
-      g.insertBefore(back,tx);
-      if(!big){ g.setAttribute("transform",`translate(${x} ${y-16}) rotate(${L.a||0})`); svgEl("circle",{cx:0,cy:16,r:3,fill:"#d2482f",stroke:"#fff","stroke-width":1.2},g); }
-    } else if(L.kind==="sea"){
-      L.t.split(" ").forEach((w,i)=>{ const t=svgEl("text",{x:i*10,y:i*34,"text-anchor":"middle","font-family":"Caveat, cursive","font-weight":700,"font-size":40,"letter-spacing":2,fill:"#ffffff"},g); t.textContent=w; });
-    } else if(L.kind==="river"){
-      const t=svgEl("text",{"text-anchor":"middle","font-family":"Caveat, cursive","font-weight":700,"font-size":17,fill:"#1f5f9e",stroke:"rgba(255,255,255,.85)","stroke-width":3,"paint-order":"stroke"},g); t.textContent=L.t;
-    } else {
-      const t=svgEl("text",{"text-anchor":"middle","font-family":"Nunito, sans-serif","font-weight":800,"font-size":14,"letter-spacing":6,fill:"#5d7a52","fill-opacity":0.85},g); t.textContent=L.t.toUpperCase();
-    }
+
+/* ---------- the map: SVG layers from real-map.js, bottom to top ---------- */
+function buildMap(){
+  const svg=$("real"), R=REAL;
+  const defs=svgEl("defs",{},svg);
+  const layer=(id)=>svgEl("g",{id:"layer-"+id},svg);
+  // sea: watercolour blue with soft ripples along every shore, as on the history map
+  const sea=layer("sea");
+  svgEl("rect",{x:-2000,y:-2000,width:R.W+4000,height:R.H+4000,fill:SEA},sea);
+  // the deep sea a step darker past the edge of the shelf (tools/build-relief.mjs)
+  svgEl("image",{href:"img/real-depth.webp",x:0,y:0,width:R.W,height:R.H,preserveAspectRatio:"none"},sea);
+  [[18,.06],[11,.1],[5,.16]].forEach(([w,o])=>svgEl("path",{d:R.land,fill:"none",stroke:"#4f7f92","stroke-width":w,"stroke-opacity":o,"stroke-linejoin":"round"},sea));
+  // land: the height colours of a physical map (tools/build-relief.mjs) clipped to the coast
+  const land=layer("land");
+  svgEl("path",{d:R.land},svgEl("clipPath",{id:"landClip"},defs));
+  svgEl("path",{d:R.land,fill:"#e6dcc3"},land);
+  svgEl("image",{href:"img/real-heights.webp",x:0,y:0,width:R.W,height:R.H,preserveAspectRatio:"none","clip-path":"url(#landClip)"},land);
+  // forests: ESA WorldCover tree cover as a faint dark green (tools/build-forest.mjs)
+  svgEl("image",{href:"img/real-forest.webp",x:0,y:0,width:R.W,height:R.H,preserveAspectRatio:"none","clip-path":"url(#landClip)"},layer("forest"));
+  // relief: hill shading, blended like ink. The clip sits on the image, not the group: a clipped group would blend only inside itself.
+  svgEl("image",{href:"img/real-relief.webp",x:0,y:0,width:R.W,height:R.H,preserveAspectRatio:"none","clip-path":"url(#landClip)",style:"mix-blend-mode:multiply"},layer("relief"));
+  // the neighbours a little paler, so Bulgaria stands out
+  svgEl("path",{d:R.land+R.bg,fill:"#f6f1e4","fill-opacity":.4,"fill-rule":"evenodd"},layer("fade"));
+  // borders: the neighbours' faint, the oblasts dotted
+  const borders=layer("borders");
+  svgEl("path",{d:R.nbBorders,fill:"none",stroke:"#8a7a5c","stroke-width":1,"stroke-dasharray":"5 3","stroke-opacity":.7},borders);
+  svgEl("path",{d:R.obl,fill:"none",stroke:"#9a7f57","stroke-width":.8,"stroke-dasharray":"2.5 2.5","stroke-opacity":.75,"stroke-linejoin":"round"},borders);
+  // water: lakes and reservoirs, rivers by size, the Danube thickest
+  const water=layer("water");
+  svgEl("path",{d:R.lakes,fill:SEA,stroke:"#5c8fa3","stroke-width":.6},water);
+  const RW={1:.8,2:1.25,3:1.8};
+  for(const r of R.rivers) svgEl("path",{d:r.d,fill:"none",stroke:"#5c8fa3","stroke-width":RW[r.w],"stroke-opacity":.9,"stroke-linecap":"round","stroke-linejoin":"round"},water);
+  svgEl("path",{d:R.danube,fill:"none",stroke:"#3f7f9c","stroke-width":3.6,"stroke-linecap":"round","stroke-linejoin":"round"},water);
+  // outlines on top: every coast in ink, Bulgaria's border in red
+  const lines=layer("outline");
+  svgEl("path",{d:R.land,fill:"none",stroke:"#5b4a33","stroke-width":.9,"stroke-opacity":.8},lines);
+  svgEl("path",{d:R.bg,fill:"none",stroke:"#c8402f","stroke-width":2.2,"stroke-opacity":.85,"stroke-linejoin":"round"},lines);
+  buildLabelLayers();
+}
+
+/* ---------- layers with names: they keep their screen size (see .pin and --k) ---------- */
+// a group at [lon, lat] that does not grow with the zoom; its content is drawn in screen pixels around 0,0
+function pin(parent,lon,lat,cls){ const [x,y]=G.P(lon,lat), g=svgEl("g",{class:"pin"+(cls?" "+cls:"")},parent); g.style.setProperty("--x",x.toFixed(1)+"px"); g.style.setProperty("--y",y.toFixed(1)+"px"); return g; }
+function text(parent,t,attrs){ const e=svgEl("text",{class:"lbl",...attrs},parent); e.textContent=t; return e; }
+const COUNTRIES=[["Румъния",25.3,44.62],["Сърбия",21.0,43.9],["Северна Македония",21.7,41.62],["Гърция",22.2,39.75],["Турция",32.4,39.4],["Турция",27.15,41.45],
+  ["Албания",20.0,40.9],["Косово",20.9,42.62],["Черна гора",19.3,42.75],["Босна и Херцеговина",17.9,44.15],["Хърватия",16.3,45.55],["Унгария",19.6,46.62],
+  ["Молдова",28.55,46.72],["Украйна",32.6,46.75],["Италия",16.55,40.85]];
+const SEAS=[["Черно море",31.4,43.35],["Егейско море",25.2,39.15],["Мраморно море",28.1,40.72],["Адриатическо море",17.4,42.25],["Йонийско море",19.2,38.4],["Азовско море",35.9,46.15]];
+// the thematic layers: data from their own files (tools/build-*.mjs); each is skipped while its file is missing
+const KIND_ICON={ // small white glyphs (24×24) for landmark kinds
+  monastery:'<path d="M12 2v4M10 4h4M6 21V11l6-4 6 4v10M10 21v-5h4v5" fill="none" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/>',
+  fortress:'<path d="M4 21V9h3V6h2v3h2V6h2v3h2V6h2v3h3v12h-6v-5a2 2 0 0 0-4 0v5z" fill="#fff"/>',
+  museum:'<path d="M3 9l9-5 9 5M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>',
+  monument:'<path d="M10 3h4l1 14H9zM6 21h12v-3H6z" fill="#fff"/>',
+  peak:'<path d="M2 20l7-12 3 5 2-3 8 10z" fill="#fff"/>',
+  cave:'<path d="M3 20c0-9 4-15 9-15s9 6 9 15h-6c0-4-1-7-3-7s-3 3-3 7z" fill="#fff"/>',
+  water:'<path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z" fill="#fff"/>',
+  rock:'<path d="M4 20l3-9 4-3 3 4 3-2 3 10z" fill="#fff"/>',
+  town:'<path d="M3 21V10l5-3v4l5-3v13zm11 0V5l7 3v13z" fill="#fff"/>',
+  sea:'<path d="M2 15c3-3 5 3 8 0s5 3 8 0 3-1 4 0M2 19c3-3 5 3 8 0s5 3 8 0 3-1 4 0" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="16" cy="7" r="3" fill="#fff"/>'};
+const KIND={monastery:["Манастири и църкви","#7b4fa0"],fortress:["Крепости и древни места","#b03a2e"],museum:["Музеи","#2f6fb3"],monument:["Паметници","#6b5a45"],
+  peak:["Върхове","#8a5a2b"],cave:["Пещери","#4d4d5a"],water:["Водопади и езера","#2d8fb5"],rock:["Скални феномени и природа","#3c8a3e"],town:["Стари градове и курорти","#c77a2a"],sea:["Морски места","#1f7f9a"]};
+function buildThemeLayers(svg){
+  const defs=svg.querySelector("defs");
+  if(!$("bgClip")) svgEl("path",{d:REAL.bg},svgEl("clipPath",{id:"bgClip"},defs));
+  const before=$("layer-borders"), layerAt=(id)=>{ const g=svgEl("g",{id:"layer-"+id},null); svg.insertBefore(g,before); return g; };
+  // soils: a coloured image clipped to Bulgaria
+  if(typeof SOILS!=="undefined") svgEl("image",{href:"img/real-soils.webp",x:0,y:0,width:REAL.W,height:REAL.H,preserveAspectRatio:"none","clip-path":"url(#bgClip)",opacity:.85},layerAt("soils"));
+  // natural regions: soft fills with their names
+  if(typeof REGIONS!=="undefined"){ const g=layerAt("regions");
+    // the five regions in colour, their sub-regions as dashed lines on top
+    for(const r of REGIONS) if(!r.parent) svgEl("path",{d:r.d,fill:r.color,"fill-opacity":.5,stroke:"#fff","stroke-width":2.2,"stroke-opacity":.95},g);
+    for(const r of REGIONS) if(r.parent) svgEl("path",{d:r.d,fill:"none",stroke:"#5a4b33","stroke-width":.9,"stroke-opacity":.6,"stroke-dasharray":"4 3"},g); }
+  // landforms: outlined mountains, plains, valleys and plateaus
+  if(typeof LANDFORMS!=="undefined"){ const g=layerAt("landforms"), C={mountain:"#8a5a2b",plain:"#4f8a3c",lowland:"#4f8a3c",plateau:"#b8862e",valley:"#c9a227"};
+    for(const f of LANDFORMS) svgEl("path",{d:f.d,fill:C[f.k]||"#888","fill-opacity":.12,stroke:C[f.k]||"#888","stroke-width":1.3,"stroke-dasharray":"4 2.5","stroke-linejoin":"round"},g); }
+  // animals: each one's range in its colour (sub-checkboxes pick which)
+  if(typeof ANIMALS!=="undefined"){ const g=layerAt("animals");
+    for(const a of ANIMALS){ const ga=svgEl("g",{id:"animal-"+a.id},g); svgEl("path",{d:a.d,fill:a.color,"fill-opacity":.28,stroke:a.color,"stroke-width":1.2,"stroke-opacity":.9},ga); } }
+  // minerals: basins as hatched areas
+  if(typeof MINERALS!=="undefined"){ const g=layerAt("minerals");
+    for(const m of MINERALS) if(m.area){ const k=MINERAL_KINDS[m.k]||{color:"#555"}; svgEl("path",{d:"M"+m.area.map(([lo,la])=>G.P(lo,la).map(v=>v.toFixed(1)).join(" ")).join("L")+"Z",fill:k.color,"fill-opacity":.25,stroke:k.color,"stroke-width":1,"data-k":m.k},g); } }
+}
+// their names and symbols, on top of everything
+function buildThemeLabels(svg){
+  if(typeof REGIONS!=="undefined"){ const g=svgEl("g",{id:"layer-regions-names"},svg);
+    for(const r of REGIONS){ const [lon,lat]=G.U(...r.at); text(pin(g,lon,lat),r.parent?r.n:r.n.toUpperCase(),{"text-anchor":"middle",y:5,"font-size":r.parent?11:13,"font-weight":900,"letter-spacing":r.parent?.5:2,fill:"#4a3f2e",stroke:"rgba(255,255,255,.85)","stroke-width":3}); } }
+  if(typeof LANDFORMS!=="undefined"){ const g=svgEl("g",{id:"layer-landforms-names"},svg), C={mountain:"#6b4220",plain:"#3d6e2e",lowland:"#3d6e2e",plateau:"#8a621c",valley:"#8a7016"};
+    for(const f of LANDFORMS){ const [lon,lat]=G.U(...f.at), p=pin(g,lon,lat), inner=svgEl("g",{transform:`rotate(${f.angle||0})`},p);
+      text(inner,f.n,{"text-anchor":"middle",y:4,"font-size":f.k==="mountain"?12.5:11.5,"font-style":f.k==="mountain"?"normal":"italic","font-weight":800,"letter-spacing":f.k==="mountain"?1.5:.5,fill:C[f.k]||"#555",stroke:"rgba(255,255,255,.85)","stroke-width":3}); } }
+  if(typeof PEAKS!=="undefined"){ const g=svgEl("g",{id:"layer-peaks"},svg);
+    // highest first, so the declutter keeps Мусала and Вихрен
+    for(const k of [...PEAKS].sort((a,b)=>b.h-a.h)){ const p=pin(g,k.c[0],k.c[1],k.h<2000?"c3":""); svgEl("path",{d:"M0 -6L6 4H-6Z",fill:"#6b4220",stroke:"#fff","stroke-width":1.4},p);
+      text(p,`${k.n} ${k.h}`,{x:8,y:4,"font-size":11,"font-weight":800,fill:"#4a2e16",stroke:"rgba(255,255,255,.9)","stroke-width":3}); } }
+  if(typeof ANIMALS!=="undefined"){ const g=svgEl("g",{id:"layer-animals-names"},svg);
+    for(const a of ANIMALS){ const [lon,lat]=G.U(...a.at), p=pin(g,lon,lat); p.id="animal-name-"+a.id;
+      svgEl("circle",{r:13,fill:"#fff",stroke:a.color,"stroke-width":2.2},p); text(p,a.icon,{"text-anchor":"middle",y:5,"font-size":15},p);
+      text(p,a.n,{"text-anchor":"middle",y:27,"font-size":11,"font-weight":900,fill:a.color,stroke:"rgba(255,255,255,.9)","stroke-width":3}); } }
+  if(typeof MINERALS!=="undefined"){ const g=svgEl("g",{id:"layer-minerals-names"},svg);
+    for(const m of MINERALS){ const k=MINERAL_KINDS[m.k]||{color:"#555",n:m.k}, p=pin(g,m.c[0],m.c[1]); p.dataset.k=m.k;
+      svgEl("rect",{x:-6,y:-6,width:12,height:12,transform:"rotate(45)",fill:k.color,stroke:"#fff","stroke-width":1.6,"stroke-dasharray":m.active===false?"2 1.5":"none"},p);
+      text(p,m.n,{x:10,y:4,"font-size":10.5,"font-weight":800,fill:"#2b2d3a",stroke:"rgba(255,255,255,.9)","stroke-width":3}); } }
+  if(typeof LANDMARKS!=="undefined"){ const g=svgEl("g",{id:"layer-landmarks"},svg);
+    for(const m of LANDMARKS){ const [label,color]=KIND[m.k]||["",'#555'], p=pin(g,m.c[0],m.c[1]); p.dataset.k=m.k;
+      svgEl("circle",{r:8,fill:color,stroke:"#fff","stroke-width":1.6},p); const ic=svgEl("g",{transform:"translate(-6 -6) scale(.5)"},p); ic.innerHTML=KIND_ICON[m.k]||"";
+      text(p,m.n,{x:11,y:4,"font-size":10.5,"font-weight":800,fill:"#2b2d3a",stroke:"rgba(255,255,255,.9)","stroke-width":3}); } }
+}
+function buildLabelLayers(){
+  const svg=$("real");
+  buildThemeLayers(svg);
+  // roads: motorways red on a white casing, first-class roads orange, the rest yellow
+  const roads=svgEl("g",{id:"layer-roads"},svg);
+  if(typeof ROADS!=="undefined"){
+    svgEl("path",{d:ROADS.primary,fill:"none",stroke:"#e4b84a","stroke-width":.9,"stroke-linecap":"round","stroke-linejoin":"round"},roads);
+    svgEl("path",{d:ROADS.trunk,fill:"none",stroke:"#e08a2c","stroke-width":1.3,"stroke-linecap":"round","stroke-linejoin":"round"},roads);
+    svgEl("path",{d:ROADS.motorway,fill:"none",stroke:"#fff","stroke-width":3.2,"stroke-linecap":"round","stroke-linejoin":"round"},roads);
+    svgEl("path",{d:ROADS.motorway,fill:"none",stroke:"#c8402f","stroke-width":2,"stroke-linecap":"round","stroke-linejoin":"round"},roads);
+  }
+  // river names along the rivers
+  const rn=svgEl("g",{id:"layer-rivernames"},svg), rdefs=svgEl("defs",{},rn);
+  (REAL.riverLabels||[]).forEach((r,i)=>{ svgEl("path",{id:"rl"+i,d:r.d},rdefs);
+    const t=svgEl("text",{class:"lbl rl","font-style":"italic","font-weight":800,fill:"#2f6f8f",stroke:"rgba(255,255,255,.85)"},rn);
+    const tp=svgEl("textPath",{href:"#rl"+i,startOffset:"50%","text-anchor":"middle"},t); tp.textContent=r.n; });
+  // countries and seas: always on
+  const names=svgEl("g",{id:"layer-countries"},svg);
+  for(const [n,lon,lat] of COUNTRIES) text(pin(names,lon,lat),n.toUpperCase(),{"text-anchor":"middle",y:5,"font-size":13,"font-weight":800,"letter-spacing":3,fill:"#6d6250","fill-opacity":.8,stroke:"rgba(255,255,255,.6)","stroke-width":3});
+  for(const [n,lon,lat] of SEAS) text(pin(names,lon,lat),n,{"text-anchor":"middle",y:5,"font-size":17,"font-style":"italic","font-weight":700,"letter-spacing":1,fill:"#3d6f88","fill-opacity":.85});
+  // cities: a dot and a name; the small towns only when zoomed in
+  const cities=svgEl("g",{id:"layer-cities"},svg);
+  if(typeof CITIES!=="undefined") for(const c of CITIES){
+    const big=c.r===1, g=pin(cities,c.c[0],c.c[1],c.r===3?"c3":"");
+    if(big&&c.bg) svgEl("rect",{x:-5,y:-5,width:10,height:10,fill:"#fff",stroke:"#2b2d3a","stroke-width":2.2},g);
+    else svgEl("circle",{r:c.r===3?2.8:big?4.5:3.8,fill:c.bg?"#fff":"#f6f1e4",stroke:"#2b2d3a","stroke-width":c.r===3?1.4:1.9},g);
+    text(g,c.n,{x:7,y:4,"font-size":big?15:c.r===2?13:11.5,"font-weight":c.r===3?700:900,fill:c.bg?"#2b2d3a":"#5b5446",stroke:"rgba(255,253,248,.9)","stroke-width":3.2});
+  }
+  // the thematic names go under the cities so city names stay readable
+  const tl=svgEl("g",{},null); svg.insertBefore(tl,cities); buildThemeLabels(tl);
+}
+
+/* ---------- the layers list: one checkbox per layer, remembered in this browser ---------- */
+const LAYER_KEY="bl-layers";
+const LAYERS=[
+  {h:"Карта"},
+  {id:"relief",n:"Релеф (сенки)",on:true},
+  {id:"forest",n:"Гори",on:true,c:"#2e6e34"},
+  {id:"borders",n:"Граници на областите",on:true},
+  {id:"water",n:"Реки и езера",on:true,c:"#5c8fa3"},
+  {h:"Имена и обекти"},
+  {id:"countries",n:"Съседни държави и морета",on:true},
+  {id:"cities",n:"Градове",on:true,c:"#2b2d3a",need:"CITIES"},
+  {id:"rivernames",n:"Имена на реките",on:false,c:"#2f6f8f"},
+  {id:"roads",n:"Големи пътища",on:false,c:"#c8402f",need:"ROADS"},
+  {h:"Теми"},
+  {id:"landmarks",n:"Забележителности",on:false,c:"#b03a2e",need:"LANDMARKS",sub:()=>Object.entries(KIND).filter(([k])=>LANDMARKS.some(m=>m.k===k)).map(([k,[n,c]])=>({k,n,c,sel:`#layer-landmarks [data-k="${k}"]`}))},
+  {id:"regions",n:"Природни области",on:false,c:"#c9b26b",need:"REGIONS",also:["regions-names"]},
+  {id:"landforms",n:"Форми на релефа",on:false,c:"#8a5a2b",need:"LANDFORMS",also:["landforms-names"]},
+  {id:"peaks",n:"Планини и върхове",on:false,c:"#6b4220",need:"PEAKS"},
+  {id:"soils",n:"Почви",on:false,c:"#cf905c",need:"SOILS",legend:()=>SOILS.map(x=>({n:x.n,c:x.color}))},
+  {id:"animals",n:"Животни",on:false,c:"#8a5a3c",need:"ANIMALS",also:["animals-names"],sub:()=>ANIMALS.map((a,i)=>({k:a.id,n:`${a.icon} ${a.n}`,c:a.color,on:i===0,sel:`#animal-${a.id},#animal-name-${a.id}`}))},
+  {id:"minerals",n:"Полезни изкопаеми",on:false,c:"#c56a2d",need:"MINERALS",also:["minerals-names"],sub:()=>Object.entries(MINERAL_KINDS).filter(([k])=>MINERALS.some(m=>m.k===k)).map(([k,v])=>({k,n:v.n,c:v.color,sel:`#layer-minerals [data-k="${k}"],#layer-minerals-names [data-k="${k}"]`}))},
+];
+let layerOn={}; try{ layerOn=JSON.parse(localStorage.getItem(LAYER_KEY)||"{}")||{}; }catch(e){}
+function showLayer(L,on){ for(const id of [L.id,...(L.also||[])]){ const g=$("layer-"+id); if(g) g.style.display=on?"":"none"; } }
+function buildLayerList(){
+  const list=$("layersList"); list.innerHTML="";
+  for(const L of LAYERS){
+    if(L.h){ const h=document.createElement("h3"); h.textContent=L.h; list.appendChild(h); continue; }
+    if(L.need&&!new Function(`return typeof ${L.need}!=="undefined"`)()) continue; // its data file is not there (yet)
+    const on=layerOn[L.id]??L.on, lab=document.createElement("label");
+    lab.innerHTML=`<input type="checkbox"${on?" checked":""}><i style="background:${L.c||"#d8cfb8"}"></i><span></span>`; lab.querySelector("span").textContent=L.n;
+    const save=()=>{ try{ localStorage.setItem(LAYER_KEY,JSON.stringify(layerOn)); }catch(err){} };
+    // a legend (soils) or sub-checkboxes (kinds, animals) show under the layer while it is on
+    const more=document.createElement("div"); more.className="more"; more.hidden=!on;
+    if(L.legend) for(const x of L.legend()){ const r=document.createElement("div"); r.className="leg"; r.innerHTML=`<i style="background:${x.c}"></i><span></span>`; r.querySelector("span").textContent=x.n; more.appendChild(r); }
+    if(L.sub) for(const x of L.sub()){ const key=L.id+":"+x.k, sOn=layerOn[key]??(x.on??true), r=document.createElement("label"); r.className="sub";
+      r.innerHTML=`<input type="checkbox"${sOn?" checked":""}><i style="background:${x.c}"></i><span></span>`; r.querySelector("span").textContent=x.n;
+      const apply=(v)=>document.querySelectorAll(x.sel).forEach(el=>el.style.display=v?"":"none"); apply(sOn);
+      r.querySelector("input").addEventListener("change",e=>{ layerOn[key]=e.target.checked; apply(e.target.checked); save(); declutter(); }); more.appendChild(r); }
+    lab.querySelector("input").addEventListener("change",e=>{ layerOn[L.id]=e.target.checked; showLayer(L,e.target.checked); more.hidden=!e.target.checked; save(); declutter(); });
+    list.appendChild(lab); if(more.childNodes.length) list.appendChild(more); showLayer(L,on);
   }
 }
-(document.fonts?Promise.race([Promise.all(['900 12px Nunito','700 20px Caveat'].map(f=>document.fonts.load(f,"БЪЛГАРИЯ"))),new Promise(r=>setTimeout(r,2500))]):Promise.resolve()).then(buildSigns);
+$("layersBtn").addEventListener("click",()=>{ const l=$("layersList"), open=l.hidden; l.hidden=!open; $("layersBtn").setAttribute("aria-expanded",String(open)); });
 
-/* ---------- intro art ---------- */
-fetch("intro.svg?v=monster2").then(r=>r.ok?r.text():"").then(t=>{ if(t) $("introArt").innerHTML=t; }).catch(()=>{});
-
-/* ---------- map layout + render ---------- */
-function layout(){
-  const vw=innerWidth, vh=innerHeight, bw=BB.x1-BB.x0, bh=BB.y1-BB.y0;
-  const top=vw<900?86:90, bottom=vw<900?20:24;
-  const cover=Math.max(vw/G.W,vh/G.H);
-  const s=cover;
-  let ox=vw/2-(BB.x0+bw/2)*s, oy=top+(vh-top-bottom)/2-(BB.y0+bh/2)*s;
-  if(G.W*s>=vw) ox=Math.min(0,Math.max(vw-G.W*s,ox));
-  if(G.H*s>=vh) oy=Math.min(0,Math.max(vh-G.H*s,oy));
-  return {vw,vh,s,ox,oy};
+/* ---------- camera: Bulgaria fills the screen; drag moves the world (it leans toward the move), wheel or two fingers zoom ---------- */
+const MAX_ZOOM=1.75;                                // closest zoom, relative to Bulgaria filling the screen
+let homeS=1;
+function homeView(){
+  const vw=innerWidth, vh=innerHeight, bw=BB.x1-BB.x0, bh=BB.y1-BB.y0, top=vw<900?86:90, bottom=vw<900?20:24;
+  const s=homeS=Math.min(vw/bw,(vh-top-bottom)/bh);
+  return clampView({vw,vh,s,ox:vw/2-(BB.x0+bw/2)*s,oy:top+(vh-top-bottom)/2-(BB.y0+bh/2)*s});
 }
-function placeOverlay(){ const v=view, st={left:v.ox+"px",top:v.oy+"px",width:G.W*v.s+"px",height:G.H*v.s+"px"}; Object.assign(ov.style,st); Object.assign($("lab").style,st); }
-function draw(){
-  view=layout(); placeOverlay(); $("loading").hidden=false;
-  const d=Math.min(2,window.devicePixelRatio||1), v=view;
-  busy=busy.then(()=>mapReady).then(()=>{
-    canvas.width=Math.round(v.vw*d); canvas.height=Math.round(v.vh*d); const c=canvas.getContext("2d");
-    c.setTransform(1,0,0,1,0,0); c.fillStyle="#cadd95"; c.fillRect(0,0,canvas.width,canvas.height);
-    // fill any uncovered edge with the same picture, enlarged and softened, so there are no empty bands
-    const cs=Math.max(canvas.width/G.W,canvas.height/G.H)*1.04; c.save(); c.filter="blur(14px) saturate(.85)";
-    c.drawImage(mapImg,(canvas.width-G.W*cs)/2,(canvas.height-G.H*cs)/2,G.W*cs,G.H*cs); c.restore();
-    c.save(); c.shadowColor="rgba(40,60,20,.35)"; c.shadowBlur=30*d; c.fillStyle="#cadd95"; c.fillRect(v.ox*d,v.oy*d,G.W*v.s*d,G.H*v.s*d); c.restore();
-    c.setTransform(v.s*d,0,0,v.s*d,v.ox*d,v.oy*d); c.imageSmoothingEnabled=true; c.imageSmoothingQuality="high"; c.drawImage(mapImg,0,0,G.W,G.H);
-    $("loading").hidden=true;
-  })
-    .catch(e=>{$("loading").textContent="Картата не се зареди: "+e.message;});
-  document.body.style.background="#cadd95";
-  fxResize();
+// the world never ends inside the window
+function clampView(v){
+  const s=Math.max(Math.max(v.vw/G.W,v.vh/G.H),Math.min(homeS*MAX_ZOOM,v.s));
+  return {...v,s,ox:Math.min(0,Math.max(v.vw-G.W*s,v.ox)),oy:Math.min(0,Math.max(v.vh-G.H*s,v.oy))};
 }
+function applyView(){
+  const v=view, vb=`${(-v.ox/v.s).toFixed(2)} ${(-v.oy/v.s).toFixed(2)} ${(v.vw/v.s).toFixed(2)} ${(v.vh/v.s).toFixed(2)}`;
+  const svg=$("real"); svg.setAttribute("viewBox",vb); ov.setAttribute("viewBox",vb);
+  svg.style.setProperty("--k",(1/v.s).toFixed(4)); svg.classList.toggle("z2",v.s>=homeS*1.3);
+  clearTimeout(declutterT); declutterT=setTimeout(declutter,120);
+}
+// names never sit on each other: in order of importance (cities by rank, peaks, landmarks, minerals), a name that would
+// overlap one already shown is hidden until the view changes
+let declutterT=0;
+const LABEL_ORDER=["#layer-cities .pin:not(.c3) .lbl","#layer-peaks .lbl","#layer-regions-names .lbl","#layer-landforms-names .lbl","#layer-animals-names .lbl","#layer-cities .c3 .lbl","#layer-landmarks .lbl","#layer-minerals-names .lbl"];
+function declutter(){
+  const placed=[], hit=(a,b)=>a.left<b.right&&b.left<a.right&&a.top<b.bottom&&b.top<a.bottom;
+  for(const sel of LABEL_ORDER) for(const t of document.querySelectorAll(sel)){
+    // a name beside its symbol tries the right side first, then the left; one that fits neither is hidden
+    t.style.visibility=""; const x0=t.dataset.x??(t.dataset.x=t.getAttribute("x")||"");
+    const side=(left)=>{ if(x0&&+x0>0){ t.setAttribute("x",left?-x0:x0); t.setAttribute("text-anchor",left?"end":"start"); } const r=t.getBoundingClientRect(); return {w:r.width,left:r.left-2,right:r.right+2,top:r.top-1,bottom:r.bottom+1}; };
+    let box=side(false); if(!box.w) continue;
+    if(placed.some(p=>hit(p,box))&&x0&&+x0>0) box=side(true);
+    if(placed.some(p=>hit(p,box))) t.style.visibility="hidden"; else placed.push(box);
+  }
+}
+function draw(){ view=homeView(); applyView(); fxResize(); }
+const zoomAt=(v,f,sx,sy)=>{ const s=Math.max(Math.max(v.vw/G.W,v.vh/G.H),Math.min(homeS*MAX_ZOOM,v.s*f)), k=s/v.s; return clampView({...v,s,ox:sx-(sx-v.ox)*k,oy:sy-(sy-v.oy)*k}); };
+const SLOP=6, pointers=new Map(); let dragged=false;
+const spread=()=>{ const [a,b=a]=pointers.values(); return {x:(a.x+b.x)/2,y:(a.y+b.y)/2,d:Math.hypot(a.x-b.x,a.y-b.y)||1}; };
+ov.addEventListener("pointerdown",e=>{ ov.setPointerCapture(e.pointerId); pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,x0:e.clientX,y0:e.clientY}); dragged=pointers.size>1; });
+ov.addEventListener("pointermove",e=>{
+  const p=pointers.get(e.pointerId); if(!p) return;
+  if(!dragged&&Math.hypot(e.clientX-p.x0,e.clientY-p.y0)<SLOP) return;
+  dragged=true; ov.classList.add("grabbing");
+  const a=spread(); p.x=e.clientX; p.y=e.clientY; const b=spread();
+  view=zoomAt({...view,ox:view.ox+b.x-a.x,oy:view.oy+b.y-a.y},b.d/a.d,b.x,b.y); applyView();
+  if(pointers.size===1) leanWith(b.x-a.x,b.y-a.y);
+});
+const lift=e=>{ pointers.delete(e.pointerId); if(!pointers.size){ ov.classList.remove("grabbing"); unlean(); } };
+ov.addEventListener("pointerup",lift); ov.addEventListener("pointercancel",lift);
+// a drag is not a tap: the guess only hears presses that stayed put
+ov.addEventListener("click",e=>{ if(dragged){ e.stopImmediatePropagation(); dragged=false; } },true);
+ov.addEventListener("wheel",e=>{ e.preventDefault(); const f=2**(-e.deltaY*[.002,.05,1][e.deltaMode]*(e.ctrlKey?10:1)); view=zoomAt(view,f,e.clientX,e.clientY); applyView(); },{passive:false});
+// while the hand carries the map it leans a little toward the move, like a sheet of paper on the table; let go and it springs flat
+let lean={x:0,y:0}, leanRest=0;
+const setLean=(t,tr)=>{ const w=$("world"); w.style.transition=`transform ${tr}`; w.style.transform=t; };
+function leanWith(dx,dy){
+  if(calm) return;
+  lean={x:Math.max(-5,Math.min(5,lean.x*0.6+dx*0.3)),y:Math.max(-5,Math.min(5,lean.y*0.6+dy*0.3))};
+  setLean(`perspective(1600px) rotateY(${lean.x.toFixed(2)}deg) rotateX(${(-lean.y).toFixed(2)}deg) scale(1.04)`,".15s ease-out");
+  clearTimeout(leanRest); if(Math.abs(lean.x)+Math.abs(lean.y)>0.1) leanRest=setTimeout(()=>leanWith(0,0),120);
+}
+function unlean(){ clearTimeout(leanRest); if(!$("world").style.transform) return; lean={x:0,y:0}; setLean("",".6s cubic-bezier(.3, 1.6, .5, 1)"); }
 let rz; addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(()=>{draw();paintMarks();},250);});
 
 /* ---------- ambient life: drifting clouds, birds, flowing rivers, glinting sea ---------- */
@@ -421,10 +618,14 @@ let fxD=1, fxLast=0, fxT=0, glints=[], clouds=[], flocks=[], nextFlock=3;
 function fxResize(){ fxD=Math.min(1.5,window.devicePixelRatio||1); fx.width=Math.round(innerWidth*fxD); fx.height=Math.round(innerHeight*fxD); }
 function fxInit(){
   const R=M.rng(4242);
-  const cv=document.createElement("canvas"); cv.width=G.W; cv.height=G.H; const cg=cv.getContext("2d"); cg.drawImage(mapImg,0,0); const px=cg.getImageData(0,0,G.W,G.H).data;
-  const isSea=(x,y)=>{ const o=(Math.round(y)*G.W+Math.round(x))*4; return px[o+2]>150&&px[o+2]>px[o]+60; };
-  for(let i=0;i<4000&&glints.length<60;i++){ const x=R()*G.W, y=R()*G.H; if(isSea(x,y)&&isSea(x+8,y)&&isSea(x-8,y)) glints.push({x,y,ph:R()*6.3,sp:0.5+R()*0.7,w:5+R()*5}); }
-  for(let i=0;i<5;i++) clouds.push({x:R()*G.W, y:120+R()*680, sp:5+R()*5, k:0.75+R()*0.5, img:cloudSprite(R)});
+  fxGlints();
+  for(let i=0;i<5;i++) clouds.push({x:BB.x0+R()*(BB.x1-BB.x0), y:BB.y0+R()*(BB.y1-BB.y0), sp:5+R()*5, k:0.75+R()*0.5, img:cloudSprite(R)});
+}
+// sea glints off the coast near Bulgaria
+function fxGlints(){
+  const R=M.rng(4242), land=new Path2D(REAL.land), hc=document.createElement("canvas").getContext("2d"), isSea=(x,y)=>!hc.isPointInPath(land,x,y);
+  const x0=BB.x0-200, w=BB.x1-BB.x0+400, y0=BB.y0-100, h=BB.y1-BB.y0+200;
+  glints=[]; for(let i=0;i<4000&&glints.length<60;i++){ const x=x0+R()*w, y=y0+R()*h; if(isSea(x,y)&&isSea(x+8,y)&&isSea(x-8,y)) glints.push({x,y,ph:R()*6.3,sp:0.5+R()*0.7,w:5+R()*5}); }
 }
 function cloudSprite(R){
   const cv=document.createElement("canvas"), w=220, h=110; cv.width=w; cv.height=h; const g=cv.getContext("2d");
@@ -435,7 +636,7 @@ function cloudSprite(R){
 }
 function spawnFlock(){
   const R=Math.random, fromLeft=R()<0.5, n=3+Math.floor(R()*3), y=120+R()*480;
-  flocks.push({x:fromLeft?-40:G.W+40, y, vx:(fromLeft?1:-1)*(34+R()*14), vy:(R()-.5)*6, birds:Array.from({length:n},(_,i)=>({dx:-Math.abs(i-(n>>1))*9*(fromLeft?1:-1), dy:(i-(n>>1))*7, ph:R()*6.3}))});
+  flocks.push({x:fromLeft?BB.x0-40:BB.x1+40, y:BB.y0+y-120, vx:(fromLeft?1:-1)*(34+R()*14), vy:(R()-.5)*6, birds:Array.from({length:n},(_,i)=>({dx:-Math.abs(i-(n>>1))*9*(fromLeft?1:-1), dy:(i-(n>>1))*7, ph:R()*6.3}))});
 }
 function fxFrame(now){
   requestAnimationFrame(fxFrame);
@@ -450,7 +651,7 @@ function fxFrame(now){
   fc.globalAlpha=1;
   // clouds with their soft shadows
   for(const c of clouds){
-    c.x+=c.sp*dt; if(c.x-110*c.k>G.W) { c.x=-120*c.k; c.y=120+Math.random()*680; }
+    c.x+=c.sp*dt; if(c.x-110*c.k>BB.x1+100) { c.x=BB.x0-120*c.k; c.y=BB.y0+Math.random()*(BB.y1-BB.y0); }
     const cw=150*c.k, ch=75*c.k;
     fc.globalAlpha=0.1; fc.drawImage(c.img.sh,c.x-cw/2+22*c.k,c.y-ch/2+30*c.k,cw,ch);
     fc.globalAlpha=0.55; fc.drawImage(c.img.img,c.x-cw/2,c.y-ch/2,cw,ch); fc.globalAlpha=1;
@@ -458,12 +659,12 @@ function fxFrame(now){
   // birds: a small flock now and then
   nextFlock-=dt; if(nextFlock<=0){ spawnFlock(); nextFlock=9+Math.random()*10; }
   fc.strokeStyle="rgba(35,35,48,.75)"; fc.lineWidth=1.1;
-  flocks=flocks.filter(f=>f.x>-80&&f.x<G.W+80);
+  flocks=flocks.filter(f=>f.x>BB.x0-80&&f.x<BB.x1+80);
   for(const f of flocks){ f.x+=f.vx*dt; f.y+=f.vy*dt;
     for(const b of f.birds){ const x=f.x+b.dx, y=f.y+b.dy+Math.sin(fxT*1.4+b.ph)*1.5, w=Math.sin(fxT*9+b.ph)*2.2;
       fc.beginPath(); fc.moveTo(x-4,y-w); fc.quadraticCurveTo(x-2,y-1.2-w*0.3,x,y); fc.quadraticCurveTo(x+2,y-1.2-w*0.3,x+4,y-w); fc.stroke(); } }
 }
-if(!calm) mapReady.then(()=>{ fxInit(); requestAnimationFrame(fxFrame); });
+if(!calm){ fxInit(); requestAnimationFrame(fxFrame); }
 
 /* ---------- deck + fan ---------- */
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -600,9 +801,8 @@ $("detail").addEventListener("click",e=>{if(e.target.id==="detail")$("detail").h
 addEventListener("keydown",e=>{if(e.key==="Escape"){if(!$("detail").hidden)$("detail").hidden=true;else $("album").hidden=true;}});
 
 /* ---------- controls ---------- */
-$("play").addEventListener("click",()=>{ $("start").classList.add("leave"); setTimeout(()=>{$("start").hidden=true;},500); dealRound(); });
 
-refill(); updateTop(); updateAlbumCount(); draw();
+buildMap(); buildLayerList(); declutter(); refill(); updateTop(); updateAlbumCount(); draw(); $("loading").hidden=true;
 })();
 </script>
 </body>

@@ -1,0 +1,1365 @@
+{
+ "head": {
+  "vars": [
+   "p",
+   "bg",
+   "h",
+   "coord",
+   "art"
+  ]
+ },
+ "results": {
+  "bindings": [
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q95229679"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%91%D0%B5%D0%BD%D0%BA%D0%BE%D0%B2%D1%81%D0%BA%D0%B8_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Бенковски"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.925 42.382222222)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1186"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q102313267"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%91%D1%80%D0%B0%D1%82%D0%B0%D0%BD_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Братан"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(25.152222222 42.5075)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1235.8"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q134217"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%A8%D0%B8%D0%BF%D0%BA%D0%B0_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Шипка (връх)"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(25.321944444 42.748333333)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1329"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q209341"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9C%D1%83%D1%81%D0%B0%D0%BB%D0%B0"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Мусала"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.585278 42.179167)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2925.4"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q210004"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9C%D0%B0%D0%BB%D1%8C%D0%BE%D0%B2%D0%B8%D1%86%D0%B0"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Мальовица"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.363083333 42.173861111)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2729"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q576796"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%93%D0%BE%D0%BB%D1%8F%D0%BC_%D0%91%D0%BE%D0%B3%D0%B4%D0%B0%D0%BD"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Голям Богдан"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(24.4615 42.60727778)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1604"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q26144"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%91%D0%B5%D0%BB%D0%BC%D0%B5%D0%BA%D0%B5%D0%BD_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Белмекен"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.771767 42.180577)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2626"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q46499"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%A0%D1%83%D0%B5%D0%BD"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Руен (връх)"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(22.51632222 42.15798056)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2251"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q59836"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9A%D1%83%D1%82%D0%B5%D0%BB%D0%BE"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Кутело"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.400028 41.776861)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2908"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q846340"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9A%D0%BE%D0%BC"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Ком"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.05 43.166666666)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2016"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q849657"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%A7%D0%B5%D1%80%D0%BD%D0%B8_%D0%B2%D1%80%D1%8A%D1%85"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Черни връх"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.278333333 42.563611111)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2290"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q894703"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%91%D0%BE%D1%82%D0%B5%D0%B2_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Ботев"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(24.933333333 42.716666666)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2376"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q962856"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9C%D0%B8%D0%B4%D0%B6%D1%83%D1%80"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Миджур"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(22.681944444 43.393888888)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2169"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1140684"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%92%D0%B8%D1%85%D1%80%D0%B5%D0%BD"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Вихрен"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.399444444 41.766388888)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2914.3"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q1548833"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%93%D0%BE%D0%BB%D1%8F%D0%BC_%D0%9F%D0%B5%D1%80%D0%B5%D0%BB%D0%B8%D0%BA"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Голям Перелик"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(24.574166666 41.601111111)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2191"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q2458111"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%A2%D1%83%D0%BC%D0%B1%D0%B0_(%D0%91%D0%B5%D0%BB%D0%B0%D1%81%D0%B8%D1%86%D0%B0)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Тумба"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(22.9275 41.338333333)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1880"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3110295"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%93%D0%BE%D0%BB%D1%8F%D0%BC_%D0%9F%D0%B5%D1%80%D1%81%D0%B5%D0%BD%D0%BA"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Голям Персенк"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(24.5425 41.8156)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2064"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3110295"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%93%D0%BE%D0%BB%D1%8F%D0%BC_%D0%9F%D0%B5%D1%80%D1%81%D0%B5%D0%BD%D0%BA"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Голям Персенк"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(24.5483 41.8183)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2064"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q3321997"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9E%D0%BA%D0%BE%D0%BB%D1%87%D0%B8%D1%86%D0%B0"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Околчица"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.58 43.151)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1048"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6356657"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9A%D0%B0%D0%BC%D0%B5%D0%BD_%D0%B4%D0%B5%D0%BB"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Камен дел"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.27611111 42.61222222)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1862"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q6547737"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9E%D0%B3%D1%80%D0%B5%D1%8F%D0%BA"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Огреяк"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(22.966666666 41.783333333)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1924"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7281542"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%A0%D0%B0%D0%B4%D0%BE%D0%BC%D0%B8%D1%80_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Радомир"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.12055556 41.32138889)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2029"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7812850"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%A2%D0%BE%D0%B4%D0%BE%D1%80%D0%B8%D0%BD_%D0%B2%D1%80%D1%8A%D1%85"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Тодорка"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.431777777 41.752722222)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2746"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q7924249"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%92%D0%B5%D0%B6%D0%B5%D0%BD"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Вежен"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(24.354166666 42.755833333)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2198"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q8364919"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%93%D0%BE%D0%BB%D1%8F%D0%BC_%D0%9A%D1%83%D0%BF%D0%B5%D0%BD_(%D0%9A%D0%B0%D0%BB%D0%BE%D1%84%D0%B5%D1%80%D1%81%D0%BA%D0%B0_%D0%BF%D0%BB%D0%B0%D0%BD%D0%B8%D0%BD%D0%B0)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Голям Купен"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(24.819166666 42.723333333)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2169"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q8364919"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%93%D0%BE%D0%BB%D1%8F%D0%BC_%D0%9A%D1%83%D0%BF%D0%B5%D0%BD_(%D0%9A%D0%B0%D0%BB%D0%BE%D1%84%D0%B5%D1%80%D1%81%D0%BA%D0%B0_%D0%BF%D0%BB%D0%B0%D0%BD%D0%B8%D0%BD%D0%B0)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Голям Купен"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(24.819831 42.724411)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2169"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q9375421"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%92%D0%B8%D1%88%D0%B5%D0%B3%D1%80%D0%B0%D0%B4_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Вишеград"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(26.327313897 41.992054519)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "856"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q11786693"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9C%D1%83%D1%80%D0%B3%D0%B0%D1%88_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Мургаш"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.6694 42.8331)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1687"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q11787533"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9C%D1%8A%D0%B3%D0%BB%D0%B5%D0%BD%D0%B8%D0%BA"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Мъгленик"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(25.877 41.308)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1266.8"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q11787533"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9C%D1%8A%D0%B3%D0%BB%D0%B5%D0%BD%D0%B8%D0%BA"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Мъгленик"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(25.877427 41.308552)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1266.8"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12272992"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%91%D0%B0%D1%82%D0%B0%D1%88%D0%BA%D0%B8_%D0%A1%D0%BD%D0%B5%D0%B6%D0%BD%D0%B8%D0%BA"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Баташки Снежник"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(24.2497 41.9083)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2081.9"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12274177"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%91%D1%8A%D0%BB%D0%B3%D0%B0%D1%80%D0%BA%D0%B0_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Българка"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(26.3214 42.7475)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1181"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12274952"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%92%D0%B5%D0%B9%D0%BA%D0%B0%D1%82%D0%B0"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Вейката"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(25.2833 41.2347)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1463"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12275221"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%92%D0%B8%D0%B4%D0%B5%D0%BD_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Виден"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(22.8395 42.3441)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1487"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12277138"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%93%D0%BE%D0%BB%D1%8F%D0%BC%D0%B0_%D0%A1%D1%8E%D1%82%D0%BA%D1%8F"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Голяма Сюткя"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(24.0217 41.8956)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2186"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12277264"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%93%D0%BE%D1%86%D0%B5%D0%B2_%D0%B2%D1%80%D1%8A%D1%85"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Гоцев връх"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.620612 41.377053)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2212"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12279222"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%94%D1%83%D0%BF%D0%B5%D0%B2%D0%B8%D1%86%D0%B0"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Дупевица"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.171468 42.652555)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1256"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12281701"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%98%D0%BB%D1%8C%D0%BE%D0%B2_%D0%B2%D1%80%D1%8A%D1%85"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Ильов връх"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.008364 41.769155)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1803"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12285797"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9C%D0%B0%D0%BD%D0%B0%D1%81%D1%82%D0%B8%D1%80%D0%B8%D1%89%D0%B5_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Манастирище"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.4086 42.5122)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1337.4"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12285797"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9C%D0%B0%D0%BD%D0%B0%D1%81%D1%82%D0%B8%D1%80%D0%B8%D1%89%D0%B5_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Манастирище"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.4086 42.5122)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1338"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12286217"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9C%D0%B0%D1%80%D0%BA%D0%BE%D0%B2%D0%B8_%D0%BA%D0%BB%D0%B0%D0%B4%D0%B5%D0%BD%D1%86%D0%B8"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Маркови кладенци"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.0667 41.4833)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1523"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12286617"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9C%D0%B5%D1%87%D0%B8_%D1%87%D0%B0%D0%BB"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Мечи чал"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(24.664444444 41.6925)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1872.6"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12286711"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9C%D0%B8%D0%BB%D0%B5%D0%B2%D0%B5%D1%86"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Милевец"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(22.4392 42.5652)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1733"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12289306"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9E%D1%80%D0%B5%D0%BB%D1%8F%D0%BA"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Ореляк"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.612883 41.570551)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2099"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12292614"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%A0%D1%83%D0%B9_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Руй"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(22.575708 42.862927)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1706"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12293800"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%A1%D0%B8%D0%BD%D0%B0%D0%BD%D0%B8%D1%86%D0%B0"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Синаница"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.3583 41.7258)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2518"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12293800"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%A1%D0%B8%D0%BD%D0%B0%D0%BD%D0%B8%D1%86%D0%B0"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Синаница"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.35835 41.725861)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2518"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12296633"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%A2%D0%BE%D0%B4%D0%BE%D1%80%D0%B8%D0%BD%D0%B8_%D0%BA%D1%83%D0%BA%D0%BB%D0%B8"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Тодорини кукли"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.19613 43.135191)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1785"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q12299263"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%A7%D1%83%D0%BC%D0%B5%D1%80%D0%BD%D0%B0_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Чумерна"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(25.9728 42.7819)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1536"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q15987051"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%91%D1%83%D0%B7%D0%BB%D1%83%D0%B4%D0%B6%D0%B0"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Хаджи Димитър"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(25.389992074 42.738598912)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1441"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q21780834"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%93%D0%BE%D0%BB%D1%8F%D0%BC_%D0%94%D0%B5%D0%B1%D0%B5%D0%BB%D0%B5%D1%86"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Голям Дебелец"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(23.2625 42.3917)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "1414.5"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q41524058"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%9F%D0%B0%D0%BF%D0%B8%D1%8F_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Папия"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(27.84673 42.11161)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "505"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q52187216"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%93%D0%BE%D0%BB%D1%8F%D0%BC_%D0%9A%D0%B0%D0%B4%D0%B5%D0%BC%D0%BB%D0%B8%D1%8F"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Голям Кадемлия"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(25.055561111 42.727180555)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "2275.4"
+    }
+   },
+   {
+    "p": {
+     "type": "uri",
+     "value": "http://www.wikidata.org/entity/Q56394805"
+    },
+    "art": {
+     "type": "uri",
+     "value": "https://bg.wikipedia.org/wiki/%D0%93%D1%80%D0%B0%D0%B4%D0%B8%D1%89%D0%B5_(%D0%B2%D1%80%D1%8A%D1%85)"
+    },
+    "bg": {
+     "xml:lang": "bg",
+     "type": "literal",
+     "value": "Градище"
+    },
+    "coord": {
+     "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+     "type": "literal",
+     "value": "Point(27.489444444 41.965277777)"
+    },
+    "h": {
+     "datatype": "http://www.w3.org/2001/XMLSchema#decimal",
+     "type": "literal",
+     "value": "709.6"
+    }
+   }
+  ]
+ }
+}
