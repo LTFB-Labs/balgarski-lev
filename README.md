@@ -5,6 +5,10 @@
 **Играй:** https://ltfb-labs.github.io/balgarski-lev/
 **Идеи и проучване:** https://ltfb-labs.github.io/balgarski-lev/ideas.html
 
+## В LevAcademy
+
+В LevAcademy играта се отваря на `/app/#/balgarski-lev` под лентата на LevAcademy. `academy-app.js` (договорът `@ltfb/academy-core`) я зарежда в изолирана рамка: албумът и слоевете са на детето в LevAcademy (на всяко устройство), а първото намерено място и всяка пълна категория дават значки в профила му. Отворена сама, играта работи както преди и пази албума в браузъра. `levacademy.json` е описанието ѝ.
+
 ## Какво има вътре
 
 - `index.html` — играта

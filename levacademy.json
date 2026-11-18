@@ -1,0 +1,10 @@
+{
+  "id": "balgarski-lev",
+  "name": "Български Лев",
+  "description": "Обърни карта и намери мястото на картата на България.",
+  "icon": "/avatars/03.webp",
+  "route": "balgarski-lev",
+  "contract": 2,
+  "permissions": ["user", "storage", "badges"],
+  "entry": "academy-app.js"
+}
