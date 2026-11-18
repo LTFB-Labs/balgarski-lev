@@ -301,8 +301,7 @@ button:focus-visible{outline:3px solid var(--pink-d);outline-offset:2px}
 <div class="attr">© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> · Natural Earth · Terrain Tiles · © ESA WorldCover 2021 · HWSD v2.0 (FAO/IIASA)</div>
 <div class="loading" id="loading">Рисуваме картата…</div>
 
-<!-- the cards and the album are hidden while we work on the map itself; remove "hidden" and call dealRound() to bring the game back -->
-<div class="hud" id="hud" hidden>
+<div class="hud" id="hud">
   <div class="top">
     <div class="q pill" id="q" hidden><div class="lbl">Къде е</div><div class="name" id="qName"></div><div class="pips" id="pips"></div></div>
   </div>
@@ -804,7 +803,7 @@ addEventListener("keydown",e=>{if(e.key==="Escape"){if(!$("detail").hidden)$("de
 
 /* ---------- controls ---------- */
 
-buildMap(); buildLayerList(); declutter(); refill(); updateTop(); updateAlbumCount(); draw(); $("loading").hidden=true;
+buildMap(); buildLayerList(); declutter(); refill(); updateTop(); updateAlbumCount(); draw(); $("loading").hidden=true; dealRound();
 })();
 </script>
 </body>
